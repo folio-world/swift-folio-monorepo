@@ -1,42 +1,40 @@
 //
 //  Modules.swift
-//  DependencyPlugin
+//  EnviromentPlugin
 //
-//  Created by 송영모 on 2023/04/27.
+//  Created by 송영모 on 2023/07/06.
 //
 
 import Foundation
-import ProjectDescription
 
-public enum MicroType: String {
-    case Implement
-    case Interface
-    case Tests
-    case Testing
+public enum MicroTargetType: String {
+    case interface = "Interface"
+    case implement = "Implement"
+    case tests = "Tests"
+    case testing = "Testing"
 }
 
-public enum ModulePath {
-    case project(Project)
+public enum Module {
+    case product(Product)
     case feature(Feature)
     case domain(Domain)
     case core(Core)
     case shared(Shared)
-    case watchShared(WatchShared)
 }
 
-// MARK: ProjectModule
+// MARK: ProductModule
 
-public extension ModulePath {
-    enum Project: String, CaseIterable {
+public extension Module {
+    enum Product: String, CaseIterable {
         case Dying
         
-        public static let name: String = "Project"
+        public static let name: String = "Product"
     }
 }
 
 // MARK: AppModule
 
-public extension ModulePath {
+public extension Module {
     enum App: String, CaseIterable {
         case IOS
         case Watch
@@ -49,7 +47,7 @@ public extension ModulePath {
 
 // MARK: FeatureModule
 
-public extension ModulePath {
+public extension Module {
     enum Feature: String, CaseIterable {
         case Onboarding
         
@@ -59,7 +57,7 @@ public extension ModulePath {
 
 // MARK: DomainModule
 
-public extension ModulePath {
+public extension Module {
     enum Domain: String, CaseIterable {
         case Health
         
@@ -69,7 +67,7 @@ public extension ModulePath {
 
 // MARK: CoreModule
 
-public extension ModulePath {
+public extension Module {
     enum Core: String, CaseIterable {
         case HealthKit
         
@@ -79,24 +77,13 @@ public extension ModulePath {
 
 // MARK: SharedModule
 
-public extension ModulePath {
+public extension Module {
     enum Shared: String, CaseIterable {
         case Util
         case DesignSystem
         case ThirdPartyLib
         
         public static let name: String = "Shared"
-    }
-}
-
-// MARK: WatchSharedModule
-
-public extension ModulePath {
-    enum WatchShared: String, CaseIterable {
-        case DesignSystem
-        case ThirdPartyLib
-        
-        public static let name: String = "WatchShared"
     }
 }
 

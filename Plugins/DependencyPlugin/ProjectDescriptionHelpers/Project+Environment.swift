@@ -12,25 +12,25 @@ public extension Project {
     struct Environment {
         public static func deploymentTarget(project: ModulePath.Project) -> DeploymentTarget {
             switch project {
-            case .Diebeing: return self.deploymentTarget(project: project, app: .IOS)
+            case .Dying: return self.deploymentTarget(project: project, app: .IOS)
             }
         }
         
         public static func namePrefix(project: ModulePath.Project) -> String {
             switch project {
-            case .Diebeing: return "Diebeing"
+            case .Dying: return "Diebeing"
             }
         }
         
         public static func productNamePrefix(project: ModulePath.Project) -> String {
             switch project {
-            case .Diebeing: return "Diebeing"
+            case .Dying: return "Diebeing"
             }
         }
         
         public static func bundleIdPrefix(project: ModulePath.Project) -> String {
             switch project {
-            case .Diebeing: return "com.annapo.diebeing"
+            case .Dying: return "com.annapo.diebeing"
             }
         }
     }
@@ -42,7 +42,7 @@ public extension Project {
 public extension Project.Environment {
     static func name(project: ModulePath.Project, app: ModulePath.App) -> String {
         switch project {
-        case .Diebeing:
+        case .Dying:
             switch app {
             case .IOS: return self.namePrefix(project: project)
             case .Watch: return self.namePrefix(project: project) + "Watch"
@@ -53,7 +53,7 @@ public extension Project.Environment {
     
     static func deploymentTarget(project: ModulePath.Project, app: ModulePath.App) -> DeploymentTarget {
         switch project {
-        case .Diebeing:
+        case .Dying:
             switch app {
             case .IOS: return DeploymentTarget.iOS(targetVersion: "16.0", devices: [.iphone])
             case .Watch: return DeploymentTarget.watchOS(targetVersion: "9.0")
@@ -64,7 +64,7 @@ public extension Project.Environment {
     
     static func product(project: ModulePath.Project, app: ModulePath.App) -> Product {
         switch project {
-        case .Diebeing:
+        case .Dying:
             switch app {
             case .IOS: return .app
             case .Watch: return .watch2App
@@ -87,13 +87,13 @@ public extension Project.Environment {
     
     static func deploymentTarget(project: ModulePath.Project, feature: ModulePath.Feature) -> DeploymentTarget {
         switch project {
-        case .Diebeing: return self.deploymentTarget(project: project, app: .IOS)
+        case .Dying: return self.deploymentTarget(project: project, app: .IOS)
         }
     }
     
     static func product(project: ModulePath.Project, feature: ModulePath.Feature) -> Product {
         switch project {
-        case .Diebeing: return self.product(project: project, app: .IOS)
+        case .Dying: return self.product(project: project, app: .IOS)
         }
     }
     
@@ -111,13 +111,13 @@ public extension Project.Environment {
     
     static func deploymentTarget(project: ModulePath.Project, domain: ModulePath.Domain) -> DeploymentTarget {
         switch project {
-        case .Diebeing: return self.deploymentTarget(project: project, app: .IOS)
+        case .Dying: return self.deploymentTarget(project: project, app: .IOS)
         }
     }
     
     static func product(project: ModulePath.Project, domain: ModulePath.Domain) -> Product {
         switch project {
-        case .Diebeing: return self.product(project: project, app: .IOS)
+        case .Dying: return self.product(project: project, app: .IOS)
         }
     }
     
@@ -135,13 +135,13 @@ public extension Project.Environment {
     
     static func deploymentTarget(project: ModulePath.Project, core: ModulePath.Core) -> DeploymentTarget {
         switch project {
-        case .Diebeing: return self.deploymentTarget(project: project, app: .IOS)
+        case .Dying: return self.deploymentTarget(project: project, app: .IOS)
         }
     }
     
     static func product(project: ModulePath.Project, core: ModulePath.Core) -> Product {
         switch project {
-        case .Diebeing: return self.product(project: project, app: .IOS)
+        case .Dying: return self.product(project: project, app: .IOS)
         }
     }
     
@@ -159,13 +159,13 @@ public extension Project.Environment {
     
     static func deploymentTarget(project: ModulePath.Project, shared: ModulePath.Shared) -> DeploymentTarget {
         switch project {
-        case .Diebeing: return self.deploymentTarget(project: project, app: .IOS)
+        case .Dying: return self.deploymentTarget(project: project, app: .IOS)
         }
     }
     
     static func product(project: ModulePath.Project, shared: ModulePath.Shared) -> Product {
         switch project {
-        case .Diebeing: return self.product(project: project, app: .IOS)
+        case .Dying: return self.product(project: project, app: .IOS)
         }
     }
     

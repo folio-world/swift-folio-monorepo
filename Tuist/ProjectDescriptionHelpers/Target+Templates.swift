@@ -136,14 +136,14 @@ public extension Target {
 // MARK: Target + Feature
 
 public extension Target {
-    static func feature(factory: TargetFactory) -> Self {
+    static func feature(project: ModulePath.Project, factory: TargetFactory) -> Self {
         var newFactory = factory
         newFactory.name = ModulePath.Feature.name
         
-        return make(factory: newFactory)
+        return make(project: project, factory: newFactory)
     }
     
-    static func feature(implements module: ModulePath.Feature, factory: TargetFactory) -> Self {
+    static func feature(project: ModulePath.Project, module: ModulePath.Feature, factory: TargetFactory) -> Self {
         var newFactory = factory
         newFactory.name = ModulePath.Feature.name + module.rawValue
         
@@ -231,11 +231,11 @@ public extension Target {
 // MARK: Target + Core
 
 public extension Target {
-    static func core(factory: TargetFactory) -> Self {
+    static func core(project: ModulePath.Project, factory: TargetFactory) -> Self {
         var newFactory = factory
         newFactory.name = ModulePath.Core.name
         
-        return make(factory: newFactory)
+        return make(project: project, factory: newFactory)
     }
     
     static func core(implements module: ModulePath.Core, factory: TargetFactory) -> Self {
@@ -262,7 +262,7 @@ public extension Target {
         return make(factory: newFactory)
     }
     
-    static func core(interface module: ModulePath.Core, factory: TargetFactory) -> Self {
+    static func core(project: ModulePath.Project, interface module: ModulePath.Core, factory: TargetFactory) -> Self {
         var newFactory = factory
         newFactory.name = ModulePath.Core.name + module.rawValue + "Interface"
         newFactory.sources = .interface
@@ -274,14 +274,14 @@ public extension Target {
 // MARK: Target + Shared
 
 public extension Target {
-    static func shared(factory: TargetFactory) -> Self {
+    static func shared(project: ModulePath.Project, factory: TargetFactory) -> Self {
         var newFactory = factory
         newFactory.name = ModulePath.Shared.name
         
-        return make(factory: newFactory)
+        return make(project: project, factory: newFactory)
     }
     
-    static func shared(implements module: ModulePath.Shared, factory: TargetFactory) -> Self {
+    static func shared(project: ModulePath.Project, implements module: ModulePath.Shared, factory: TargetFactory) -> Self {
         var newFactory = factory
         newFactory.name = ModulePath.Shared.name + module.rawValue
         
@@ -298,37 +298,6 @@ public extension Target {
         var newFactory = factory
         newFactory.name = ModulePath.Shared.name + module.rawValue + "Interface"
         newFactory.sources = .interface
-        
-        return make(factory: newFactory)
-    }
-}
-
-// MARK: Target + Shared
-
-public extension Target {
-    static func watchShared(factory: TargetFactory) -> Self {
-        var newFactory = factory
-        newFactory.name = ModulePath.WatchShared.name
-        newFactory.sources = nil
-        newFactory.platform = .watchOS
-        newFactory.product = .staticFramework
-        newFactory.deploymentTarget = Project.Environment.watchDeploymentTarget
-        
-        
-        return make(factory: newFactory)
-    }
-    
-    static func watchShared(implements module: ModulePath.WatchShared, factory: TargetFactory) -> Self {
-        var newFactory = factory
-        newFactory.name = ModulePath.WatchShared.name + module.rawValue
-        newFactory.platform = .watchOS
-        newFactory.deploymentTarget = Project.Environment.watchDeploymentTarget
-        newFactory.sources = nil
-        
-        if module == .DesignSystem {
-            newFactory.resources = ["Resources/**"]
-            newFactory.product = .staticFramework
-        }
         
         return make(factory: newFactory)
     }
