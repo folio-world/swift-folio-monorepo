@@ -20,7 +20,7 @@ public extension Target {
             bundleId: .BundleId.app(product),
             deploymentTarget: .app(product),
             infoPlist: .app(product),
-            sources: .app,
+            sources: .app(product, type: .implement),
             resources: nil,
             copyFiles: nil,
             headers: nil,

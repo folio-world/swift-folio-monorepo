@@ -59,3 +59,105 @@ public extension Project {
         )
     }
 }
+
+//MARK: Domain
+
+public extension Project {
+    static func domain(_ product: Module.Product) -> Self {
+        return .init(
+            name: .Name.domain(product),
+            organizationName: nil,
+            options: .domain(product),
+            packages: .domain(product),
+            settings: .domain(product),
+            targets: [],
+            schemes: [],
+            fileHeaderTemplate: nil,
+            additionalFiles: [],
+            resourceSynthesizers: []
+        )
+    }
+    
+    static func domain(_ product: Module.Product, module: Module.Domain) -> Self {
+        return .init(
+            name: .Name.domain(product, module: module),
+            organizationName: nil,
+            options: .domain(product),
+            packages: .domain(product),
+            settings: .domain(product),
+            targets: [],
+            schemes: [],
+            fileHeaderTemplate: nil,
+            additionalFiles: [],
+            resourceSynthesizers: []
+        )
+    }
+}
+
+//MARK: Core
+
+public extension Project {
+    static func core(_ product: Module.Product) -> Self {
+        return .init(
+            name: .Name.core(product),
+            organizationName: nil,
+            options: .core(product),
+            packages: .core(product),
+            settings: .core(product),
+            targets: [],
+            schemes: [],
+            fileHeaderTemplate: nil,
+            additionalFiles: [],
+            resourceSynthesizers: []
+        )
+    }
+    
+    static func core(_ product: Module.Product, module: Module.Core) -> Self {
+        return .init(
+            name: .Name.core(product, module: module),
+            organizationName: nil,
+            options: .core(product),
+            packages: .core(product),
+            settings: .core(product),
+            targets: [],
+            schemes: [],
+            fileHeaderTemplate: nil,
+            additionalFiles: [],
+            resourceSynthesizers: []
+        )
+    }
+}
+
+//MARK: Shared
+
+public extension Project {
+    static func shared(_ product: Module.Product) -> Self {
+        return .init(
+            name: .Name.shared(product),
+            organizationName: nil,
+            options: .shared(product),
+            packages: .shared(product),
+            settings: .shared(product),
+            targets: [],
+            schemes: [],
+            fileHeaderTemplate: nil,
+            additionalFiles: [],
+            resourceSynthesizers: []
+        )
+    }
+    
+    static func shared(_ product: Module.Product, module: Module.Shared) -> Self {
+        return .init(
+            name: .Name.shared(product, module: module),
+            organizationName: nil,
+            options: .shared(product),
+            packages: .shared(product),
+            settings: .shared(product),
+            targets: [],
+            schemes: [],
+            fileHeaderTemplate: nil,
+            additionalFiles: [],
+            resourceSynthesizers: []
+        )
+    }
+}

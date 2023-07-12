@@ -14,12 +14,19 @@ import ProjectDescription
 public extension Product {
     static func app(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .app
         case .Dying: return .app
         }
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> Self {
         switch product {
+        case .Folio:
+            switch module {
+            case .IOS: return .app
+            case .Watch: return .watch2App
+            case .WatchExtension: return .watch2Extension
+            }
         case .Dying:
             switch module {
             case .IOS: return .app
@@ -35,12 +42,17 @@ public extension Product {
 public extension Product {
     static func feature(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func feature(_ product: Module.Product, module: Module.Feature) -> Self {
         switch product {
+        case .Folio:
+            switch module {
+            case .Onboarding: return .staticLibrary
+            }
         case .Dying:
             switch module {
             case .Onboarding: return .staticLibrary
@@ -54,12 +66,17 @@ public extension Product {
 public extension Product {
     static func domain(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func domain(_ product: Module.Product, module: Module.Domain) -> Self {
         switch product {
+        case .Folio:
+            switch module {
+            case .Health: return .staticLibrary
+            }
         case .Dying:
             switch module {
             case .Health: return .staticLibrary
@@ -73,12 +90,17 @@ public extension Product {
 public extension Product {
     static func core(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func core(_ product: Module.Product, module: Module.Core) -> Self {
         switch product {
+        case .Folio:
+            switch module {
+            case .HealthKit: return .staticLibrary
+            }
         case .Dying:
             switch module {
             case .HealthKit: return .staticLibrary
@@ -92,12 +114,19 @@ public extension Product {
 public extension Product {
     static func shared(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func shared(_ product: Module.Product, module: Module.Shared) -> Self {
         switch product {
+        case .Folio:
+            switch module {
+            case .Util: return .staticLibrary
+            case .DesignSystem: return .staticFramework
+            case .ThirdPartyLib: return .staticLibrary
+            }
         case .Dying:
             switch module {
             case .Util: return .staticLibrary

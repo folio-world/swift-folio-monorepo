@@ -26,6 +26,7 @@ public enum Module {
 
 public extension Module {
     enum Product: String, CaseIterable {
+        case Folio
         case Dying
         
         public static let name: String = "Product"

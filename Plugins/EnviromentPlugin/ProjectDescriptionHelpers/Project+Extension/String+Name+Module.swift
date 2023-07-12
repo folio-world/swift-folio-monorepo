@@ -14,6 +14,7 @@ public extension String {
     struct Name {
         private static func product(_ product: Module.Product) -> String {
             switch product {
+            case .Folio: return "Folio"
             case .Dying: return "Dying"
             }
         }
@@ -25,7 +26,7 @@ public extension String {
 
 public extension String.Name {
     static func app(_ product: Module.Product) -> String {
-        return self.product(prodct)
+        return self.product(product)
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> String {

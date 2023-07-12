@@ -11,12 +11,14 @@ import ProjectDescription
 public extension DeploymentTarget {
     private static func iOS(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .iOS(targetVersion: "16.0", devices: [.iphone])
         case .Dying: return .iOS(targetVersion: "16.0", devices: [.iphone])
         }
     }
     
     private static func watchOS(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .watchOS(targetVersion: "9.0")
         case .Dying: return .watchOS(targetVersion: "9.0")
         }
     }
@@ -37,12 +39,19 @@ public extension DeploymentTarget {
 public extension DeploymentTarget {
     static func app(_ product: Module.Product) -> Self {
         switch product {
+        case .Folio: return .iOS(product)
         case .Dying: return .iOS(product)
         }
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> Self {
         switch product {
+        case .Folio:
+            switch module {
+            case .IOS: return .iOS(product)
+            case .Watch: return .watchOS(product)
+            case .WatchExtension: return .watchOS(product)
+            }
         case .Dying:
             switch module {
             case .IOS: return .iOS(product)

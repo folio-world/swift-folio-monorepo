@@ -8,22 +8,6 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 import DependencyPlugin
+import EnviromentPlugin
 
-let targets: [Target] = [
-    .core(
-        factory: .init(
-            dependencies: [
-                .core(implements: .Network),
-                .core(implements: .KeyChainStore),
-                .core(implements: .HealthKitManager),
-                .shared
-            ]
-        )
-    )
-]
-
-
-let project: Project = .makeModule(
-    name: "Core",
-    targets: targets
-)
+let project: Project = .core(.Dying)
