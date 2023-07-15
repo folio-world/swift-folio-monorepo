@@ -1,6 +1,8 @@
 #!/usr/bin/swift
 import Foundation
 
+
+/*
 enum LayerType: String {
     case feature = "Feature"
     case domain = "Domain"
@@ -266,3 +268,4 @@ struct Bash: CommandExecuting {
         return output
     }
 }
+*/

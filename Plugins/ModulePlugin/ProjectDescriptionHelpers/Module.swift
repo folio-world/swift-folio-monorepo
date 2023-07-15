@@ -8,6 +8,7 @@
 import Foundation
 
 public enum MicroTargetType: String {
+    case example = "Example"
     case interface = "Interface"
     case implement = "Implement"
     case tests = "Tests"
@@ -16,6 +17,7 @@ public enum MicroTargetType: String {
 
 public enum Module {
     case product(Product)
+    case app(App)
     case feature(Feature)
     case domain(Domain)
     case core(Core)
