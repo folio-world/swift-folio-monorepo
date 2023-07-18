@@ -54,7 +54,47 @@ public extension Target {
             headers: nil,
             entitlements: nil,
             scripts: [],
-            dependencies: [.feature(product)],
+            dependencies: {
+                var dependencies: [TargetDependency] = []
+                
+                dependencies += Module.Feature.resolve(product).map { feature in
+                        .feature(product, module: feature)
+                }
+                
+                return dependencies
+            }(),
+            settings: .feature(product),
+            coreDataModels: [],
+            environment: [:],
+            launchArguments: [],
+            additionalFiles: [],
+            buildRules: [])
+    }
+    
+    static func feature(_ product: Module.Product, module: Module.Feature, type: MicroTargetType) -> Self {
+        return .init(
+            name: .Name.feature(product, module: module),
+            platform: .feature(product, module: module),
+            product: .feature(product, module: module),
+            productName: .ProductName.feature(product, module: module),
+            bundleId: .BundleId.feature(product, module: module),
+            deploymentTarget: .feature(product, module: module),
+            infoPlist: .feature(product, module: module),
+            sources: .path(type: .implement),
+            resources: nil,
+            copyFiles: nil,
+            headers: nil,
+            entitlements: nil,
+            scripts: [],
+            dependencies: {
+                var dependencies: [TargetDependency] = []
+                
+                dependencies += Module.Feature.resolve(product).flatMap { feature in
+                    type.dependencies().map { .feature(product, module: feature, type: $0) }
+                }
+                
+                return dependencies
+            }(),
             settings: .feature(product),
             coreDataModels: [],
             environment: [:],

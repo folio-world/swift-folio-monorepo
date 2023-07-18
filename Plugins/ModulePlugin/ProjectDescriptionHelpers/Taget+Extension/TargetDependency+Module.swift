@@ -12,11 +12,11 @@ import ProjectDescription
 
 public extension TargetDependency {
     static func app(_ product: Module.Product) -> Self {
-        return .project(target: Module.Product.name + Module.App.name, path: .app(product))
+        return .project(target: product.rawValue + Module.App.name, path: .app(product))
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> Self {
-        return .project(target: Module.Product.name + Module.App.name + module.rawValue, path: .app(product, module: module))
+        return .project(target: product.rawValue + Module.App.name + module.rawValue, path: .app(product, module: module))
     }
 }
 
@@ -24,11 +24,11 @@ public extension TargetDependency {
 
 public extension TargetDependency {
     static func feature(_ product: Module.Product) -> Self {
-        return .project(target: Module.Product.name + Module.Feature.name, path: .feature(product))
+        return .project(target: product.rawValue + Module.Feature.name, path: .feature(product))
     }
     
     static func feature(_ product: Module.Product, module: Module.Feature) -> Self {
-        return .project(target: Module.Product.name + Module.Feature.name + module.rawValue, path: .feature(product, module: module))
+        return .project(target: product.rawValue + Module.Feature.name + module.rawValue, path: .feature(product, module: module))
     }
     
     static func feature(
@@ -36,7 +36,7 @@ public extension TargetDependency {
         module: Module.Feature,
         type: MicroTargetType) -> Self {
         return .project(
-            target: Module.Product.name + Module.Feature.name + module.rawValue + type.rawValue,
+            target: product.rawValue + Module.Feature.name + module.rawValue + type.rawValue,
             path: .feature(product, module: module))
     }
 }
@@ -45,11 +45,11 @@ public extension TargetDependency {
 
 public extension TargetDependency {
     static func domain(_ product: Module.Product) -> Self {
-        return .project(target: Module.Product.name + Module.Domain.name, path: .domain(product))
+        return .project(target: product.rawValue + Module.Domain.name, path: .domain(product))
     }
     
     static func domain(_ product: Module.Product, module: Module.Domain) -> Self {
-        return .project(target: Module.Product.name + Module.Domain.name + module.rawValue, path: .domain(product, module: module))
+        return .project(target: product.rawValue + Module.Domain.name + module.rawValue, path: .domain(product, module: module))
     }
     
     static func domain(
@@ -57,7 +57,7 @@ public extension TargetDependency {
         module: Module.Domain,
         type: MicroTargetType) -> Self {
         return .project(
-            target: Module.Product.name + Module.Domain.name + module.rawValue + type.rawValue,
+            target: product.rawValue + Module.Domain.name + module.rawValue + type.rawValue,
             path: .domain(product, module: module))
     }
 }
@@ -66,11 +66,11 @@ public extension TargetDependency {
 
 public extension TargetDependency {
     static func core(_ product: Module.Product) -> Self {
-        return .project(target: Module.Product.name + Module.Core.name, path: .core(product))
+        return .project(target: product.rawValue + Module.Core.name, path: .core(product))
     }
     
     static func core(_ product: Module.Product, module: Module.Core) -> Self {
-        return .project(target: Module.Product.name + Module.Core.name + module.rawValue, path: .core(product, module: module))
+        return .project(target: product.rawValue + Module.Core.name + module.rawValue, path: .core(product, module: module))
     }
     
     static func core(
@@ -78,7 +78,7 @@ public extension TargetDependency {
         module: Module.Core,
         type: MicroTargetType) -> Self {
         return .project(
-            target: Module.Product.name + Module.Core.name + module.rawValue + type.rawValue,
+            target: product.rawValue + Module.Core.name + module.rawValue + type.rawValue,
             path: .core(product, module: module))
     }
 }
@@ -87,11 +87,11 @@ public extension TargetDependency {
 
 public extension TargetDependency {
     static func shared(_ product: Module.Product) -> Self {
-        return .project(target: Module.Product.name + Module.Shared.name, path: .shared(product))
+        return .project(target: product.rawValue + Module.Shared.name, path: .shared(product))
     }
     
     static func shared(_ product: Module.Product, module: Module.Shared) -> Self {
-        return .project(target: Module.Product.name + Module.Shared.name + module.rawValue, path: .shared(product, module: module))
+        return .project(target: product.rawValue + Module.Shared.name + module.rawValue, path: .shared(product, module: module))
     }
     
     static func shared(
@@ -99,7 +99,7 @@ public extension TargetDependency {
         module: Module.Shared,
         type: MicroTargetType) -> Self {
         return .project(
-            target: Module.Product.name + Module.Shared.name + module.rawValue + type.rawValue,
+            target: product.rawValue + Module.Shared.name + module.rawValue + type.rawValue,
             path: .shared(product, module: module))
     }
 }

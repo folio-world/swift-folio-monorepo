@@ -7,12 +7,22 @@
 
 import Foundation
 
-public enum MicroTargetType: String {
+public enum MicroTargetType: String, CaseIterable {
     case demo = "Demo"
     case interface = "Interface"
     case implement = "Implement"
     case tests = "Tests"
     case testing = "Testing"
+    
+    public func dependencies() -> [MicroTargetType] {
+        switch self {
+        case .demo: return [.implement, .interface]
+        case .interface: return []
+        case .implement: return [.interface]
+        case .tests: return [.testing]
+        case .testing: return [.interface]
+        }
+    }
 }
 
 public enum Module {
@@ -32,6 +42,13 @@ public extension Module {
         case Dying
         
         public static let name: String = "Product"
+        
+        public func dependencies() -> [Module.Feature] {
+            switch self {
+            case .Dying: return [.Home, .Onboarding]
+            case .Folio: return []
+            }
+        }
     }
 }
 
@@ -70,18 +87,26 @@ public extension Module {
         
         public static let name: String = "Feature"
         
-        public func dependencies(_ product: Product) -> [Module.Feature] {
+        public static func resolve(_ product: Product) -> [Module.Feature] {
             switch product {
-            case .Folio:
-                switch self {
-                default: return []
-                }
-            case .Dying:
-                switch self {
-                default: return []
-                }
+            case .Folio: return []
+            case .Dying: return [.Onboarding, .Home]
             }
         }
+        
+//        public static func types(_ product: Module.Product) -> [MicroTargetType] {
+//            switch product {
+//            case .Folio:
+//                switch self {
+//                default: return []
+//                }
+//            case .Dying:
+//                switch self {
+//                case .Home: return [.]
+//                default: return []
+//                }
+//            }
+//        }
     }
 }
 

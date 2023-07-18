@@ -18,7 +18,7 @@ public extension Project {
             options: .app(product),
             packages: .app(product),
             settings: .app(product),
-            targets: [.app(product)],
+            targets: [],
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -36,7 +36,7 @@ public extension Project {
             options: .feature(product),
             packages: .feature(product),
             settings: .feature(product),
-            targets: [],
+            targets: [.feature(product)],
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -51,7 +51,15 @@ public extension Project {
             options: .feature(product),
             packages: .feature(product),
             settings: .feature(product),
-            targets: [],
+            targets: {
+                var targets: [Target] = []
+                
+                targets += [
+                    .feature(product, module: module, type: .interface)
+                ]
+                
+                return targets
+            }(),
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
