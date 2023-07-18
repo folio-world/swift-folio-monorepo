@@ -8,7 +8,7 @@
 import Foundation
 
 public enum MicroTargetType: String {
-    case example = "Example"
+    case demo = "Demo"
     case interface = "Interface"
     case implement = "Implement"
     case tests = "Tests"
@@ -24,7 +24,7 @@ public enum Module {
     case shared(Shared)
 }
 
-// MARK: ProductModule
+// MARK: Product
 
 public extension Module {
     enum Product: String, CaseIterable {
@@ -35,7 +35,7 @@ public extension Module {
     }
 }
 
-// MARK: AppModule
+// MARK: App
 
 public extension Module {
     enum App: String, CaseIterable {
@@ -44,41 +44,94 @@ public extension Module {
         case WatchExtension
         
         public static let name: String = "App"
+        
+        public func dependencies(_ product: Product) -> [Module.App] {
+            switch product {
+            case .Folio:
+                switch self {
+                default: return []
+                }
+            case .Dying:
+                switch self {
+                default: return []
+                }
+            }
+        }
     }
 }
 
 
-// MARK: FeatureModule
+// MARK: Feature
 
 public extension Module {
     enum Feature: String, CaseIterable {
         case Onboarding
+        case Home
         
         public static let name: String = "Feature"
+        
+        public func dependencies(_ product: Product) -> [Module.Feature] {
+            switch product {
+            case .Folio:
+                switch self {
+                default: return []
+                }
+            case .Dying:
+                switch self {
+                default: return []
+                }
+            }
+        }
     }
 }
 
-// MARK: DomainModule
+// MARK: Domain
 
 public extension Module {
     enum Domain: String, CaseIterable {
         case Health
         
         public static let name: String = "Domain"
+        
+        public func dependencies(_ product: Product) -> [Module.Domain] {
+            switch product {
+            case .Folio:
+                switch self {
+                default: return []
+                }
+            case .Dying:
+                switch self {
+                default: return []
+                }
+            }
+        }
     }
 }
 
-// MARK: CoreModule
+// MARK: Core
 
 public extension Module {
     enum Core: String, CaseIterable {
         case HealthKit
         
         public static let name: String = "Core"
+        
+        public func dependencies(_ product: Product) -> [Module.Core] {
+            switch product {
+            case .Folio:
+                switch self {
+                default: return []
+                }
+            case .Dying:
+                switch self {
+                default: return []
+                }
+            }
+        }
     }
 }
 
-// MARK: SharedModule
+// MARK: Shared
 
 public extension Module {
     enum Shared: String, CaseIterable {
@@ -87,6 +140,19 @@ public extension Module {
         case ThirdPartyLib
         
         public static let name: String = "Shared"
+        
+        public func dependencies(_ product: Product) -> [Module.Shared] {
+            switch product {
+            case .Folio:
+                switch self {
+                default: return []
+                }
+            case .Dying:
+                switch self {
+                default: return []
+                }
+            }
+        }
     }
 }
 

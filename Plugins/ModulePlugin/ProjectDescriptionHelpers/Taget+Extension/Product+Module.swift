@@ -51,11 +51,11 @@ public extension Product {
         switch product {
         case .Folio:
             switch module {
-            case .Onboarding: return .staticLibrary
+            default: return .staticLibrary
             }
         case .Dying:
             switch module {
-            case .Onboarding: return .staticLibrary
+            default: return .staticLibrary
             }
         }
     }
@@ -75,11 +75,11 @@ public extension Product {
         switch product {
         case .Folio:
             switch module {
-            case .Health: return .staticLibrary
+            default: return .staticLibrary
             }
         case .Dying:
             switch module {
-            case .Health: return .staticLibrary
+            default: return .staticLibrary
             }
         }
     }
@@ -99,11 +99,11 @@ public extension Product {
         switch product {
         case .Folio:
             switch module {
-            case .HealthKit: return .staticLibrary
+            default: return .staticLibrary
             }
         case .Dying:
             switch module {
-            case .HealthKit: return .staticLibrary
+            default: return .staticLibrary
             }
         }
     }
@@ -123,15 +123,13 @@ public extension Product {
         switch product {
         case .Folio:
             switch module {
-            case .Util: return .staticLibrary
             case .DesignSystem: return .staticFramework
-            case .ThirdPartyLib: return .staticLibrary
+            default: return .staticLibrary
             }
         case .Dying:
             switch module {
-            case .Util: return .staticLibrary
             case .DesignSystem: return .staticFramework
-            case .ThirdPartyLib: return .staticLibrary
+            default: return .staticLibrary
             }
         }
     }

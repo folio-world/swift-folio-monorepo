@@ -1,5 +1,5 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
-import EnviromentPlugin
+import ModulePlugin
 
 let project: Project = .core(.Folio, module: .HealthKit)

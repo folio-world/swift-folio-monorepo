@@ -9,7 +9,7 @@ import Foundation
 import ProjectDescription
 
 extension SourceFilesList {
-    static private func path(type: MicroTargetType) -> Self? {
+    static func path(type: MicroTargetType) -> Self? {
         let suffix: String = "Sources/**"
         
         switch type {
@@ -19,50 +19,62 @@ extension SourceFilesList {
     }
 }
 
-//MARK: App
-
-public extension SourceFilesList {
-    static func app(_ product: Module.Product, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-    
-    static func app(_ product: Module.Product, module: Module.App, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-}
-
-//MARK: Feature
-
-public extension SourceFilesList {
-    static func feature(_ product: Module.Product, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-    
-    static func feature(_ product: Module.Product, module: Module.Feature, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-}
-
-//MARK: Domain
-
-public extension SourceFilesList {
-    static func domain(_ product: Module.Product, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-    
-    static func domain(_ product: Module.Product, module: Module.Domain, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-}
-
-//MARK: Shared
-
-public extension SourceFilesList {
-    static func shared(_ product: Module.Product, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-    
-    static func shared(_ product: Module.Product, module: Module.Domain, type: MicroTargetType) -> Self? {
-        return path(type: type)
-    }
-}
+////MARK: App
+//
+//public extension SourceFilesList {
+//    static func app(_ product: Module.Product) -> Self? {
+//        return path(type: .implement)
+//    }
+//
+//    static func app(_ product: Module.Product, module: Module.App, type: MicroTargetType) -> Self? {
+//        return path(type: type)
+//    }
+//}
+//
+////MARK: Feature
+//
+//public extension SourceFilesList {
+//    static func feature(_ product: Module.Product) -> Self? {
+//        return path(type: .implement)
+//    }
+//
+//    static func feature(_ product: Module.Product, module: Module.Feature, type: MicroTargetType) -> Self? {
+//        return path(type: type)
+//    }
+//}
+//
+////MARK: Domain
+//
+//public extension SourceFilesList {
+//    static func domain(_ product: Module.Product) -> Self? {
+//        return path(type: .implement)
+//    }
+//
+//    static func domain(_ product: Module.Product, module: Module.Domain, type: MicroTargetType) -> Self? {
+//        return path(type: type)
+//    }
+//}
+//
+////MARK: Domain
+//
+//public extension SourceFilesList {
+//    static func core(_ product: Module.Product) -> Self? {
+//        return path(type: .implement)
+//    }
+//
+//    static func domain(_ product: Module.Product, module: Module.Domain, type: MicroTargetType) -> Self? {
+//        return path(type: type)
+//    }
+//}
+//
+////MARK: Shared
+//
+//public extension SourceFilesList {
+//    static func shared(_ product: Module.Product) -> Self? {
+//        return path(type: .implement)
+//    }
+//
+//    static func shared(_ product: Module.Product, module: Module.Domain, type: MicroTargetType) -> Self? {
+//        return path(type: type)
+//    }
+//}

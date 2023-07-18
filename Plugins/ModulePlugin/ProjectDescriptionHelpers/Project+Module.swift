@@ -18,7 +18,7 @@ public extension Project {
             options: .app(product),
             packages: .app(product),
             settings: .app(product),
-            targets: [],
+            targets: [.app(product)],
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
