@@ -49,7 +49,7 @@ public extension Module {
 
 public extension Module {
     enum App: String, CaseIterable {
-        case IOS = ""
+        case IOS
         case Watch
         case WatchExtension
         

@@ -11,12 +11,14 @@ import ProjectDescription
 //MARK: App
 
 public extension InfoPlist {
+    static var prefix: String = "Support"
+    
     static func app(_ product: Module.Product) -> Self {
         return .default
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> Self {
-        return .default
+        return .file(path: "\(prefix)/\(String.Name.app(product))\(Module.App.name)\(module.rawValue)-Info.plist")
     }
 }
 
