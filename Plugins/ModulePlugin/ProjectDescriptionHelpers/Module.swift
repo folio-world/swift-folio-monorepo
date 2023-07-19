@@ -42,13 +42,6 @@ public extension Module {
         case Dying
         
         public static let name: String = "Product"
-        
-        public func dependencies() -> [Module.Feature] {
-            switch self {
-            case .Dying: return [.Home, .Onboarding]
-            case .Folio: return []
-            }
-        }
     }
 }
 
@@ -103,19 +96,6 @@ public extension Module {
         case Health
         
         public static let name: String = "Domain"
-        
-        public func dependencies(_ product: Product) -> [Module.Domain] {
-            switch product {
-            case .Folio:
-                switch self {
-                default: return []
-                }
-            case .Dying:
-                switch self {
-                default: return []
-                }
-            }
-        }
     }
 }
 
@@ -126,19 +106,6 @@ public extension Module {
         case HealthKit
         
         public static let name: String = "Core"
-        
-        public func dependencies(_ product: Product) -> [Module.Core] {
-            switch product {
-            case .Folio:
-                switch self {
-                default: return []
-                }
-            case .Dying:
-                switch self {
-                default: return []
-                }
-            }
-        }
     }
 }
 
@@ -151,19 +118,6 @@ public extension Module {
         case ThirdPartyLib
         
         public static let name: String = "Shared"
-        
-        public func dependencies(_ product: Product) -> [Module.Shared] {
-            switch product {
-            case .Folio:
-                switch self {
-                default: return []
-                }
-            case .Dying:
-                switch self {
-                default: return []
-                }
-            }
-        }
     }
 }
 
