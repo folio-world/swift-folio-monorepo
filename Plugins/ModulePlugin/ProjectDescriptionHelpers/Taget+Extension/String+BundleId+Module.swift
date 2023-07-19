@@ -47,6 +47,12 @@ public extension String.BundleId {
         
         return id.lowercased()
     }
+    
+    static func feature(_ product: Module.Product, module: Module.Feature, type: MicroTargetType) -> String {
+        let id = self.prefix(product) + "." + Module.Feature.name + "." + module.rawValue + "." + type.rawValue
+        
+        return id.lowercased()
+    }
 }
 
 //MARK: Domain
@@ -60,6 +66,12 @@ public extension String.BundleId {
     
     static func domain(_ product: Module.Product, module: Module.Domain) -> String {
         let id = self.prefix(product) + "." + Module.Domain.name + "." + module.rawValue
+        
+        return id.lowercased()
+    }
+    
+    static func domain(_ product: Module.Product, module: Module.Domain, type: MicroTargetType) -> String {
+        let id = self.prefix(product) + "." + Module.Domain.name + "." + module.rawValue + "." + type.rawValue
         
         return id.lowercased()
     }
@@ -79,6 +91,12 @@ public extension String.BundleId {
         
         return id.lowercased()
     }
+    
+    static func core(_ product: Module.Product, module: Module.Core, type: MicroTargetType) -> String {
+        let id = self.prefix(product) + "." + Module.Core.name + "." + module.rawValue + "." + type.rawValue
+        
+        return id.lowercased()
+    }
 }
 
 //MARK: Shared
@@ -92,6 +110,12 @@ public extension String.BundleId {
     
     static func shared(_ product: Module.Product, module: Module.Shared) -> String {
         let id = self.prefix(product) + "." + Module.Shared.name + "." + module.rawValue
+        
+        return id.lowercased()
+    }
+    
+    static func shared(_ product: Module.Product, module: Module.Shared, type: MicroTargetType) -> String {
+        let id = self.prefix(product) + "." + Module.Shared.name + "." + module.rawValue + "." + type.rawValue
         
         return id.lowercased()
     }

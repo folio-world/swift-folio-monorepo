@@ -18,7 +18,15 @@ public extension Project {
             options: .app(product),
             packages: .app(product),
             settings: .app(product),
-            targets: [],
+            targets: {
+                var targets: [Target] = []
+                
+                targets += Module.App.targets(product).map { app in
+                    return .app(product, module: app)
+                }
+                
+                return targets
+            }(),
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -55,7 +63,11 @@ public extension Project {
                 var targets: [Target] = []
                 
                 targets += [
-                    .feature(product, module: module, type: .interface)
+                    .feature(product, module: module, type: .interface),
+                    .feature(product, module: module, type: .implement),
+                    .feature(product, module: module, type: .demo),
+                    .feature(product, module: module, type: .tests),
+                    .feature(product, module: module, type: .testing)
                 ]
                 
                 return targets

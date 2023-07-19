@@ -10,7 +10,7 @@ import Foundation
 public enum MicroTargetType: String, CaseIterable {
     case demo = "Demo"
     case interface = "Interface"
-    case implement = "Implement"
+    case implement = ""
     case tests = "Tests"
     case testing = "Testing"
     
@@ -56,21 +56,21 @@ public extension Module {
 
 public extension Module {
     enum App: String, CaseIterable {
-        case IOS
+        case IOS = ""
         case Watch
         case WatchExtension
         
         public static let name: String = "App"
         
-        public func dependencies(_ product: Product) -> [Module.App] {
+        public static func targets(_ product: Product) -> [Module.App] {
             switch product {
             case .Folio:
                 switch self {
-                default: return []
+                default: return [.IOS]
                 }
             case .Dying:
                 switch self {
-                default: return []
+                default: return [.IOS]
                 }
             }
         }
@@ -87,26 +87,12 @@ public extension Module {
         
         public static let name: String = "Feature"
         
-        public static func resolve(_ product: Product) -> [Module.Feature] {
+        public static func targets(_ product: Product) -> [Module.Feature] {
             switch product {
             case .Folio: return []
             case .Dying: return [.Onboarding, .Home]
             }
         }
-        
-//        public static func types(_ product: Module.Product) -> [MicroTargetType] {
-//            switch product {
-//            case .Folio:
-//                switch self {
-//                default: return []
-//                }
-//            case .Dying:
-//                switch self {
-//                case .Home: return [.]
-//                default: return []
-//                }
-//            }
-//        }
     }
 }
 

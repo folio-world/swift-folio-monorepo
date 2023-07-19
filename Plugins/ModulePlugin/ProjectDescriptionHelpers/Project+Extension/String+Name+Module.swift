@@ -30,11 +30,7 @@ public extension String.Name {
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> String {
-        switch module {
-        case .IOS: return self.product(product)
-        case .Watch: return self.product(product) + module.rawValue
-        case .WatchExtension: return self.product(product) + module.rawValue
-        }
+        return self.product(product) + module.rawValue
     }
 }
 

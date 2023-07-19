@@ -26,7 +26,17 @@ public extension Target {
             headers: nil,
             entitlements: nil,
             scripts: [],
-            dependencies: [.feature(product)],
+            dependencies: {
+                var dependencies: [TargetDependency] = [
+                    .feature(product)
+                ]
+                
+                dependencies += Module.App.targets(product).map { app in
+                        .app(product, module: app)
+                }
+                
+                return dependencies
+            }(),
             settings: .app(product),
             coreDataModels: [],
             environment: [:],
@@ -34,6 +44,37 @@ public extension Target {
             additionalFiles: [],
             buildRules: [])
     }
+    
+    static func app(_ product: Module.Product, module: Module.App) -> Self {
+        return .init(
+            name: .Name.app(product, module: module),
+            platform: .app(product, module: module),
+            product: .app(product, module: module),
+            productName: .ProductName.app(product, module: module),
+            bundleId: .BundleId.app(product, module: module),
+            deploymentTarget: .app(product, module: module),
+            infoPlist: .app(product, module: module),
+            sources: nil,
+            resources: nil,
+            copyFiles: nil,
+            headers: nil,
+            entitlements: nil,
+            scripts: [],
+            dependencies: {
+                var dependencies: [TargetDependency] = [
+                    .feature(product)
+                ]
+                
+                return dependencies
+            }(),
+            settings: .app(product),
+            coreDataModels: [],
+            environment: [:],
+            launchArguments: [],
+            additionalFiles: [],
+            buildRules: [])
+    }
+
 }
 
 //MARK: Feature
@@ -57,7 +98,7 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-                dependencies += Module.Feature.resolve(product).map { feature in
+                dependencies += Module.Feature.targets(product).map { feature in
                         .feature(product, module: feature)
                 }
                 
@@ -73,7 +114,7 @@ public extension Target {
     
     static func feature(_ product: Module.Product, module: Module.Feature, type: MicroTargetType) -> Self {
         return .init(
-            name: .Name.feature(product, module: module),
+            name: .Name.feature(product, module: module, type: type),
             platform: .feature(product, module: module),
             product: .feature(product, module: module),
             productName: .ProductName.feature(product, module: module),
@@ -89,7 +130,7 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-                dependencies += Module.Feature.resolve(product).flatMap { feature in
+                dependencies += Module.Feature.targets(product).flatMap { feature in
                     type.dependencies().map { .feature(product, module: feature, type: $0) }
                 }
                 
