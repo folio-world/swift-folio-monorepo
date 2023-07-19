@@ -17,6 +17,6 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>UIUserInterfaceStyle</key>
-	<string>White</string>
+	<string>Light</string>
 </dict>
 </plist>
