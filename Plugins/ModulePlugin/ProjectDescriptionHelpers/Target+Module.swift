@@ -121,7 +121,7 @@ public extension Target {
             bundleId: .BundleId.feature(product, module: module),
             deploymentTarget: .feature(product, module: module),
             infoPlist: .feature(product, module: module),
-            sources: .path(type: .implement),
+            sources: .path(type: type),
             resources: nil,
             copyFiles: nil,
             headers: nil,

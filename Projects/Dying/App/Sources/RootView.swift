@@ -8,13 +8,14 @@
 
 import SwiftUI
 
-struct RootView: View {
+import DyingFeature
+
+public struct RootView: View {
     public init() {
         
     }
     
-    var body: some View {
-        Text("root view")
+    public var body: some View {
+        MainView()
     }
 }
-

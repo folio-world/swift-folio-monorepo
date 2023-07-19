@@ -14,7 +14,7 @@ extension SourceFilesList {
         
         switch type {
         case .implement: return .init(stringLiteral: suffix)
-        default: return .init(stringLiteral: type.rawValue + suffix)
+        default: return .init(stringLiteral: type.rawValue + "/" + suffix)
         }
     }
 }
