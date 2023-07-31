@@ -130,10 +130,6 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-//                dependencies += module.microTargetTypes(product).map {
-//                    .feature(product, module: module, type: $0)
-//                }
-                
                 if type == .interface {
                     dependencies += [.domain(product)]
                 }
@@ -277,15 +273,7 @@ public extension Target {
             scripts: [],
             dependencies: {
                 var dependencies: [TargetDependency] = []
-                
-//                dependencies += Module.Core.targets(product).flatMap { core in
-//                    type.dependencies().map { .core(product, module: core, type: $0) }
-//                }
-                
-//                dependencies += module.microTargetTypes(product).map {
-//                    .core(product, module: module, type: $0)
-//                }
-                
+
                 if type == .interface {
                     dependencies += [.shared(product)]
                 }
@@ -357,13 +345,7 @@ public extension Target {
             scripts: [],
             dependencies: {
                 var dependencies: [TargetDependency] = []
-                
-//                dependencies += Module.Shared.targets(product).flatMap { shared in
-//                    type.dependencies().filter({ type in
-//                        module.microTargetTypes(product).contains(where: { type == $0 })
-//                    }).map { .shared(product, module: shared, type: $0) }
-//                }
-                
+
                 dependencies += type.dependencies().map {
                     .shared(product, module: module, type: $0)
                 }
