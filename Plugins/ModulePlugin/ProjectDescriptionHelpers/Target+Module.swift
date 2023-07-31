@@ -130,8 +130,16 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-                dependencies += Module.Feature.targets(product).flatMap { feature in
-                    type.dependencies().map { .feature(product, module: feature, type: $0) }
+//                dependencies += module.microTargetTypes(product).map {
+//                    .feature(product, module: module, type: $0)
+//                }
+                
+                if type == .interface {
+                    dependencies += [.domain(product)]
+                }
+                
+                dependencies += type.dependencies().map {
+                    .feature(product, module: module, type: $0)
                 }
                 
                 return dependencies
@@ -163,7 +171,51 @@ public extension Target {
             headers: nil,
             entitlements: nil,
             scripts: [],
-            dependencies: [.core(product)],
+            dependencies: {
+                var dependencies: [TargetDependency] = []
+                
+                dependencies += Module.Domain.targets(product).map { domain in
+                        .domain(product, module: domain)
+                }
+                
+                return dependencies
+            }(),
+            settings: .domain(product),
+            coreDataModels: [],
+            environment: [:],
+            launchArguments: [],
+            additionalFiles: [],
+            buildRules: [])
+    }
+    
+    static func domain(_ product: Module.Product, module: Module.Domain, type: MicroTargetType) -> Self {
+        return .init(
+            name: .Name.domain(product, module: module, type: type),
+            platform: .domain(product, module: module),
+            product: .domain(product, module: module),
+            productName: .ProductName.domain(product, module: module),
+            bundleId: .BundleId.domain(product, module: module),
+            deploymentTarget: .domain(product, module: module),
+            infoPlist: .domain(product, module: module),
+            sources: .path(type: type),
+            resources: nil,
+            copyFiles: nil,
+            headers: nil,
+            entitlements: nil,
+            scripts: [],
+            dependencies: {
+                var dependencies: [TargetDependency] = []
+                
+                if type == .interface {
+                    dependencies += [.core(product)]
+                }
+                
+                dependencies += type.dependencies().map {
+                    .domain(product, module: module, type: $0)
+                }
+                
+                return dependencies
+            }(),
             settings: .domain(product),
             coreDataModels: [],
             environment: [:],
@@ -191,8 +243,60 @@ public extension Target {
             headers: nil,
             entitlements: nil,
             scripts: [],
-            dependencies: [.domain(product)],
-            settings: .domain(product),
+            dependencies: {
+                var dependencies: [TargetDependency] = [.shared(product)]
+                
+                dependencies += Module.Core.targets(product).map { core in
+                        .core(product, module: core)
+                }
+                
+                return dependencies
+            }(),
+            settings: .core(product),
+            coreDataModels: [],
+            environment: [:],
+            launchArguments: [],
+            additionalFiles: [],
+            buildRules: [])
+    }
+    
+    static func core(_ product: Module.Product, module: Module.Core, type: MicroTargetType) -> Self {
+        return .init(
+            name: .Name.core(product, module: module, type: type),
+            platform: .core(product, module: module),
+            product: .core(product, module: module),
+            productName: .ProductName.core(product, module: module),
+            bundleId: .BundleId.core(product, module: module),
+            deploymentTarget: .core(product, module: module),
+            infoPlist: .core(product, module: module),
+            sources: .path(type: type),
+            resources: nil,
+            copyFiles: nil,
+            headers: nil,
+            entitlements: nil,
+            scripts: [],
+            dependencies: {
+                var dependencies: [TargetDependency] = []
+                
+//                dependencies += Module.Core.targets(product).flatMap { core in
+//                    type.dependencies().map { .core(product, module: core, type: $0) }
+//                }
+                
+//                dependencies += module.microTargetTypes(product).map {
+//                    .core(product, module: module, type: $0)
+//                }
+                
+                if type == .interface {
+                    dependencies += [.shared(product)]
+                }
+                
+                dependencies += type.dependencies().map {
+                    .core(product, module: module, type: $0)
+                }
+                
+                return dependencies
+            }(),
+            settings: .core(product),
             coreDataModels: [],
             environment: [:],
             launchArguments: [],
@@ -219,7 +323,53 @@ public extension Target {
             headers: nil,
             entitlements: nil,
             scripts: [],
-            dependencies: [],
+            dependencies: {
+                var dependencies: [TargetDependency] = []
+                
+                dependencies += Module.Shared.targets(product).map { shared in
+                        .shared(product, module: shared)
+                }
+                
+                return dependencies
+            }(),
+            settings: .shared(product),
+            coreDataModels: [],
+            environment: [:],
+            launchArguments: [],
+            additionalFiles: [],
+            buildRules: [])
+    }
+    
+    static func shared(_ product: Module.Product, module: Module.Shared, type: MicroTargetType) -> Self {
+        return .init(
+            name: .Name.shared(product, module: module, type: type),
+            platform: .shared(product, module: module),
+            product: .shared(product, module: module),
+            productName: .ProductName.shared(product, module: module),
+            bundleId: .BundleId.shared(product, module: module),
+            deploymentTarget: .shared(product, module: module),
+            infoPlist: .shared(product, module: module),
+            sources: .path(type: type),
+            resources: nil,
+            copyFiles: nil,
+            headers: nil,
+            entitlements: nil,
+            scripts: [],
+            dependencies: {
+                var dependencies: [TargetDependency] = []
+                
+//                dependencies += Module.Shared.targets(product).flatMap { shared in
+//                    type.dependencies().filter({ type in
+//                        module.microTargetTypes(product).contains(where: { type == $0 })
+//                    }).map { .shared(product, module: shared, type: $0) }
+//                }
+                
+                dependencies += type.dependencies().map {
+                    .shared(product, module: module, type: $0)
+                }
+                
+                return dependencies
+            }(),
             settings: .shared(product),
             coreDataModels: [],
             environment: [:],

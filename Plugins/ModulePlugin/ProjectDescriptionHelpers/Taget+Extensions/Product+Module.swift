@@ -14,14 +14,14 @@ import ProjectDescription
 public extension Product {
     static func app(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .app
+        case .Minimal: return .app
         case .Dying: return .app
         }
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> Self {
         switch product {
-        case .Folio:
+        case .Minimal:
             switch module {
             case .IOS: return .app
             case .Watch: return .watch2App
@@ -42,14 +42,14 @@ public extension Product {
 public extension Product {
     static func feature(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .staticLibrary
+        case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func feature(_ product: Module.Product, module: Module.Feature) -> Self {
         switch product {
-        case .Folio:
+        case .Minimal:
             switch module {
             default: return .staticLibrary
             }
@@ -66,14 +66,14 @@ public extension Product {
 public extension Product {
     static func domain(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .staticLibrary
+        case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func domain(_ product: Module.Product, module: Module.Domain) -> Self {
         switch product {
-        case .Folio:
+        case .Minimal:
             switch module {
             default: return .staticLibrary
             }
@@ -90,14 +90,14 @@ public extension Product {
 public extension Product {
     static func core(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .staticLibrary
+        case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func core(_ product: Module.Product, module: Module.Core) -> Self {
         switch product {
-        case .Folio:
+        case .Minimal:
             switch module {
             default: return .staticLibrary
             }
@@ -114,14 +114,14 @@ public extension Product {
 public extension Product {
     static func shared(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .staticLibrary
+        case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
         }
     }
     
     static func shared(_ product: Module.Product, module: Module.Shared) -> Self {
         switch product {
-        case .Folio:
+        case .Minimal:
             switch module {
             case .DesignSystem: return .staticFramework
             default: return .staticLibrary

@@ -14,7 +14,7 @@ public extension String {
     struct Name {
         private static func product(_ product: Module.Product) -> String {
             switch product {
-            case .Folio: return "Folio"
+            case .Minimal: return "Folio"
             case .Dying: return "Dying"
             }
         }

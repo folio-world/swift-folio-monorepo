@@ -38,7 +38,7 @@ public enum Module {
 
 public extension Module {
     enum Product: String, CaseIterable {
-        case Folio
+        case Minimal
         case Dying
         
         public static let name: String = "Product"
@@ -57,7 +57,7 @@ public extension Module {
         
         public static func targets(_ product: Product) -> [Module.App] {
             switch product {
-            case .Folio:
+            case .Minimal:
                 switch self {
                 default: return [.IOS]
                 }
@@ -82,8 +82,21 @@ public extension Module {
         
         public static func targets(_ product: Product) -> [Module.Feature] {
             switch product {
-            case .Folio: return []
+            case .Minimal: return []
             case .Dying: return [.Onboarding, .Home]
+            }
+        }
+        
+        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
+            switch product {
+            case .Minimal:
+                switch self {
+                default: return MicroTargetType.allCases
+                }
+            case .Dying:
+                switch self {
+                default: return MicroTargetType.allCases
+                }
             }
         }
     }
@@ -96,6 +109,26 @@ public extension Module {
         case Health
         
         public static let name: String = "Domain"
+        
+        public static func targets(_ product: Product) -> [Module.Domain] {
+            switch product {
+            case .Minimal: return []
+            case .Dying: return [.Health]
+            }
+        }
+        
+        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
+            switch product {
+            case .Minimal:
+                switch self {
+                default: return MicroTargetType.allCases
+                }
+            case .Dying:
+                switch self {
+                default: return [.implement, .interface, .testing, .tests]
+                }
+            }
+        }
     }
 }
 
@@ -106,6 +139,27 @@ public extension Module {
         case HealthKit
         
         public static let name: String = "Core"
+        
+        public static func targets(_ product: Product) -> [Module.Core] {
+            switch product {
+            case .Minimal: return [.HealthKit]
+            case .Dying: return []
+            }
+        }
+        
+        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
+            switch product {
+            case .Minimal:
+                switch self {
+                default: return MicroTargetType.allCases
+                }
+            case .Dying:
+                switch self {
+                default: return [.implement, .interface, .testing, .tests]
+                }
+            }
+        }
+
     }
 }
 
@@ -118,6 +172,27 @@ public extension Module {
         case ThirdPartyLib
         
         public static let name: String = "Shared"
+        
+        public static func targets(_ product: Product) -> [Module.Shared] {
+            switch product {
+            case .Minimal: return [.Util, .DesignSystem]
+            case .Dying: return [.Util, .DesignSystem, .ThirdPartyLib]
+            }
+        }
+        
+        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
+            switch product {
+            case .Minimal:
+                switch self {
+                default: return [.implement, .interface]
+                }
+            case .Dying:
+                switch self {
+                default: return [.implement, .interface]
+                }
+            }
+        }
+
     }
 }
 

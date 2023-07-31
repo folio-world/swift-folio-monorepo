@@ -62,13 +62,9 @@ public extension Project {
             targets: {
                 var targets: [Target] = []
                 
-                targets += [
-                    .feature(product, module: module, type: .interface),
-                    .feature(product, module: module, type: .implement),
-                    .feature(product, module: module, type: .demo),
-                    .feature(product, module: module, type: .tests),
-                    .feature(product, module: module, type: .testing)
-                ]
+                targets += module.microTargetTypes(product).map {
+                    .feature(product, module: module, type: $0)
+                }
                 
                 return targets
             }(),
@@ -90,7 +86,7 @@ public extension Project {
             options: .domain(product),
             packages: .domain(product),
             settings: .domain(product),
-            targets: [],
+            targets: [.domain(product)],
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -105,7 +101,15 @@ public extension Project {
             options: .domain(product),
             packages: .domain(product),
             settings: .domain(product),
-            targets: [],
+            targets: {
+                var targets: [Target] = []
+                
+                targets += module.microTargetTypes(product).map {
+                    .domain(product, module: module, type: $0)
+                }
+                
+                return targets
+            }(),
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -124,7 +128,7 @@ public extension Project {
             options: .core(product),
             packages: .core(product),
             settings: .core(product),
-            targets: [],
+            targets: [.core(product)],
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -139,7 +143,15 @@ public extension Project {
             options: .core(product),
             packages: .core(product),
             settings: .core(product),
-            targets: [],
+            targets: {
+                var targets: [Target] = []
+                
+                targets += module.microTargetTypes(product).map {
+                    .core(product, module: module, type: $0)
+                }
+                
+                return targets
+            }(),
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -158,7 +170,7 @@ public extension Project {
             options: .shared(product),
             packages: .shared(product),
             settings: .shared(product),
-            targets: [],
+            targets: [.shared(product)],
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
@@ -173,7 +185,15 @@ public extension Project {
             options: .shared(product),
             packages: .shared(product),
             settings: .shared(product),
-            targets: [],
+            targets: {
+                var targets: [Target] = []
+                
+                targets += module.microTargetTypes(product).map {
+                    .shared(product, module: module, type: $0)
+                }
+                
+                return targets
+            }(),
             schemes: [],
             fileHeaderTemplate: nil,
             additionalFiles: [],
