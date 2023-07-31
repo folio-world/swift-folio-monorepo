@@ -2,4 +2,4 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import ModulePlugin
 
-let project: Project = .shared(.Folio, module: .ThirdPartyLib)
+let project: Project = .core(.Minimal, module: .HealthKit)

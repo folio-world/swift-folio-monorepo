@@ -2,4 +2,4 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import ModulePlugin
 
-let project: Project = .shared(.Folio)
+let project: Project = .feature(.Minimal, module: .Onboarding)
