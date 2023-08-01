@@ -350,6 +350,10 @@ public extension Target {
                     .shared(product, module: module, type: $0)
                 }
                 
+                if module == .ThirdPartyLib && type == .interface {
+                    dependencies += .thirdPartyLibs(product)
+                }
+                
                 return dependencies
             }(),
             settings: .shared(product),
