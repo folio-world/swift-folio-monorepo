@@ -2,4 +2,4 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import ModulePlugin
 
-let project: Project = .domain(.Dying, module: .Health)
+let project: Project = .feature(.Minimal, module: .Onboarding)

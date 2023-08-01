@@ -13,7 +13,7 @@ import ProjectDescription
 public extension Project.Options {
     static func app(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .options()
+        case .Minimal: return .options()
         case .Dying: return .options()
         }
     }
@@ -24,7 +24,7 @@ public extension Project.Options {
 public extension Project.Options {
     static func feature(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .options()
+        case .Minimal: return .options()
         case .Dying: return .options()
         }
     }
@@ -35,7 +35,7 @@ public extension Project.Options {
 public extension Project.Options {
     static func domain(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .options()
+        case .Minimal: return .options()
         case .Dying: return .options()
         }
     }
@@ -46,7 +46,7 @@ public extension Project.Options {
 public extension Project.Options {
     static func core(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .options()
+        case .Minimal: return .options()
         case .Dying: return .options()
         }
     }
@@ -57,7 +57,7 @@ public extension Project.Options {
 public extension Project.Options {
     static func shared(_ product: Module.Product) -> Self {
         switch product {
-        case .Folio: return .options()
+        case .Minimal: return .options()
         case .Dying: return .options()
         }
     }
