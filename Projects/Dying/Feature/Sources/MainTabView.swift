@@ -17,7 +17,7 @@ public struct MainTabView: View {
     }
     
     public var body: some View {
-        WithViewStore(self.store, observe: { state in state }) { viewStore in
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
             Text("hi")
         }
     }

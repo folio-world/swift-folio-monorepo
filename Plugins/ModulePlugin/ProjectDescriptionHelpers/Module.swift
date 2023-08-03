@@ -77,13 +77,14 @@ public extension Module {
     enum Feature: String, CaseIterable {
         case Onboarding
         case Home
+        case MyPage
         
         public static let name: String = "Feature"
         
         public static func targets(_ product: Product) -> [Module.Feature] {
             switch product {
             case .Minimal: return []
-            case .Dying: return [.Onboarding, .Home]
+            case .Dying: return [.Onboarding, .Home, .MyPage]
             }
         }
         

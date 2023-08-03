@@ -116,11 +116,11 @@ public extension Target {
         return .init(
             name: .Name.feature(product, module: module, type: type),
             platform: .feature(product, module: module),
-            product: .feature(product, module: module),
+            product: .feature(product, module: module, type: type),
             productName: .ProductName.feature(product, module: module),
             bundleId: .BundleId.feature(product, module: module),
             deploymentTarget: .feature(product, module: module),
-            infoPlist: .feature(product, module: module),
+            infoPlist: .feature(product, module: module, type: type),
             sources: .path(type: type),
             resources: nil,
             copyFiles: nil,

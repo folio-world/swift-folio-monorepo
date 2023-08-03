@@ -11,14 +11,14 @@ import ProjectDescription
 //MARK: App
 
 public extension InfoPlist {
-    static var prefix: String = "Support"
+    static var prefixPath: String = "Support"
     
     static func app(_ product: Module.Product) -> Self {
         return .default
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> Self {
-        return .file(path: "\(prefix)/\(String.Name.app(product))\(Module.App.name)\(module.rawValue)-Info.plist")
+        return .file(path: "\(prefixPath)/\(String.Name.app(product))\(Module.App.name)\(module.rawValue)-Info.plist")
     }
 }
 
@@ -31,6 +31,13 @@ public extension InfoPlist {
     
     static func feature(_ product: Module.Product, module: Module.Feature) -> Self {
         return .default
+    }
+    
+    static func feature(_ product: Module.Product, module: Module.Feature, type: MicroTargetType) -> Self {
+        switch type {
+        case .demo: return .file(path: "\(prefixPath)/\(String.Name.feature(product, module: module, type: type))-Info.plist")
+        default: return .feature(product, module: module)
+        }
     }
 }
 

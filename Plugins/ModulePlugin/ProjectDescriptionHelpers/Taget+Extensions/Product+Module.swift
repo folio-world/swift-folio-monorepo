@@ -59,6 +59,16 @@ public extension Product {
             }
         }
     }
+    
+    static func feature(_ product: Module.Product, module: Module.Feature, type: MicroTargetType) -> Self {
+        switch type {
+        case .demo: return .app
+        case .interface: return .staticLibrary
+        case .implement: return .staticLibrary
+        case .tests: return .unitTests
+        case .testing: return .staticLibrary
+        }
+    }
 }
 
 //MARK: Domain
