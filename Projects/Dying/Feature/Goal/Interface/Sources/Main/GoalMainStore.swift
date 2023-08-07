@@ -10,33 +10,41 @@ import ComposableArchitecture
 public struct GoalMainStore: Reducer {
     public init() {}
     
+    public enum Unit: String, CaseIterable, Equatable, Codable, Hashable {
+        case year
+        case month
+        
+        var number: Int {
+            switch self {
+            case .year: return 100
+            case .month: return 1200
+            }
+        }
+    }
+    
     public struct State: Codable, Equatable, Hashable {
-        var cnt: Int
-        var isShow: Bool = false
+        var pointNumber: Int = 100
+        var currentUnit: Unit = .year
         
         public init() {
-            self.cnt = 100
+            
         }
     }
     
     public enum Action: Equatable {
         case onAppear
         
-        case plus
-        case minus
+        case selectUnit(Unit)
     }
     
     public func reduce(into state: inout State, action: Action) -> Effect<Action>  {
         switch action {
         case .onAppear:
-                state.cnt = 100
             return .none
             
-        case .plus:
-            state.cnt = 5200
-            return .none
-        case .minus:
-            state.cnt -= 1000
+        case let .selectUnit(unit):
+            state.currentUnit = unit
+            state.pointNumber = unit.number
             return .none
             
         default:

@@ -15,14 +15,12 @@ public struct GoalMainView: View {
     public init(store: StoreOf<GoalMainStore>) {
         self.store = store
     }
-    @State var selectedColor = "color"
-    var colors = ["year", "month", "week"]
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 LazyVGrid(columns:  .init(repeating: .init(.adaptive(minimum: 3, maximum: 3.5), spacing: 1), count: 1), spacing: 1) {
-                    ForEach(0..<100, id: \.self) { i in
+                    ForEach(0..<viewStore.state.pointNumber, id: \.self) { i in
                         Circle()
                             .foregroundColor(i == 1000 ? .red : .gray)
                     }
@@ -32,39 +30,25 @@ public struct GoalMainView: View {
                 HStack {
                     Spacer()
                     
-                    Picker("Choose a color", selection: $selectedColor) {
-                        ForEach(colors, id: \.self) {
-                            Text($0)
+                    Picker(
+                      "Tab",
+                      selection: viewStore.binding(get: \.currentUnit, send: { unit in GoalMainStore.Action.selectUnit(unit) }).animation(.easeIn)
+                    ) {
+                        ForEach(GoalMainStore.Unit.allCases, id: \.self) { unit in
+                            Text(unit.rawValue)
+                                .tag(unit)
                         }
                     }
                     .pickerStyle(.segmented)
-                    .frame(maxWidth: 200)
+                    .frame(maxWidth: 150)
                     .padding(.horizontal)
-                }
-                
-                VStack {
-                    HStack {
-                        Text("goal main view")
-                            .font(.title3)
-                        
-                        Button("plus") {
-                            viewStore.send(.plus)
-                        }
-                        
-                        Button("Minus") {
-                            viewStore.send(.minus)
-                        }
-                        
-                        Spacer()
-                    }
                     
-                    Spacer()
-                }
-                .onAppear {
-                    viewStore.send(.onAppear, animation: .default)
                 }
             }
             .navigationTitle("Goal")
+            .onAppear {
+                viewStore.send(.onAppear, animation: .default)
+            }
         }
     }
 }
