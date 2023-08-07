@@ -9,6 +9,8 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import DyingShared
+
 public struct GoalMainView: View {
     let store: StoreOf<GoalMainStore>
     
@@ -30,9 +32,13 @@ public struct GoalMainView: View {
                 HStack {
                     Spacer()
                     
+                    DatePicker("", selection: viewStore.binding(get: \.currentDate, send: GoalMainStore.Action.selectDate).animation(.default), displayedComponents: [.date])
+                        .datePickerStyle(.compact)
+                        .frame(maxWidth: 150)
+                    
                     Picker(
                       "Tab",
-                      selection: viewStore.binding(get: \.currentUnit, send: { unit in GoalMainStore.Action.selectUnit(unit) }).animation(.easeIn)
+                      selection: viewStore.binding(get: \.currentUnit, send: GoalMainStore.Action.selectUnit).animation(.default)
                     ) {
                         ForEach(GoalMainStore.Unit.allCases, id: \.self) { unit in
                             Text(unit.rawValue)
@@ -40,10 +46,35 @@ public struct GoalMainView: View {
                         }
                     }
                     .pickerStyle(.segmented)
-                    .frame(maxWidth: 150)
+                    .frame(maxWidth: 120)
                     .padding(.horizontal)
-                    
                 }
+                
+                HStack {
+                    Text(Date().localizedString(dateStyle: .short, timeStyle: .none))
+                        .font(.headline)
+                    
+                    Spacer()
+                }
+                .padding()
+                
+                HStack {
+                    Image(systemName: "heart.fill")
+                        .foregroundColor(.red)
+                    
+                    Text("마음 단련하기")
+                        .font(.body)
+                        .fontWeight(.semibold)
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        
+                    }, label: {
+                        Image(systemName: "chevron.right")
+                    })
+                }
+                .padding(.horizontal)
             }
             .navigationTitle("Goal")
             .onAppear {

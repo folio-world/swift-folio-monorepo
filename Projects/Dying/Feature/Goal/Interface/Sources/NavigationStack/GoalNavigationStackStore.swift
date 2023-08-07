@@ -28,7 +28,7 @@ public struct GoalNavigationStackStore: Reducer {
     }
     
     public struct Path: Reducer {
-        public enum State: Codable, Equatable, Hashable {
+        public enum State: Equatable {
             case main(GoalMainStore.State = .init())
         }
         

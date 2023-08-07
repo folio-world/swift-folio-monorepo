@@ -5,6 +5,8 @@
 //  Created by 송영모 on 2023/08/03.
 //
 
+import Foundation
+
 import ComposableArchitecture
 
 public struct GoalMainStore: Reducer {
@@ -22,8 +24,9 @@ public struct GoalMainStore: Reducer {
         }
     }
     
-    public struct State: Codable, Equatable, Hashable {
+    public struct State: Equatable {
         var pointNumber: Int = 100
+        var currentDate: Date = .init()
         var currentUnit: Unit = .year
         
         public init() {
@@ -34,6 +37,7 @@ public struct GoalMainStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
+        case selectDate(Date)
         case selectUnit(Unit)
     }
     
