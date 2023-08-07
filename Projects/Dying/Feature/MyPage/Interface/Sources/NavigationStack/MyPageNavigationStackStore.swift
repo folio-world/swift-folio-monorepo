@@ -1,44 +1,42 @@
 //
-//  RootGoalStore.swift
-//  DyingFeatureGoalInterface
+//  MyPageNavigationStackStore.swift
+//  DyingFeatureMyPageInterface
 //
-//  Created by 송영모 on 2023/08/03.
+//  Created by 송영모 on 2023/08/07.
 //
 
 import ComposableArchitecture
 
-public struct GoalNavigationStackStore: Reducer {
+public struct MyPageNavigationStackStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
         var path: StackState<Path.State> = .init()
         
-        var main: GoalMainStore.State = .init()
+        var main: MyPageMainStore.State = .init()
         
         public init() {}
     }
     
-    public enum Action: BindableAction, Equatable {
-        case binding(BindingAction<State>)
-        
+    public enum Action: Equatable {
         case onAppear
         
-        case main(GoalMainStore.Action)
+        case main(MyPageMainStore.Action)
         case path(StackAction<Path.State, Path.Action>)
     }
     
     public struct Path: Reducer {
         public enum State: Codable, Equatable, Hashable {
-            case main(GoalMainStore.State = .init())
+            case main(MyPageMainStore.State = .init())
         }
         
         public enum Action: Equatable {
-            case main(GoalMainStore.Action)
+            case main(MyPageMainStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
             Scope(state: /State.main, action: /Action.main) {
-                GoalMainStore()
+                MyPageMainStore()
             }
         }
     }
@@ -47,7 +45,6 @@ public struct GoalNavigationStackStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-//                state = .init()
                 return .none
                 
             default:
@@ -56,7 +53,7 @@ public struct GoalNavigationStackStore: Reducer {
         }
         
         Scope(state: \.main, action: /Action.main) {
-            GoalMainStore()._printChanges()
+            MyPageMainStore()._printChanges()
         }
     }
 }

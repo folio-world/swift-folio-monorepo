@@ -5,7 +5,14 @@
 //  Created by 송영모 on 2023/07/19.
 //
 
-@_exported import DyingFeatureHome
-@_exported import DyingFeatureHomeInterface
-@_exported import DyingFeatureOnboarding
 @_exported import DyingFeatureOnboardingInterface
+@_exported import DyingFeatureOnboarding
+
+@_exported import DyingFeatureHomeInterface
+@_exported import DyingFeatureHome
+
+@_exported import DyingFeatureHealthInterface
+@_exported import DyingFeatureHealth
+
+@_exported import DyingFeatureMyPageInterface
+@_exported import DyingFeatureMyPage
