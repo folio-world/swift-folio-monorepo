@@ -44,6 +44,8 @@ public extension [Package] {
 
 public extension [Package] {
     static func shared(_ product: Module.Product) -> Self {
-        return []
+        return [
+            .remote(url: "https://github.com/pointfreeco/swift-composable-architecture", requirement: .upToNextMajor(from: "1.0.0"))
+        ]
     }
 }
