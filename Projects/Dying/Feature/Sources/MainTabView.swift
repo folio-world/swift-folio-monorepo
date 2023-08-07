@@ -9,6 +9,11 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import DyingFeatureHomeInterface
+import DyingFeatureHome
+import DyingFeatureGoalInterface
+import DyingFeatureGoal
+
 public struct MainTabView: View {
     let store: StoreOf<MainTabStore>
     
@@ -18,7 +23,17 @@ public struct MainTabView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            Text("hi")
+            TabView {
+                HomeNavigationStackView(store: self.store.scope(state: \.home, action: MainTabStore.Action.home))
+                    .tabItem {
+                        Image(systemName: "house")
+                    }
+                
+                GoalNavigationStackView(store: self.store.scope(state: \.goal, action: MainTabStore.Action.goal))
+                    .tabItem {
+                        Image(systemName: "burst")
+                    }
+            }
         }
     }
 }

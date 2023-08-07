@@ -1,21 +1,17 @@
 //
-//  GoalMainStore.swift
-//  DyingFeatureGoalInterface
+//  HomeMainStore.swift
+//  DyingFeatureHomeInterface
 //
-//  Created by 송영모 on 2023/08/03.
+//  Created by 송영모 on 2023/08/07.
 //
 
 import ComposableArchitecture
 
-public struct GoalMainStore: Reducer {
+public struct HomeMainStore: Reducer {
     public init() {}
     
     public struct State: Codable, Equatable, Hashable {
-        var cnt: Int
-        
-        public init() {
-            self.cnt = 0
-        }
+        public init() { }
     }
     
     public enum Action: Equatable {
@@ -26,7 +22,6 @@ public struct GoalMainStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.cnt = 5200
                 return .none
                 
             default:

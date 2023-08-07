@@ -17,18 +17,23 @@ public struct GoalNavigationStackView: View {
     }
     
     public var body: some View {
-        NavigationStackStore(
-            self.store.scope(state: \.path, action: GoalNavigationStackStore.Action.path)
-        ) {
-            GoalMainView(store: self.store.scope(state: \.main, action: GoalNavigationStackStore.Action.main))
-        } destination: {
-            switch $0 {
-            case .main:
-                CaseLet(
-                    /GoalNavigationStackStore.Path.State.main,
-                     action: GoalNavigationStackStore.Path.Action.main,
-                     then: GoalMainView.init(store:)
-                )
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            NavigationStackStore(
+                self.store.scope(state: \.path, action: GoalNavigationStackStore.Action.path)
+            ) {
+                GoalMainView(store: self.store.scope(state: \.main, action: GoalNavigationStackStore.Action.main))
+            } destination: {
+                switch $0 {
+                case .main:
+                    CaseLet(
+                        /GoalNavigationStackStore.Path.State.main,
+                         action: GoalNavigationStackStore.Path.Action.main,
+                         then: GoalMainView.init(store:)
+                    )
+                }
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
             }
         }
     }

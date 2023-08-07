@@ -8,15 +8,18 @@
 import SwiftUI
 
 import ComposableArchitecture
+
 import DyingFeatureGoalInterface
 
 @main
 struct RootApp: App {
     var body: some Scene {
         WindowGroup {
-            GoalNavigationStackView(store: .init(initialState: .init()) {
-                GoalNavigationStackStore()
-            })
+            GoalNavigationStackView(
+                store: Store(initialState: GoalNavigationStackStore.State()) {
+                    GoalNavigationStackStore()._printChanges()
+                }
+            )
         }
     }
 }

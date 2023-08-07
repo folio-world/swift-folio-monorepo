@@ -17,13 +17,31 @@ public struct GoalMainView: View {
     }
     
     public var body: some View {
-        ScrollView {
-            Text("goal main view")
-            
-            Button("title") {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            ScrollView {
+                LazyVGrid(columns:  .init(repeating: .init(.adaptive(minimum: 3.5, maximum: 3.5), spacing: 1), count: 1), spacing: 1) {
+                    ForEach(0..<Int(viewStore.state.cnt / 3), id: \.self) { i in
+                        Circle()
+                            .foregroundColor(i == 1000 ? .red : .gray)
+                    }
+                }
+                .padding()
                 
+                VStack {
+                    HStack {
+                        Text("goal main view")
+                            .font(.title3)
+                        
+                        Spacer()
+                    }
+                    
+                    Spacer()
+                }
+            }
+            .navigationTitle("Goal")
+            .onAppear {
+                viewStore.send(.onAppear)
             }
         }
-        .navigationTitle("Goal")
     }
 }
