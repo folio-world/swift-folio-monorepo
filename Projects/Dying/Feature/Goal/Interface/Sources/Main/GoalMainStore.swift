@@ -41,6 +41,8 @@ public struct GoalMainStore: Reducer {
         
         case selectDate(Date)
         case selectUnit(Unit)
+        
+        case goToGoalDetail(GoalDetailStore.State)
     }
     
     public func reduce(into state: inout State, action: Action) -> Effect<Action>  {

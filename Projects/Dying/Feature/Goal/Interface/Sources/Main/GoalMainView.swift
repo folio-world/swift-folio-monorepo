@@ -126,19 +126,16 @@ public struct GoalMainView: View {
                     Spacer()
                     
                     Button(action: {
-                        
+                        viewStore.send(.goToGoalDetail(.init()))
                     }, label: {
                         Image(systemName: "chevron.right")
                             .foregroundColor(.black)
                     })
                 }
                 .padding()
-                .cornerRadius(5)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 5)
-                        .stroke(.black, lineWidth: 1)
-                )
-                .padding(.horizontal)
+                
+                Divider()
+                    .padding(.horizontal)
             }
             .navigationTitle("Goal")
             .onAppear {
