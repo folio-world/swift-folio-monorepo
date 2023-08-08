@@ -30,7 +30,7 @@ public struct MainTabView: View {
             TabView {
                 HomeNavigationStackView(store: self.store.scope(state: \.home, action: MainTabStore.Action.home))
                     .tabItem {
-                        Label("Home", systemImage: "house")
+                        Label("Home", systemImage: "chart.bar.xaxis")
                     }
                 
                 HealthNavigationStackView(store: self.store.scope(state: \.health, action: MainTabStore.Action.health))
