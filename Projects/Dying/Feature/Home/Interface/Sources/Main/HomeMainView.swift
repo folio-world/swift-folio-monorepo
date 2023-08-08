@@ -74,10 +74,14 @@ public struct HomeMainView: View {
     
     private func lifeSpanView() -> some View {
         VStack(alignment: .leading) {
-            
-            Text("Lifespan")
-                .font(.title3)
-                .fontWeight(.semibold)
+            Label {
+                Text("Lifespan")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+            } icon : {
+                Image(systemName: "sparkles")
+                    .foregroundColor(.yellow)
+            }
             
             Text("Analyze the time you have lived and the time left.")
                 .font(.caption2)
@@ -93,7 +97,8 @@ public struct HomeMainView: View {
             
             TimelineView(.periodic(from: .now, by: 0.04)) { _ in
                 Text("\(Date.now.timeIntervalSince1970)")
-                    .font(.body)
+                    .font(.callout)
+                    .padding(.bottom)
             }
             
             Divider()

@@ -19,8 +19,35 @@ public struct MyPageMainView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                
+                VStack {
+                    Divider()
+                    
+                    HStack {
+                        Image(systemName: "person.circle.fill")
+                            .resizable()
+                            .frame(width: 35, height: 35)
+                            .foregroundColor(.gray)
+                            .padding(.trailing, 10)
+                        
+                        VStack {
+                            Text("송영모")
+                                .font(.title3)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                            
+                        }, label: {
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.black)
+                        })
+                    }
+                    
+                    Divider()
+                }
             }
+            .padding(.horizontal)
             .navigationTitle("My")
             .onAppear {
                 viewStore.send(.onAppear)

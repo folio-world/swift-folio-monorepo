@@ -11,10 +11,12 @@ import ComposableArchitecture
 
 import DyingFeatureHomeInterface
 import DyingFeatureHome
-import DyingFeatureGoalInterface
-import DyingFeatureGoal
+import DyingFeatureLifespanInterface
+import DyingFeatureLifespan
 import DyingFeatureHealthInterface
 import DyingFeatureHealth
+import DyingFeatureGoalInterface
+import DyingFeatureGoal
 import DyingFeatureMyPageInterface
 import DyingFeatureMyPage
 
@@ -31,6 +33,11 @@ public struct MainTabView: View {
                 HomeNavigationStackView(store: self.store.scope(state: \.home, action: MainTabStore.Action.home))
                     .tabItem {
                         Label("Home", systemImage: "chart.bar.xaxis")
+                    }
+                
+                LifespanNavigationStackView(store: self.store.scope(state: \.lifespan, action: MainTabStore.Action.lifespan))
+                    .tabItem {
+                        Label("Lifespan", systemImage: "sparkles")
                     }
                 
                 HealthNavigationStackView(store: self.store.scope(state: \.health, action: MainTabStore.Action.health))

@@ -9,6 +9,8 @@ import ComposableArchitecture
 
 import DyingFeatureHomeInterface
 import DyingFeatureHome
+import DyingFeatureLifespanInterface
+import DyingFeatureLifespan
 import DyingFeatureGoalInterface
 import DyingFeatureGoal
 import DyingFeatureHealthInterface
@@ -21,12 +23,14 @@ public struct MainTabStore: Reducer {
     
     public struct State: Equatable {
         var home: HomeNavigationStackStore.State = .init()
+        var lifespan: LifespanNavigationStackStore.State = .init()
         var health: HealthNavigationStackStore.State = .init()
         var goal: GoalNavigationStackStore.State = .init()
         var myPage: MyPageNavigationStackStore.State = .init()
         
         public init() {
             home = HomeNavigationStackStore.State()
+            lifespan = LifespanNavigationStackStore.State()
             health = HealthNavigationStackStore.State()
             goal = GoalNavigationStackStore.State()
             myPage = MyPageNavigationStackStore.State()
@@ -40,6 +44,7 @@ public struct MainTabStore: Reducer {
         case onAppear
         
         case home(HomeNavigationStackStore.Action)
+        case lifespan(LifespanNavigationStackStore.Action)
         case health(HealthNavigationStackStore.Action)
         case goal(GoalNavigationStackStore.Action)
         case myPage(MyPageNavigationStackStore.Action)
@@ -61,6 +66,9 @@ public struct MainTabStore: Reducer {
         
         Scope(state: \.home, action: /Action.home) {
             HomeNavigationStackStore()._printChanges()
+        }
+        Scope(state: \.lifespan, action: /Action.lifespan) {
+            LifespanNavigationStackStore()._printChanges()
         }
         Scope(state: \.health, action: /Action.health) {
             HealthNavigationStackStore()._printChanges()

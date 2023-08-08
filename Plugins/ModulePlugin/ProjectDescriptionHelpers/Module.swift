@@ -79,6 +79,7 @@ public extension Module {
         case Home
         case MyPage
         
+        case Lifespan
         case Goal
         case Health
         
@@ -87,7 +88,7 @@ public extension Module {
         public static func targets(_ product: Product) -> [Module.Feature] {
             switch product {
             case .Minimal: return []
-            case .Dying: return [.Onboarding, .Home, .MyPage, .Goal, .Health]
+            case .Dying: return [.Onboarding, .Home, .MyPage, .Lifespan, .Goal, .Health]
             }
         }
         
