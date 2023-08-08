@@ -44,6 +44,8 @@ public struct GoalNavigationStackStore: Reducer {
     }
     
     public var body: some Reducer<State, Action> {
+        BindingReducer()
+        
         Reduce { state, action in
             switch action {
             case .onAppear:
@@ -61,6 +63,10 @@ public struct GoalNavigationStackStore: Reducer {
         
         Scope(state: \.main, action: /Action.main) {
             GoalMainStore()._printChanges()
+        }
+        
+        .forEach(\.path, action: /Action.path) {
+          Path()
         }
     }
 }
