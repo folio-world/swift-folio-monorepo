@@ -49,6 +49,15 @@ public struct LifespanMainView: View {
                 VStack(alignment: .leading) {
                     Divider()
                     
+                    Label {
+                        Text("Summary")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                    } icon : {
+                        Image(systemName: "sparkles")
+                            .foregroundColor(.yellow)
+                    }
+                    
                     Chart(data) {
                         BarMark(
                             x: .value("Profit", $0.hoursOfSunshine)

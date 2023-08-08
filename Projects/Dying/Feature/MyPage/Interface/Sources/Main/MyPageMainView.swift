@@ -30,7 +30,7 @@ public struct MyPageMainView: View {
                             .padding(.trailing, 10)
                         
                         VStack {
-                            Text("송영모")
+                            Text("닉네임")
                                 .font(.title3)
                         }
                         

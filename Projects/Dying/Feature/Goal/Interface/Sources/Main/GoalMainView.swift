@@ -6,10 +6,44 @@
 //
 
 import SwiftUI
-
+import Charts
 import ComposableArchitecture
 
 import DyingShared
+
+struct MonthlyHoursOfSunshine: Identifiable {
+    var id: UUID = UUID()
+    var city: String
+    var date: Date
+    var hoursOfSunshine: Double
+    
+    
+    init(city: String, month: Int, hoursOfSunshine: Double) {
+        let calendar = Calendar.autoupdatingCurrent
+        self.city = city
+        self.date = calendar.date(from: DateComponents(year: 2020, month: month))!
+        self.hoursOfSunshine = hoursOfSunshine
+    }
+}
+
+
+var data: [MonthlyHoursOfSunshine] = [
+    MonthlyHoursOfSunshine(city: "Seattle", month: 1, hoursOfSunshine: 74),
+    MonthlyHoursOfSunshine(city: "Cupertino", month: 1, hoursOfSunshine: 74),
+    
+    MonthlyHoursOfSunshine(city: "Seattle", month: 2, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    MonthlyHoursOfSunshine(city: "Cupertino", month: 2, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    
+    MonthlyHoursOfSunshine(city: "Seattle", month: 3, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    MonthlyHoursOfSunshine(city: "Cupertino", month: 3, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    
+    MonthlyHoursOfSunshine(city: "Seattle", month: 4, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    MonthlyHoursOfSunshine(city: "Cupertino", month: 4, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    MonthlyHoursOfSunshine(city: "Seattle", month: 5, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    MonthlyHoursOfSunshine(city: "Cupertino", month: 5, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    MonthlyHoursOfSunshine(city: "Seattle", month: 6, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+    MonthlyHoursOfSunshine(city: "Cupertino", month: 6, hoursOfSunshine: Double(Int.random(in: 0..<200))),
+]
 
 public struct PointView: View {
     let size: CGFloat
@@ -84,59 +118,82 @@ public struct GoalMainView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                PointGraphView(spacing: 1, horizontalPadding: 20, size: 3, number: viewStore.state.pointNumber)
-                
-                HStack {
-                    Spacer()
+                VStack(alignment: .leading) {
+                    Divider()
                     
-                    DatePicker("", selection: viewStore.binding(get: \.currentDate, send: GoalMainStore.Action.selectDate).animation(.default), displayedComponents: [.date])
-                        .datePickerStyle(.compact)
-                        .frame(maxWidth: 150)
-                    
-                    Picker(
-                      "Tab",
-                      selection: viewStore.binding(get: \.currentUnit, send: GoalMainStore.Action.selectUnit).animation(.default)
-                    ) {
-                        ForEach(GoalMainStore.Unit.allCases, id: \.self) { unit in
-                            Text(unit.rawValue)
-                                .tag(unit)
-                        }
+                    Label {
+                        Text("Summary")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                    } icon : {
+                        Image(systemName: "burst.fill")
+                            .foregroundColor(.mint)
                     }
-                    .pickerStyle(.segmented)
-                    .frame(maxWidth: 200)
-                    .padding(.horizontal)
+                    
+                    Chart(data) {
+                        PointMark(
+                            x: .value("Month", $0.date),
+                            y: .value("Hours of Sunshine", $0.hoursOfSunshine)
+                        )
+                        .foregroundStyle(by: .value("City", $0.city))
+                        .interpolationMethod(.catmullRom)
+                    }
                 }
                 
-                HStack {
-                    Text(Date().localizedString(dateStyle: .short, timeStyle: .none))
-                        .font(.headline)
-                    
-                    Spacer()
-                }
-                .padding()
-                
-                HStack {
-                    Image(systemName: "heart.fill")
-                        .foregroundColor(.red)
-                    
-                    Text("마음 단련하기")
-                        .font(.body)
-                        .fontWeight(.semibold)
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        viewStore.send(.goToGoalDetail(.init()))
-                    }, label: {
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.black)
-                    })
-                }
-                .padding()
-                
-                Divider()
-                    .padding(.horizontal)
+//                PointGraphView(spacing: 1, horizontalPadding: 20, size: 3, number: viewStore.state.pointNumber)
+//
+//                HStack {
+//                    Spacer()
+//
+//                    DatePicker("", selection: viewStore.binding(get: \.currentDate, send: GoalMainStore.Action.selectDate).animation(.default), displayedComponents: [.date])
+//                        .datePickerStyle(.compact)
+//                        .frame(maxWidth: 150)
+//
+//                    Picker(
+//                      "Tab",
+//                      selection: viewStore.binding(get: \.currentUnit, send: GoalMainStore.Action.selectUnit).animation(.default)
+//                    ) {
+//                        ForEach(GoalMainStore.Unit.allCases, id: \.self) { unit in
+//                            Text(unit.rawValue)
+//                                .tag(unit)
+//                        }
+//                    }
+//                    .pickerStyle(.segmented)
+//                    .frame(maxWidth: 200)
+//                    .padding(.horizontal)
+//                }
+//
+//                HStack {
+//                    Text(Date().localizedString(dateStyle: .short, timeStyle: .none))
+//                        .font(.headline)
+//
+//                    Spacer()
+//                }
+//                .padding()
+//
+//                HStack {
+//                    Image(systemName: "heart.fill")
+//                        .foregroundColor(.red)
+//
+//                    Text("마음 단련하기")
+//                        .font(.body)
+//                        .fontWeight(.semibold)
+//
+//                    Spacer()
+//
+//                    Button(action: {
+//                        viewStore.send(.goToGoalDetail(.init()))
+//                    }, label: {
+//                        Image(systemName: "chevron.right")
+//                            .foregroundColor(.black)
+//                    })
+//                }
+//                .padding()
+//
+//                Divider()
+//                    .padding(.horizontal)
             }
+            .padding(.horizontal)
             .navigationTitle("Goal")
             .onAppear {
                 viewStore.send(.onAppear, animation: .default)
