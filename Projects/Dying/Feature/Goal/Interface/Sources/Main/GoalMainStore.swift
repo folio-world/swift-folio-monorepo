@@ -15,11 +15,13 @@ public struct GoalMainStore: Reducer {
     public enum Unit: String, CaseIterable, Equatable, Codable, Hashable {
         case year
         case month
+        case week
         
         var number: Int {
             switch self {
             case .year: return 100
             case .month: return 1200
+            case .week: return 5200
             }
         }
     }
