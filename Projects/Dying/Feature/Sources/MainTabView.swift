@@ -29,31 +29,36 @@ public struct MainTabView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            TabView {
+            TabView(selection: viewStore.binding(get: \.currentTab, send: MainTabStore.Action.selectTab)) {
                 HomeNavigationStackView(store: self.store.scope(state: \.home, action: MainTabStore.Action.home))
                     .tabItem {
-                        Label("Home", systemImage: "chart.bar.xaxis")
+                        Label(MainTabStore.Tab.home.rawValue, systemImage: "chart.bar.xaxis")
                     }
+                    .tag(MainTabStore.Tab.home)
                 
                 LifespanNavigationStackView(store: self.store.scope(state: \.lifespan, action: MainTabStore.Action.lifespan))
                     .tabItem {
-                        Label("Lifespan", systemImage: "sparkles")
+                        Label(MainTabStore.Tab.lifespan.rawValue, systemImage: "sparkles")
                     }
+                    .tag(MainTabStore.Tab.lifespan)
                 
                 HealthNavigationStackView(store: self.store.scope(state: \.health, action: MainTabStore.Action.health))
                     .tabItem {
-                        Label("Health", systemImage: "heart")
+                        Label(MainTabStore.Tab.health.rawValue, systemImage: "heart")
                     }
+                    .tag(MainTabStore.Tab.health)
                 
                 GoalNavigationStackView(store: self.store.scope(state: \.goal, action: MainTabStore.Action.goal))
                     .tabItem {
-                        Label("Goal", systemImage: "burst")
+                        Label(MainTabStore.Tab.goal.rawValue, systemImage: "burst")
                     }
+                    .tag(MainTabStore.Tab.goal)
                 
                 MyPageNavigationStackView(store: self.store.scope(state: \.myPage, action: MainTabStore.Action.myPage))
                     .tabItem {
-                        Label("My", systemImage: "person.crop.circle")
+                        Label(MainTabStore.Tab.myPage.rawValue, systemImage: "person.crop.circle")
                     }
+                    .tag(MainTabStore.Tab.myPage)
             }
             .onAppear {
                 viewStore.send(.onAppear)

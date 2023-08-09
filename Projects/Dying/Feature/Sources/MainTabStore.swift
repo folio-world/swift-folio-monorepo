@@ -21,12 +21,22 @@ import DyingFeatureMyPage
 public struct MainTabStore: Reducer {
     public init() {}
     
+    public enum Tab: String {
+        case home = "Home"
+        case lifespan = "Lifespan"
+        case health = "Health"
+        case goal = "Goal"
+        case myPage = "My"
+    }
+    
     public struct State: Equatable {
         var home: HomeNavigationStackStore.State = .init()
         var lifespan: LifespanNavigationStackStore.State = .init()
         var health: HealthNavigationStackStore.State = .init()
         var goal: GoalNavigationStackStore.State = .init()
         var myPage: MyPageNavigationStackStore.State = .init()
+        
+        var currentTab: Tab = .health
         
         public init() {
             home = HomeNavigationStackStore.State()
@@ -42,6 +52,7 @@ public struct MainTabStore: Reducer {
         case binding(BindingAction<State>)
         
         case onAppear
+        case selectTab(Tab)
         
         case home(HomeNavigationStackStore.Action)
         case lifespan(LifespanNavigationStackStore.Action)
@@ -50,7 +61,7 @@ public struct MainTabStore: Reducer {
         case myPage(MyPageNavigationStackStore.Action)
     }
     
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .binding:
@@ -59,6 +70,11 @@ public struct MainTabStore: Reducer {
             case .onAppear:
                 state = .init()
                 return .none
+                
+            case let .selectTab(tab):
+                state.currentTab = tab
+                return .none
+                
             default:
                 return .none
             }

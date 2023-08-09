@@ -75,12 +75,112 @@ public struct HealthMainView: View {
                         .foregroundStyle(by: .value("City", $0.city))
                         .interpolationMethod(.catmullRom)
                     }
+                    
+                    Text("Your health is 25% better than a week ago. Water levels improved by 17%, and walking improved by 38%.")
+                        .font(.callout)
+                        .padding(.bottom)
+                    
+                    Divider()
+                    
+                    HStack(spacing: .zero) {
+                        Label {
+                            Text("7 Follows")
+                                .font(.title3)
+                                .fontWeight(.semibold)
+                        } icon : {
+                            Image(systemName: "checkmark.seal.fill")
+                                .foregroundColor(.green)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {}, label: {
+                            Image(systemName: "plus.circle")
+                        })
+                    }
+                    
+                    VStack(spacing: 15) {
+                        ForEach(0..<10) { i in
+                            item()
+                        }
+                    }
                 }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
             .navigationTitle("Health")
             .onAppear {
                 viewStore.send(.onAppear)
+            }
+        }
+    }
+    
+    private func item() -> some View {
+        HStack(alignment: .top) {
+            VStack(alignment: .leading, spacing: 3) {
+                ZStack {
+                    Image(systemName: "app.fill")
+                        .resizable()
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.blue)
+                    
+                    
+                    Image(systemName: "drop.fill")
+                        .font(.title)
+                        .foregroundColor(.white)
+                }
+                .padding(.bottom, 2)
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 5)
+                        .frame(maxWidth: 40, maxHeight: 10)
+                    
+                    HStack(spacing: 1) {
+                        Image(systemName: "heart.fill")
+                            .font(.system(size: 5))
+                            .foregroundColor(.red)
+                        
+                        Text("Health")
+                            .font(.system(size: 6))
+                            .foregroundColor(.white)
+                    }
+                }
+            }
+            VStack(spacing: 5) {
+                HStack {
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("Water")
+                            .font(.body)
+                            .fontWeight(.semibold)
+                        
+                        Text("3.5ml")
+                            .font(.caption)
+                            .padding(.bottom, 2.5)
+                        
+                        Text("2023/08/09")
+                            .font(.system(size: 6))
+                            .foregroundColor(.gray)
+                    }
+                    
+                    Chart(data.filter({ $0.city == "Cupertino" })) {
+                        LineMark(
+                            x: .value("Month", $0.date),
+                            y: .value("Hours of Sunshine", $0.hoursOfSunshine)
+                        )
+                        .interpolationMethod(.catmullRom)
+                    }
+                    .chartXAxis(.hidden)
+                    .chartYAxis(.hidden)
+                    .frame(maxHeight: 50)
+                    
+                    Button(action: {
+                        
+                    }, label: {
+                        Image(systemName: "chevron.right")
+                            .foregroundColor(.black)
+                    })
+                }
+                
+                Divider()
             }
         }
     }
