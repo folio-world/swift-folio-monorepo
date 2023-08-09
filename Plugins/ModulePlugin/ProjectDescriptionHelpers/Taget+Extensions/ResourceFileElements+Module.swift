@@ -8,8 +8,8 @@
 import Foundation
 import ProjectDescription
 
-extension ResourceFileElements {
-    static private func path(type: MicroTargetType) -> Self? {
+public extension ResourceFileElements {
+    static func path(type: MicroTargetType) -> Self? {
         let suffix: String = "Resources/**"
         
         switch type {

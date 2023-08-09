@@ -101,7 +101,7 @@ public struct HealthMainView: View {
                     
                     VStack(spacing: 15) {
                         ForEach(0..<10) { i in
-                            item()
+                            item(viewStore: viewStore)
                         }
                     }
                 }
@@ -114,7 +114,7 @@ public struct HealthMainView: View {
         }
     }
     
-    private func item() -> some View {
+    private func item(viewStore: ViewStoreOf<HealthMainStore>) -> some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 3) {
                 ZStack {
@@ -173,7 +173,7 @@ public struct HealthMainView: View {
                     .frame(maxHeight: 50)
                     
                     Button(action: {
-                        
+                        viewStore.send(.goToDetail(.init()))
                     }, label: {
                         Image(systemName: "chevron.right")
                             .foregroundColor(.black)

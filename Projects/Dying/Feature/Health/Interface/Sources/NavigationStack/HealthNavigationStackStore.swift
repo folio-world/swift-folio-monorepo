@@ -27,16 +27,16 @@ public struct HealthNavigationStackStore: Reducer {
     
     public struct Path: Reducer {
         public enum State: Codable, Equatable, Hashable {
-            case main(HealthMainStore.State = .init())
+            case detail(HealthDetailStore.State)
         }
         
         public enum Action: Equatable {
-            case main(HealthMainStore.Action)
+            case detail(HealthDetailStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
-            Scope(state: /State.main, action: /Action.main) {
-                HealthMainStore()
+            Scope(state: /State.detail, action: /Action.detail) {
+                HealthDetailStore()
             }
         }
     }
@@ -47,6 +47,15 @@ public struct HealthNavigationStackStore: Reducer {
             case .onAppear:
                 return .none
                 
+            case let .main(action):
+                switch action {
+                case let .goToDetail(healthDetailState):
+                    state.path = .init()
+                    state.path.append(.detail(healthDetailState))
+                default: return .none
+                }
+                return .none
+                
             default:
                 return .none
             }
@@ -54,6 +63,10 @@ public struct HealthNavigationStackStore: Reducer {
         
         Scope(state: \.main, action: /Action.main) {
             HealthMainStore()._printChanges()
+        }
+        
+        .forEach(\.path, action: /Action.path) {
+          Path()
         }
     }
 }

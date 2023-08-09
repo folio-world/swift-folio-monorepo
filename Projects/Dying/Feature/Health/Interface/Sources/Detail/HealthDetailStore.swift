@@ -1,13 +1,13 @@
 //
-//  HealthMainStore.swift
-//  DyingFeatureHealthInterface
+//  HealthDetailStore.swift
+//  DyingFeatureHealthDemo
 //
-//  Created by 송영모 on 2023/08/07.
+//  Created by 송영모 on 2023/08/09.
 //
 
 import ComposableArchitecture
 
-public struct HealthMainStore: Reducer {
+public struct HealthDetailStore: Reducer {
     public init() {}
     
     public struct State: Codable, Equatable, Hashable {
@@ -16,8 +16,6 @@ public struct HealthMainStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
-        
-        case goToDetail(HealthDetailStore.State)
     }
     
     public var body: some Reducer<State, Action> {

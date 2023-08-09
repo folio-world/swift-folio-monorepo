@@ -10,7 +10,7 @@ import Foundation
 public extension String {
     struct BundleId {
         private static func prefix(_ product: Module.Product) -> String {
-            let prefix: String = "com." + .OrganizationName(product) + .Name.app(product)
+            let prefix: String = "com." + .OrganizationName(product) + "." + .Name.app(product)
             
             return prefix.lowercased()
         }
