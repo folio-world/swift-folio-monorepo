@@ -18,26 +18,34 @@ public struct ChatView: View {
     
     public var body: some View {
         VStack(spacing: .zero) {
-            Spacer()
-            
-            FlexibleView(
-                availableWidth: UIScreen.screenWidth - 10,
-                data: [
-                    "Here’s", "to", "the", "crazy", "ones", "the", "misfits", "the", "rebels", "the", "troublemakers", "the", "round", "pegs", "in", "the", "square", "holes", "the", "ones", "who", "see", "things", "differently", "they’re", "not", "fond", "of", "rules"
-                ],
-                spacing: 5,
-                alignment: .leading,
-                content: { item in
-                    Text(verbatim: item)
-                        .padding(8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .fill(Color.gray.opacity(0.2))
+            GeometryReader { reader in
+                ScrollView {
+                    VStack {
+                        Spacer()
+                        
+                        FlexibleView(
+                            availableWidth: UIScreen.screenWidth - 10,
+                            data: [
+                                "Here’s", "to", "the", "crazy", "ones", "the", "misfits", "the", "rebels", "the", "troublemakers", "the", "round", "pegs", "in", "the", "square", "holes", "the", "ones", "who", "see", "things", "differently", "they’re", "not", "fond", "of", "rules"
+                            ],
+                            spacing: 5,
+                            alignment: .leading,
+                            content: { item in
+                                Text(verbatim: item)
+                                    .padding(8)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 8)
+                                            .fill(Color.gray.opacity(0.2))
+                                    )
+                            },
+                            elementsSize: [:]
                         )
-                },
-                elementsSize: [:]
-            )
-            .padding(.vertical, 10)
+                        .padding(.vertical, 5)
+                    }
+                    .frame(minHeight: reader.size.height)
+                }
+                .padding(.horizontal)
+            }
             
             HStack(spacing: .zero) {
                 TextField("keyword", text: $viewModel.chat)
