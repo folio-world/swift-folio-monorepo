@@ -15,6 +15,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
     
@@ -32,6 +33,12 @@ public extension Platform {
             case .Watch: return .watchOS
             case .WatchExtension: return .watchOS
             }
+        default:
+            switch module {
+            case .IOS: return .iOS
+            case .Watch: return .watchOS
+            case .WatchExtension: return .watchOS
+            }
         }
     }
 }
@@ -43,6 +50,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
     
@@ -50,6 +58,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
 }
@@ -61,6 +70,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
     
@@ -68,6 +78,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
 }
@@ -79,6 +90,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
     
@@ -86,6 +98,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
 }
@@ -97,6 +110,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
     
@@ -104,6 +118,7 @@ public extension Platform {
         switch product {
         case .Minimal: return .iOS
         case .Dying: return .iOS
+        default: return .iOS
         }
     }
 }

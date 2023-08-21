@@ -13,6 +13,7 @@ public extension DeploymentTarget {
         switch product {
         case .Minimal: return .iOS(targetVersion: "16.0", devices: [.iphone])
         case .Dying: return .iOS(targetVersion: "16.0", devices: [.iphone])
+        default: return .iOS(targetVersion: "16.0", devices: [.iphone])
         }
     }
     
@@ -20,6 +21,7 @@ public extension DeploymentTarget {
         switch product {
         case .Minimal: return .watchOS(targetVersion: "9.0")
         case .Dying: return .watchOS(targetVersion: "9.0")
+        default: return .watchOS(targetVersion: "9.0")
         }
     }
     
@@ -41,6 +43,7 @@ public extension DeploymentTarget {
         switch product {
         case .Minimal: return .iOS(product)
         case .Dying: return .iOS(product)
+        default: return .iOS(product)
         }
     }
     
@@ -53,6 +56,12 @@ public extension DeploymentTarget {
             case .WatchExtension: return .watchOS(product)
             }
         case .Dying:
+            switch module {
+            case .IOS: return .iOS(product)
+            case .Watch: return .watchOS(product)
+            case .WatchExtension: return .watchOS(product)
+            }
+        default:
             switch module {
             case .IOS: return .iOS(product)
             case .Watch: return .watchOS(product)

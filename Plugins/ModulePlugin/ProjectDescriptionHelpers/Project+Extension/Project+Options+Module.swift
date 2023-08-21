@@ -15,6 +15,7 @@ public extension Project.Options {
         switch product {
         case .Minimal: return .options()
         case .Dying: return .options()
+        default: return .options()
         }
     }
 }
@@ -26,6 +27,7 @@ public extension Project.Options {
         switch product {
         case .Minimal: return .options()
         case .Dying: return .options()
+        default: return .options()
         }
     }
 }
@@ -37,6 +39,7 @@ public extension Project.Options {
         switch product {
         case .Minimal: return .options()
         case .Dying: return .options()
+        default: return .options()
         }
     }
 }
@@ -48,6 +51,7 @@ public extension Project.Options {
         switch product {
         case .Minimal: return .options()
         case .Dying: return .options()
+        default: return .options()
         }
     }
 }
@@ -59,6 +63,7 @@ public extension Project.Options {
         switch product {
         case .Minimal: return .options()
         case .Dying: return .options()
+        default: return .options()
         }
     }
 }

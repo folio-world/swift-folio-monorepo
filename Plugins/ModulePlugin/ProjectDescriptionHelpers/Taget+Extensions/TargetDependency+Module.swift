@@ -110,6 +110,8 @@ public extension [TargetDependency] {
     static func thirdPartyLibs(_ product: Module.Product) -> Self {
         switch product {
         case .Minimal: return []
-        case .Dying: return [.package(product: "ComposableArchitecture")]        }
+        case .Dying: return [.package(product: "ComposableArchitecture")]
+        default: return []
+        }
     }
 }

@@ -16,6 +16,7 @@ public extension String {
             switch product {
             case .Minimal: return "Folio"
             case .Dying: return "Dying"
+            case .Mulling: return "Mulling"
             }
         }
     }
