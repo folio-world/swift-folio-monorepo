@@ -14,6 +14,7 @@ public extension String {
         switch product {
         case .Minimal: return "folio.world"
         case .Dying: return "folio.world"
+        case .Mulling: return "folio.world"
         }
     }
 }

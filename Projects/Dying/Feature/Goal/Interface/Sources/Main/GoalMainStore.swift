@@ -5,38 +5,54 @@
 //  Created by 송영모 on 2023/08/03.
 //
 
+import Foundation
+
 import ComposableArchitecture
 
 public struct GoalMainStore: Reducer {
     public init() {}
     
-    public struct State: Codable, Equatable, Hashable {
-        var cnt: Int
-        var isShow: Bool = false
+    public enum Unit: String, CaseIterable, Equatable, Codable, Hashable {
+        case year
+        case month
+        case week
+        
+        var number: Int {
+            switch self {
+            case .year: return 100
+            case .month: return 1200
+            case .week: return 5200
+            }
+        }
+    }
+    
+    public struct State: Equatable {
+        var pointNumber: Int = 100
+        var currentDate: Date = .init()
+        var currentUnit: Unit = .year
         
         public init() {
-            self.cnt = 100
+            
         }
     }
     
     public enum Action: Equatable {
         case onAppear
         
-        case plus
-        case minus
+        case selectDate(Date)
+        case selectUnit(Unit)
+        
+        case goToGoalDetail(GoalDetailStore.State)
     }
     
     public func reduce(into state: inout State, action: Action) -> Effect<Action>  {
         switch action {
         case .onAppear:
-                state.cnt = 100
             return .none
             
-        case .plus:
-            state.cnt = 5200
-            return .none
-        case .minus:
-            state.cnt -= 1000
+        case let .selectUnit(unit):
+            state.currentUnit = unit
+            state.pointNumber = unit.number
             return .none
             
         default:

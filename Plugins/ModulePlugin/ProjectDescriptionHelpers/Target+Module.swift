@@ -21,7 +21,7 @@ public extension Target {
             deploymentTarget: .app(product),
             infoPlist: .app(product),
             sources: .path(type: .implement),
-            resources: nil,
+            resources: .path(type: .implement),
             copyFiles: nil,
             headers: nil,
             entitlements: nil,
@@ -55,7 +55,7 @@ public extension Target {
             deploymentTarget: .app(product, module: module),
             infoPlist: .app(product, module: module),
             sources: .path(type: .implement),
-            resources: nil,
+            resources: .path(type: .implement),
             copyFiles: nil,
             headers: nil,
             entitlements: nil,
@@ -168,7 +168,7 @@ public extension Target {
             entitlements: nil,
             scripts: [],
             dependencies: {
-                var dependencies: [TargetDependency] = []
+                var dependencies: [TargetDependency] = [.core(product)]
                 
                 dependencies += Module.Domain.targets(product).map { domain in
                         .domain(product, module: domain)

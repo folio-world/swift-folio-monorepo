@@ -28,26 +28,32 @@ public struct GoalNavigationStackStore: Reducer {
     }
     
     public struct Path: Reducer {
-        public enum State: Codable, Equatable, Hashable {
-            case main(GoalMainStore.State = .init())
+        public enum State: Equatable {
+            case detail(GoalDetailStore.State)
         }
         
         public enum Action: Equatable {
-            case main(GoalMainStore.Action)
+            case detail(GoalDetailStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
-            Scope(state: /State.main, action: /Action.main) {
-                GoalMainStore()
+            Scope(state: /State.detail, action: /Action.detail) {
+                GoalDetailStore()
             }
         }
     }
     
     public var body: some Reducer<State, Action> {
+        BindingReducer()
+        
         Reduce { state, action in
             switch action {
             case .onAppear:
-//                state = .init()
+                return .none
+                
+            case let .main(.goToGoalDetail(goalDetailState)):
+                state.path = .init()
+                state.path.append(.detail(goalDetailState))
                 return .none
                 
             default:
@@ -57,6 +63,10 @@ public struct GoalNavigationStackStore: Reducer {
         
         Scope(state: \.main, action: /Action.main) {
             GoalMainStore()._printChanges()
+        }
+        
+        .forEach(\.path, action: /Action.path) {
+          Path()
         }
     }
 }

@@ -40,6 +40,7 @@ public extension Module {
     enum Product: String, CaseIterable {
         case Minimal
         case Dying
+        case Mulling
         
         public static let name: String = "Product"
     }
@@ -57,14 +58,9 @@ public extension Module {
         
         public static func targets(_ product: Product) -> [Module.App] {
             switch product {
-            case .Minimal:
-                switch self {
-                default: return [.IOS]
-                }
-            case .Dying:
-                switch self {
-                default: return [.IOS]
-                }
+            case .Minimal: return [.IOS]
+            case .Dying: return [.IOS]
+            case .Mulling: return [.IOS]
             }
         }
     }
@@ -79,15 +75,19 @@ public extension Module {
         case Home
         case MyPage
         
+        case Lifespan
         case Goal
         case Health
+        
+        case Chat
         
         public static let name: String = "Feature"
         
         public static func targets(_ product: Product) -> [Module.Feature] {
             switch product {
             case .Minimal: return []
-            case .Dying: return [.Onboarding, .Home, .MyPage, .Goal, .Health]
+            case .Dying: return [.Onboarding, .Home, .MyPage, .Lifespan, .Goal, .Health]
+            case .Mulling: return [.Home, .MyPage, .Chat]
             }
         }
         
@@ -98,6 +98,10 @@ public extension Module {
                 default: return MicroTargetType.allCases
                 }
             case .Dying:
+                switch self {
+                default: return MicroTargetType.allCases
+                }
+            case .Mulling:
                 switch self {
                 default: return MicroTargetType.allCases
                 }
@@ -118,6 +122,7 @@ public extension Module {
             switch product {
             case .Minimal: return []
             case .Dying: return [.Health]
+            case .Mulling: return []
             }
         }
         
@@ -128,6 +133,10 @@ public extension Module {
                 default: return MicroTargetType.allCases
                 }
             case .Dying:
+                switch self {
+                default: return [.implement, .interface, .testing, .tests]
+                }
+            case .Mulling:
                 switch self {
                 default: return [.implement, .interface, .testing, .tests]
                 }
@@ -148,6 +157,7 @@ public extension Module {
             switch product {
             case .Minimal: return [.HealthKit]
             case .Dying: return []
+            case .Mulling: return []
             }
         }
         
@@ -158,6 +168,10 @@ public extension Module {
                 default: return MicroTargetType.allCases
                 }
             case .Dying:
+                switch self {
+                default: return [.implement, .interface, .testing, .tests]
+                }
+            case .Mulling:
                 switch self {
                 default: return [.implement, .interface, .testing, .tests]
                 }
@@ -181,6 +195,7 @@ public extension Module {
             switch product {
             case .Minimal: return [.Util, .DesignSystem]
             case .Dying: return [.Util, .DesignSystem, .ThirdPartyLib]
+            case .Mulling: return [.Util, .DesignSystem, .ThirdPartyLib]
             }
         }
         
@@ -191,6 +206,10 @@ public extension Module {
                 default: return [.implement, .interface]
                 }
             case .Dying:
+                switch self {
+                default: return [.implement, .interface]
+                }
+            case .Mulling:
                 switch self {
                 default: return [.implement, .interface]
                 }

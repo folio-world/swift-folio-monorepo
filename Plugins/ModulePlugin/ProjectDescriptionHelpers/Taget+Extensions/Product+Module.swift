@@ -16,6 +16,7 @@ public extension Product {
         switch product {
         case .Minimal: return .app
         case .Dying: return .app
+        default: return .app
         }
     }
     
@@ -33,6 +34,12 @@ public extension Product {
             case .Watch: return .watch2App
             case .WatchExtension: return .watch2Extension
             }
+        default:
+            switch module {
+            case .IOS: return .app
+            case .Watch: return .watch2App
+            case .WatchExtension: return .watch2Extension
+            }
         }
     }
 }
@@ -44,6 +51,7 @@ public extension Product {
         switch product {
         case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
+        default: return .staticLibrary
         }
     }
     
@@ -54,6 +62,10 @@ public extension Product {
             default: return .staticLibrary
             }
         case .Dying:
+            switch module {
+            default: return .staticLibrary
+            }
+        default:
             switch module {
             default: return .staticLibrary
             }
@@ -78,6 +90,7 @@ public extension Product {
         switch product {
         case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
+        default: return .staticLibrary
         }
     }
     
@@ -88,6 +101,10 @@ public extension Product {
             default: return .staticLibrary
             }
         case .Dying:
+            switch module {
+            default: return .staticLibrary
+            }
+        default:
             switch module {
             default: return .staticLibrary
             }
@@ -102,6 +119,7 @@ public extension Product {
         switch product {
         case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
+        default: return .staticLibrary
         }
     }
     
@@ -112,6 +130,10 @@ public extension Product {
             default: return .staticLibrary
             }
         case .Dying:
+            switch module {
+            default: return .staticLibrary
+            }
+        default:
             switch module {
             default: return .staticLibrary
             }
@@ -126,6 +148,7 @@ public extension Product {
         switch product {
         case .Minimal: return .staticLibrary
         case .Dying: return .staticLibrary
+        default: return .staticLibrary
         }
     }
     
@@ -137,6 +160,11 @@ public extension Product {
             default: return .staticLibrary
             }
         case .Dying:
+            switch module {
+            case .DesignSystem: return .staticFramework
+            default: return .staticLibrary
+            }
+        default:
             switch module {
             case .DesignSystem: return .staticFramework
             default: return .staticLibrary

@@ -16,6 +16,8 @@ public struct HealthMainStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
+        
+        case goToDetail(HealthDetailStore.State)
     }
     
     public var body: some Reducer<State, Action> {

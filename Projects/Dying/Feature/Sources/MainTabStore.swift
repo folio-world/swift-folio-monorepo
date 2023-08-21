@@ -9,6 +9,8 @@ import ComposableArchitecture
 
 import DyingFeatureHomeInterface
 import DyingFeatureHome
+import DyingFeatureLifespanInterface
+import DyingFeatureLifespan
 import DyingFeatureGoalInterface
 import DyingFeatureGoal
 import DyingFeatureHealthInterface
@@ -19,14 +21,26 @@ import DyingFeatureMyPage
 public struct MainTabStore: Reducer {
     public init() {}
     
+    public enum Tab: String {
+        case home = "Home"
+        case lifespan = "Lifespan"
+        case health = "Health"
+        case goal = "Goal"
+        case myPage = "My"
+    }
+    
     public struct State: Equatable {
         var home: HomeNavigationStackStore.State = .init()
+        var lifespan: LifespanNavigationStackStore.State = .init()
         var health: HealthNavigationStackStore.State = .init()
         var goal: GoalNavigationStackStore.State = .init()
         var myPage: MyPageNavigationStackStore.State = .init()
         
+        var currentTab: Tab = .home
+        
         public init() {
             home = HomeNavigationStackStore.State()
+            lifespan = LifespanNavigationStackStore.State()
             health = HealthNavigationStackStore.State()
             goal = GoalNavigationStackStore.State()
             myPage = MyPageNavigationStackStore.State()
@@ -38,14 +52,16 @@ public struct MainTabStore: Reducer {
         case binding(BindingAction<State>)
         
         case onAppear
+        case selectTab(Tab)
         
         case home(HomeNavigationStackStore.Action)
+        case lifespan(LifespanNavigationStackStore.Action)
         case health(HealthNavigationStackStore.Action)
         case goal(GoalNavigationStackStore.Action)
         case myPage(MyPageNavigationStackStore.Action)
     }
     
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .binding:
@@ -54,6 +70,11 @@ public struct MainTabStore: Reducer {
             case .onAppear:
                 state = .init()
                 return .none
+                
+            case let .selectTab(tab):
+                state.currentTab = tab
+                return .none
+                
             default:
                 return .none
             }
@@ -61,6 +82,9 @@ public struct MainTabStore: Reducer {
         
         Scope(state: \.home, action: /Action.home) {
             HomeNavigationStackStore()._printChanges()
+        }
+        Scope(state: \.lifespan, action: /Action.lifespan) {
+            LifespanNavigationStackStore()._printChanges()
         }
         Scope(state: \.health, action: /Action.health) {
             HealthNavigationStackStore()._printChanges()

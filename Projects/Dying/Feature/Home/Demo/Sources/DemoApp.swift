@@ -9,11 +9,16 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import DyingFeatureHomeInterface
+import DyingFeatureHome
+
 @main
 struct RootApp: App {
     var body: some Scene {
         WindowGroup {
-            Text("Home")
+            HomeNavigationStackView(store: Store(initialState: HomeNavigationStackStore.State()) {
+                HomeNavigationStackStore()._printChanges()
+            })
         }
     }
 }
