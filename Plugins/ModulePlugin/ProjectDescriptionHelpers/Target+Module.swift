@@ -168,7 +168,7 @@ public extension Target {
             entitlements: nil,
             scripts: [],
             dependencies: {
-                var dependencies: [TargetDependency] = []
+                var dependencies: [TargetDependency] = [.core(product)]
                 
                 dependencies += Module.Domain.targets(product).map { domain in
                         .domain(product, module: domain)

@@ -10,6 +10,7 @@ import Combine
 
 public class ChatViewModel: ObservableObject {
     @Published var chats: [String] = []
+    @Published var chat: String = ""
     
     public init() {
         

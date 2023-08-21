@@ -8,13 +8,15 @@
 
 import SwiftUI
 
+import MullingFeature
+
 @main
 struct RootApp: App {
     let appDIContainer: AppDIContainerInterface = AppDIContainer()
     
     var body: some Scene {
         WindowGroup {
-            AppSearchView(viewModel: appDIContainer.appSearchDependencies())
+            ChatView(viewModel: .init(wrappedValue: appDIContainer.chatDependencies()))
         }
     }
 }
