@@ -1,25 +1,20 @@
 //
 //  RootApp.swift
-//  Dying
+//  MullingIOS
 //
-//  Created by 송영모 on 2023/07/19.
+//  Created by 송영모 on 2023/08/21.
 //  Copyright © 2023 folio.world. All rights reserved.
 //
 
 import SwiftUI
 
-import ComposableArchitecture
-
 @main
 struct RootApp: App {
+    let appDIContainer: AppDIContainerInterface = AppDIContainer()
+    
     var body: some Scene {
         WindowGroup {
-            RootView(
-                store: Store(initialState: RootStore.State()) {
-                    RootStore()
-                        ._printChanges()
-                }
-            )
+            AppSearchView(viewModel: appDIContainer.appSearchDependencies())
         }
     }
 }

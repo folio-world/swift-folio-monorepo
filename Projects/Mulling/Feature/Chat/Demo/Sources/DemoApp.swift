@@ -7,13 +7,13 @@
 
 import SwiftUI
 
+import MullingFeatureChatInterface
+
 @main
 struct RootApp: App {
     var body: some Scene {
         WindowGroup {
-            HomeNavigationStackView(store: Store(initialState: HomeNavigationStackStore.State()) {
-                HomeNavigationStackStore()._printChanges()
-            })
+            ChatView(viewModel: .init(wrappedValue: .init()))
         }
     }
 }

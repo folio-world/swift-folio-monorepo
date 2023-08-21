@@ -79,13 +79,15 @@ public extension Module {
         case Goal
         case Health
         
+        case Chat
+        
         public static let name: String = "Feature"
         
         public static func targets(_ product: Product) -> [Module.Feature] {
             switch product {
             case .Minimal: return []
             case .Dying: return [.Onboarding, .Home, .MyPage, .Lifespan, .Goal, .Health]
-            case .Mulling: return [.Home, .MyPage]
+            case .Mulling: return [.Home, .MyPage, .Chat]
             }
         }
         
