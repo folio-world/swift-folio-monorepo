@@ -25,18 +25,20 @@ public struct ChatView: View {
                         
                         FlexibleView(
                             availableWidth: UIScreen.screenWidth - 10,
-                            data: [
-                                "Here’s", "to", "the", "crazy", "ones", "the", "misfits", "the", "rebels", "the", "troublemakers", "the", "round", "pegs", "in", "the", "square", "holes", "the", "ones", "who", "see", "things", "differently", "they’re", "not", "fond", "of", "rules"
-                            ],
+                            data: viewModel.chats,
                             spacing: 5,
                             alignment: .leading,
                             content: { item in
                                 Text(verbatim: item)
-                                    .padding(8)
+                                    .fontWeight(.light)
+                                    .padding(10)
                                     .background(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color.gray.opacity(0.2))
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
                                     )
+                                    .onTapGesture {
+                                        print(item)
+                                    }
                             },
                             elementsSize: [:]
                         )
@@ -46,25 +48,36 @@ public struct ChatView: View {
                 }
                 .padding(.horizontal)
             }
-            
             HStack(spacing: .zero) {
-                TextField("keyword", text: $viewModel.chat)
-                    .padding(.leading, 10)
-                
                 Button(action: {
                     
                 }, label: {
-                    Image(systemName: "arrow.up.circle.fill")
+                    Image(systemName: "arrow.counterclockwise.circle.fill")
                         .font(.title)
+                        .foregroundColor(viewModel.chat.isEmpty ? .green : .gray)
                 })
-                .padding(.trailing, 5)
-                .padding(.vertical, 5)
+                .padding(.trailing, 10)
+                
+                HStack(spacing: .zero) {
+                    TextField("keyword", text: $viewModel.chat)
+                        .padding(.leading, 10)
+                    
+                    Button(action: {
+                        viewModel.send(.sendButtonTapped(viewModel.chat))
+                    }, label: {
+                        Image(systemName: viewModel.chat.isEmpty ? "arrow.right.circle.fill" : "arrow.up.circle.fill")
+                            .foregroundColor(viewModel.chat.isEmpty ? .gray : .green)
+                            .font(.title)
+                    })
+                    .padding(.trailing, 5)
+                    .padding(.vertical, 5)
+                }
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
+                )
             }
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
-            )
-            .padding(.horizontal)
+            .padding()
         }
     }
 }
