@@ -6,3 +6,29 @@
 //
 
 import Foundation
+
+public class ChatResultViewModel: ObservableObject {
+    
+    enum Action {
+        case sendButtonTapped(String)
+    }
+    
+    @Published var chat: String = ""
+    @Published var chats: [String] = []
+    
+    public init() {
+        
+    }
+    
+    func send(_ action: Action) {
+        switch action {
+        case let .sendButtonTapped(chat):
+            if chat.isEmpty {
+                
+            } else {
+                self.chats.append(chat)
+                self.chat = ""
+            }
+        }
+    }
+}
