@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RequestError: Error {
+public enum RequestError: Error {
     case decode
     case invalidURL
     case noResponse
@@ -15,7 +15,7 @@ enum RequestError: Error {
     case unexpectedStatusCode
     case unknown
     
-    var customMessage: String {
+    public var customMessage: String {
         switch self {
         case .decode:
             return "Decode error"

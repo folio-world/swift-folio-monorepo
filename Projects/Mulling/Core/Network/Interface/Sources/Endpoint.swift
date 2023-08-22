@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Endpoint {
+public protocol Endpoint {
     var scheme: String { get }
     var host: String { get }
     var path: String { get }
@@ -16,7 +16,7 @@ protocol Endpoint {
     var body: [String: String]? { get }
 }
 
-extension Endpoint {
+public extension Endpoint {
     var scheme: String {
         return "https"
     }
