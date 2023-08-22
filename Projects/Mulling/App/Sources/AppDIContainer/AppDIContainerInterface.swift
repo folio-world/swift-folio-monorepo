@@ -10,5 +10,5 @@ import Foundation
 import MullingFeature
 
 protocol AppDIContainerInterface {
-    func chatDependencies() -> ChatViewModel
+    func makeChatSceneDIContainer() -> ChatSceneDIContainer
 }

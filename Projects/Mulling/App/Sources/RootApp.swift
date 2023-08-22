@@ -16,7 +16,7 @@ struct RootApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ChatView(viewModel: .init(wrappedValue: appDIContainer.chatDependencies()))
+            ChatScene(chatSceneDIContainer: appDIContainer.makeChatSceneDIContainer())
         }
     }
 }

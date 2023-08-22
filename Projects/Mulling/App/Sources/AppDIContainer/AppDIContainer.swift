@@ -10,9 +10,9 @@ import Foundation
 
 import MullingFeature
 
-final class AppDIContainer: AppDIContainerInterface {
-    func chatDependencies() -> ChatViewModel {
-        return .init()
+public final class AppDIContainer: AppDIContainerInterface {
+    public func makeChatSceneDIContainer() -> ChatSceneDIContainer {
+        return ChatSceneDIContainer()
     }
 //    func appSearchDependencies() -> AppSearchViewModel {
 //        let dataSource : AppSearchDataSourceInterface = AppSearchDataSource(networkProvider: NetworkProvider())

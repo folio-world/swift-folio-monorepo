@@ -10,10 +10,12 @@ import SwiftUI
 import MullingShared
 
 public struct ChatView: View {
+    @EnvironmentObject public var chatFlowCoordinator: ChatFlowCoordinator
+    
     @StateObject public var viewModel: ChatViewModel
     
-    public init(viewModel: StateObject<ChatViewModel>) {
-        self._viewModel = viewModel
+    public init(viewModel: ChatViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
     }
     
     public var body: some View {
@@ -61,7 +63,6 @@ public struct ChatView: View {
     private func chatTextFieldView() -> some View {
         HStack(spacing: .zero) {
             Button(action: {
-                
             }, label: {
                 Image(systemName: "arrow.counterclockwise.circle.fill")
                     .font(.title)
@@ -74,7 +75,11 @@ public struct ChatView: View {
                     .padding(.leading, 10)
                 
                 Button(action: {
-                    viewModel.send(.sendButtonTapped(viewModel.chat))
+                    if viewModel.chat.isEmpty {
+                        self.chatFlowCoordinator.navigate(.chatResult)
+                    } else {
+                        viewModel.send(.sendButtonTapped(viewModel.chat))
+                    }
                 }, label: {
                     Image(systemName: viewModel.chat.isEmpty ? "arrow.right.circle.fill" : "arrow.up.circle.fill")
                         .foregroundColor(viewModel.chat.isEmpty ? .gray : .green)
@@ -93,6 +98,6 @@ public struct ChatView: View {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: .init(wrappedValue: .init()))
+        ChatView(viewModel: .init())
     }
 }
