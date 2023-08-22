@@ -17,14 +17,15 @@ public class ChatResultViewModel: ObservableObject {
     }
     
     enum Action {
+        
     }
     
     private let dependencies: Dependencies
     
     let chats: [String]
     
-    @Published public var job: String = "IT engineer"
-    @Published public var subject: String = "IT Project"
+    @Published public var job: String = ""
+    @Published public var subject: String = ""
     
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies

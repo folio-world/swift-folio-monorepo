@@ -19,44 +19,68 @@ public struct ChatResultView: View {
     }
     
     public var body: some View {
-        ScrollView {
-            VStack(spacing: .zero) {
+        VStack {
+            ScrollView {
+                HStack {
+                    Text("Keyword")
+                        .fontWeight(.semibold)
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 30)
+                                .foregroundColor(.black)
+                        )
+                    
+                    Spacer()
+                }
+                
                 chatListView()
                 
                 inputView()
+                    .padding(.bottom, 5)
                 
-                Spacer()
-                
-                HStack {
-                    Button(action: {}, label: {
-                        Label("Ask GPT", systemImage: "volleyball")
+                VStack(spacing: 5) {
+                    HStack {
+                        Text("GPT")
+                            .fontWeight(.semibold)
+                            .font(.caption)
                             .foregroundColor(.white)
-                    })
-                    .padding(10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.black)
-                    )
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 30)
+                                    .foregroundColor(.black)
+                            )
+                        
+                        Spacer()
+                    }
                     
-//                    Spacer()
-//                    
-//                    Button(action: {}, label: {
-//                        Label("Share After Watching Ads", systemImage: "square.and.arrow.up")
-//                            .foregroundColor(.white)
-//                    })
-//                    .padding(10)
-//                    .background(
-//                        RoundedRectangle(cornerRadius: 20)
-//                            .foregroundColor(.black)
-//                    )
+                    Text("ddasfnjkfjnsnfkjasnfjkansfjknasjkfnjaksnfjkansfjnasjkfnjkasnfjnasjkfnkjasnfjkansjkfnajsknfjkasnfjknasjkfnakjsfnjaksnfkjasnjfknaskfnjaskfjnksjfan")
                 }
             }
+            
+            Spacer()
+            
+            HStack {
+                Button(action: {}, label: {
+                    Label("Ask GPT", systemImage: "volleyball")
+                        .foregroundColor(.white)
+                })
+                .padding(10)
+                .background(
+                    RoundedRectangle(cornerRadius: 20)
+                        .foregroundColor(.black)
+                )
+            }
+            .padding(.vertical)
         }
         .padding(.horizontal)
     }
     
     private func chatListView() -> some View {
-        VStack(alignment: .leading) {
+        HStack {
             FlexibleView(
                 availableWidth: UIScreen.screenWidth,
                 data: viewModel.chats,
@@ -64,8 +88,8 @@ public struct ChatResultView: View {
                 alignment: .leading,
                 content: { item in
                     Text(verbatim: item)
-                        .fontWeight(.light)
-                        .padding(10)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 7)
                         .background(
                             RoundedRectangle(cornerRadius: 20)
                                 .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
@@ -76,37 +100,43 @@ public struct ChatResultView: View {
                 },
                 elementsSize: [:]
             )
-            .padding(.vertical, 5)
+            
+            Spacer()
         }
     }
     
     private func inputView() -> some View {
         VStack {
+            HStack {
+                Text("Variable")
+                    .fontWeight(.semibold)
+                    .font(.caption)
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 7)
+                    .padding(.vertical, 4)
+                    .background(
+                        RoundedRectangle(cornerRadius: 30)
+                            .foregroundColor(.black)
+                    )
+                
+                Spacer()
+            }
+            
             HStack(spacing: 5) {
                 Text("Jobs:")
                     .font(.callout)
-                    .fontWeight(.semibold)
                 
-                TextField("", text: $viewModel.job)
+                TextField("ex) Product Manager", text: $viewModel.job)
+                    .textFieldStyle(.plain)
             }
-            .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
-            )
             
             HStack(spacing: 5) {
                 Text("Subject:")
                     .font(.callout)
-                    .fontWeight(.semibold)
                 
-                TextField("", text: $viewModel.subject)
+                TextField("ex) IT Project", text: $viewModel.subject)
+                    .textFieldStyle(.plain)
             }
-            .padding()
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
-            )
         }
     }
 }
