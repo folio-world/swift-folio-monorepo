@@ -27,9 +27,9 @@ public struct ChatScene: View {
                 .environmentObject(chatFlowCoordinator)
                 .navigationDestination(for: ChatFlowCoordinator.Scene.self) { scene in
                     switch scene {
-                    case .chatResult:
+                    case let .chatResult(chats):
                         ChatResultView(
-                            viewModel: chatSceneDIContainer.makeChatResultViewModel()
+                            viewModel: chatSceneDIContainer.makeChatResultViewModel(chats: chats)
                         )
                         .environmentObject(chatFlowCoordinator)
                     }

@@ -9,31 +9,26 @@ import Foundation
 
 public class ChatResultViewModel: ObservableObject {
     public struct Dependencies {
+        public let chats: [String]
         
+        public init(chats: [String]) {
+            self.chats = chats
+        }
     }
     
     enum Action {
-        case sendButtonTapped(String)
     }
     
     private let dependencies: Dependencies
     
-    @Published var chat: String = ""
-    @Published var chats: [String] = []
+    let chats: [String]
     
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
+        self.chats = dependencies.chats
     }
     
     func send(_ action: Action) {
-        switch action {
-        case let .sendButtonTapped(chat):
-            if chat.isEmpty {
-                
-            } else {
-                self.chats.append(chat)
-                self.chat = ""
-            }
-        }
+        
     }
 }

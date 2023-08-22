@@ -79,7 +79,7 @@ public struct ChatView: View {
                 
                 Button(action: {
                     if viewModel.chat.isEmpty {
-                        self.chatFlowCoordinator.navigate(.chatResult)
+                        self.chatFlowCoordinator.navigate(.chatResult(viewModel.chats))
                     } else {
                         viewModel.send(.sendButtonTapped(viewModel.chat))
                     }

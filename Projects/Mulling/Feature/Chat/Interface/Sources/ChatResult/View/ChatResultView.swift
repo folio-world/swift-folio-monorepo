@@ -19,8 +19,39 @@ public struct ChatResultView: View {
     }
     
     public var body: some View {
-        VStack(spacing: .zero) {
+        VStack(alignment: .leading, spacing: .zero) {
+            chatListView()
+                .padding(.horizontal)
             
+            HStack {
+                Spacer()
+            }
+            Spacer()
+        }
+    }
+    
+    private func chatListView() -> some View {
+        VStack(alignment: .leading) {
+            FlexibleView(
+                availableWidth: UIScreen.screenWidth - 10,
+                data: viewModel.chats,
+                spacing: 5,
+                alignment: .leading,
+                content: { item in
+                    Text(verbatim: item)
+                        .fontWeight(.light)
+                        .padding(10)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
+                        )
+                        .onTapGesture {
+                            print(item)
+                        }
+                },
+                elementsSize: [:]
+            )
+            .padding(.vertical, 5)
         }
     }
 }

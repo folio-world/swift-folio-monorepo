@@ -9,7 +9,7 @@ import SwiftUI
 
 public protocol ChatFlowCoordinatorDependencies {
     func makeChatViewModel() -> ChatViewModel
-    func makeChatResultViewModel() -> ChatResultViewModel
+    func makeChatResultViewModel(chats: [String]) -> ChatResultViewModel
 }
 
 public final class ChatFlowCoordinator: ObservableObject {
@@ -19,8 +19,8 @@ public final class ChatFlowCoordinator: ObservableObject {
         self.dependencies = dependencies
     }
     
-    public enum Scene {
-        case chatResult
+    public enum Scene: Hashable {
+        case chatResult([String])
     }
     
     @Published public var path = NavigationPath()
