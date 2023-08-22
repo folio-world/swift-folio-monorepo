@@ -101,6 +101,6 @@ public struct ChatView: View {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: .init(dependencies: .init()))
+        ChatView(viewModel: ChatSceneDIContainer().makeChatViewModel())
     }
 }

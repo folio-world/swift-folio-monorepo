@@ -7,6 +7,8 @@
 
 import Foundation
 
+import MullingDomain
+
 public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     public init() {
         
@@ -15,14 +17,24 @@ public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     public func makeChatFlowCoordinator() -> ChatFlowCoordinator {
         return ChatFlowCoordinator(dependencies: self)
     }
+    //    func appSearchDependencies() -> AppSearchViewModel {
+    //        let dataSource : AppSearchDataSourceInterface = AppSearchDataSource(networkProvider: NetworkProvider())
+    //        let repository : AppSearchRepositoryInterface = AppSearchRepository(dataSource: dataSource)
+    //        let useCase : AppSearchUseCaseInterface = AppSearchUseCase(searchRepository: repository, recentKeywordRepository: getRecentKeywordDependencies())
+    //        let viewModel : AppSearchViewModel = AppSearchViewModel(useCase: useCase)
+    //
+    //        return viewModel
+    //    }
     
     public func makeChatViewModel() -> ChatViewModel {
         let dependencies: ChatViewModel.Dependencies = .init()
-        return ChatViewModel(dependencies: dependencies)
+        let chatGPTRepository: ChatGPTRepositoryInterface = ChatGPTRepository()
+        return ChatViewModel(dependencies: dependencies, chatGPTRepository: chatGPTRepository)
     }
     
     public func makeChatResultViewModel(chats: [String]) -> ChatResultViewModel {
         let dependencies: ChatResultViewModel.Dependencies = .init(chats: chats)
-        return ChatResultViewModel(dependencies: dependencies)
+        let chatGPTRepository: ChatGPTRepositoryInterface = ChatGPTRepository()
+        return ChatResultViewModel(dependencies: dependencies, chatGPTRepository: chatGPTRepository)
     }
 }

@@ -38,11 +38,10 @@ extension ChatGPTEndpoint: Endpoint {
     }
 
     var header: [String: String]? {
-        let apiKey = "insert your access token here -> https://www.themoviedb.org/settings/api"
         switch self {
         case .completion:
             return [
-                "Authorization": "Bearer \(apiKey)",
+                "Authorization": "Bearer \(Environment.apiKey)",
                 "Content-Type": "application/json"
             ]
         }

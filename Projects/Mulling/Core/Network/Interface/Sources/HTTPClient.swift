@@ -7,6 +7,8 @@
 
 import Foundation
 
+import MullingShared
+
 public protocol HTTPClient {
     func sendRequest<T: Decodable>(endpoint: Endpoint, responseModel: T.Type) async -> Result<T, RequestError>
 }
@@ -33,16 +35,22 @@ public extension HTTPClient {
             request.httpBody = try? JSONSerialization.data(withJSONObject: body, options: [])
         }
         
+        request.debug()
+        
         do {
             let (data, response) = try await URLSession.shared.data(for: request, delegate: nil)
             guard let response = response as? HTTPURLResponse else {
                 return .failure(.noResponse)
             }
+            
+            debugPrint(response)
+            
             switch response.statusCode {
             case 200...299:
                 guard let decodedResponse = try? JSONDecoder().decode(responseModel, from: data) else {
                     return .failure(.decode)
                 }
+                print(decodedResponse)
                 return .success(decodedResponse)
             case 401:
                 return .failure(.unauthorized)

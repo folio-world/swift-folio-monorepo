@@ -9,18 +9,14 @@ import Foundation
 
 import MullingCore
 
-//protocol MoviesServiceable {
-//    func post()
-//    func getTopRated() async -> Result<TopRated, RequestError>
-//    func getMovieDetail(id: Int) async -> Result<Movie, RequestError>
-//}
-//
-//struct MoviesService: HTTPClient, MoviesServiceable {
-//    func getTopRated() async -> Result<TopRated, RequestError> {
-//        return await sendRequest(endpoint: MoviesEndpoint.topRated, responseModel: TopRated.self)
-//    }
-//    
-//    func getMovieDetail(id: Int) async -> Result<Movie, RequestError> {
-//        return await sendRequest(endpoint: MoviesEndpoint.movieDetail(id: id), responseModel: Movie.self)
-//    }
-//}
+public protocol ChatGPTRepositoryInterface {
+    func postChatCompletion(request: ChatCompletionRequestDTO) async -> Result<ChatCompletionResponseDTO, RequestError>
+}
+
+public struct ChatGPTRepository: HTTPClient, ChatGPTRepositoryInterface {
+    public init() {}
+    
+    public func postChatCompletion(request: ChatCompletionRequestDTO) async -> Result<ChatCompletionResponseDTO, RequestError> {
+        return await sendRequest(endpoint: ChatGPTEndpoint.completion(request: request), responseModel: ChatCompletionResponseDTO.self)
+    }
+}

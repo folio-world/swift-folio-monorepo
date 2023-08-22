@@ -64,7 +64,10 @@ public struct ChatResultView: View {
             Spacer()
             
             HStack {
-                Button(action: {}, label: {
+                Button(action: {
+                    viewModel.send(.gptButtonTapped)
+                    
+                }, label: {
                     Label("Ask GPT", systemImage: "volleyball")
                         .foregroundColor(.white)
                 })
@@ -143,6 +146,6 @@ public struct ChatResultView: View {
 
 struct ChatResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: .init(dependencies: .init()))
+        ChatView(viewModel: ChatSceneDIContainer().makeChatViewModel())
     }
 }
