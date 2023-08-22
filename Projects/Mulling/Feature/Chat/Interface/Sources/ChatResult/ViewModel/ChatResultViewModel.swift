@@ -8,16 +8,21 @@
 import Foundation
 
 public class ChatResultViewModel: ObservableObject {
+    public struct Dependencies {
+        
+    }
     
     enum Action {
         case sendButtonTapped(String)
     }
     
+    private let dependencies: Dependencies
+    
     @Published var chat: String = ""
     @Published var chats: [String] = []
     
-    public init() {
-        
+    public init(dependencies: Dependencies) {
+        self.dependencies = dependencies
     }
     
     func send(_ action: Action) {

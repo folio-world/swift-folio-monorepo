@@ -19,7 +19,7 @@ public final class ChatFlowCoordinator: ObservableObject {
         self.dependencies = dependencies
     }
     
-    public enum Scene {        
+    public enum Scene {
         case chatResult
     }
     

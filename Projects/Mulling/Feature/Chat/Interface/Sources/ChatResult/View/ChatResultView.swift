@@ -27,6 +27,6 @@ public struct ChatResultView: View {
 
 struct ChatResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: .init())
+        ChatView(viewModel: .init(dependencies: .init()))
     }
 }

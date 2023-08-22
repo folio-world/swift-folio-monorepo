@@ -73,6 +73,9 @@ public struct ChatView: View {
             HStack(spacing: .zero) {
                 TextField("keyword", text: $viewModel.chat)
                     .padding(.leading, 10)
+                    .onSubmit {
+                        viewModel.send(.sendButtonTapped(viewModel.chat))
+                    }
                 
                 Button(action: {
                     if viewModel.chat.isEmpty {
@@ -98,6 +101,6 @@ public struct ChatView: View {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: .init())
+        ChatView(viewModel: .init(dependencies: .init()))
     }
 }

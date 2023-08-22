@@ -17,10 +17,12 @@ public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     }
     
     public func makeChatViewModel() -> ChatViewModel {
-        return ChatViewModel()
+        let dependencies: ChatViewModel.Dependencies = .init()
+        return ChatViewModel(dependencies: dependencies)
     }
     
     public func makeChatResultViewModel() -> ChatResultViewModel {
-        return ChatResultViewModel()
+        let dependencies: ChatResultViewModel.Dependencies = .init()
+        return ChatResultViewModel(dependencies: dependencies)
     }
 }
