@@ -19,21 +19,46 @@ public struct ChatResultView: View {
     }
     
     public var body: some View {
-        VStack(alignment: .leading, spacing: .zero) {
-            chatListView()
-                .padding(.horizontal)
-            
-            HStack {
+        ScrollView {
+            VStack(spacing: .zero) {
+                chatListView()
+                
+                inputView()
+                
                 Spacer()
+                
+                HStack {
+                    Button(action: {}, label: {
+                        Label("Ask GPT", systemImage: "volleyball")
+                            .foregroundColor(.white)
+                    })
+                    .padding(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .foregroundColor(.black)
+                    )
+                    
+//                    Spacer()
+//                    
+//                    Button(action: {}, label: {
+//                        Label("Share After Watching Ads", systemImage: "square.and.arrow.up")
+//                            .foregroundColor(.white)
+//                    })
+//                    .padding(10)
+//                    .background(
+//                        RoundedRectangle(cornerRadius: 20)
+//                            .foregroundColor(.black)
+//                    )
+                }
             }
-            Spacer()
         }
+        .padding(.horizontal)
     }
     
     private func chatListView() -> some View {
         VStack(alignment: .leading) {
             FlexibleView(
-                availableWidth: UIScreen.screenWidth - 10,
+                availableWidth: UIScreen.screenWidth,
                 data: viewModel.chats,
                 spacing: 5,
                 alignment: .leading,
@@ -52,6 +77,36 @@ public struct ChatResultView: View {
                 elementsSize: [:]
             )
             .padding(.vertical, 5)
+        }
+    }
+    
+    private func inputView() -> some View {
+        VStack {
+            HStack(spacing: 5) {
+                Text("Jobs:")
+                    .font(.callout)
+                    .fontWeight(.semibold)
+                
+                TextField("", text: $viewModel.job)
+            }
+            .padding()
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
+            )
+            
+            HStack(spacing: 5) {
+                Text("Subject:")
+                    .font(.callout)
+                    .fontWeight(.semibold)
+                
+                TextField("", text: $viewModel.subject)
+            }
+            .padding()
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
+            )
         }
     }
 }

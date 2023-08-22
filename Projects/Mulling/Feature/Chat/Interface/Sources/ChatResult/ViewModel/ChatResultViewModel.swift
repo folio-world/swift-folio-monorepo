@@ -23,6 +23,9 @@ public class ChatResultViewModel: ObservableObject {
     
     let chats: [String]
     
+    @Published public var job: String = "IT engineer"
+    @Published public var subject: String = "IT Project"
+    
     public init(dependencies: Dependencies) {
         self.dependencies = dependencies
         self.chats = dependencies.chats
