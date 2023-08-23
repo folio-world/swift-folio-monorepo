@@ -12,10 +12,12 @@ import MullingCore
 
 public extension ChatCompletionResponseDTO {
     func toDomain() -> [ChatEntity] {
-        self.choices.flatMap { choice in
-            choice.message.content.components(separatedBy: ",")
-        }.map { content in
-            ChatEntity(content: content)
+        self.choices.flatMap {
+            $0.message.content.components(separatedBy: ", ")
+        }.filter {
+            !$0.isEmpty
+        }.map {
+            .init(content: $0)
         }
     }
 }

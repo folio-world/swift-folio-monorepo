@@ -63,7 +63,7 @@ public class ChatViewModel: ObservableObject {
                 Task {
                     mode = .isLoading
                     let filteredChats = chats.filter({ $0.isSelected })
-                    let response = await chatUseCase.askToGPT(type: .keyword, chats: filteredChats)
+                    let response = await chatUseCase.askKeywordsToGPT(chats: filteredChats)
                     switch response {
                     case let .success(newChats):
                         chats.removeAll(where: { !$0.isSelected })
