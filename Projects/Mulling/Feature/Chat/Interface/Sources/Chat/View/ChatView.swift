@@ -26,6 +26,11 @@ public struct ChatView: View {
             chatTextFieldView()
                 .padding()
         }
+        .onReceive(viewModel.$chatResultDependencies) { dependenciesOrNil in
+            if let dependencies = dependenciesOrNil {
+                chatFlowCoordinator.navigate(.chatResult(dependencies))
+            }
+        }
     }
     
     private func chatListView() -> some View {
@@ -40,7 +45,7 @@ public struct ChatView: View {
                         spacing: 5,
                         alignment: .leading,
                         content: { item in
-                            Button(item, action: {
+                            Button(item.content, action: {
                                 
                             })
                             .fontWeight(.light)
@@ -67,27 +72,26 @@ public struct ChatView: View {
             }, label: {
                 Image(systemName: "arrow.counterclockwise.circle.fill")
                     .font(.title)
-                    .foregroundColor(viewModel.chat.isEmpty ? .green : .gray)
+                    .foregroundColor(viewModel.keyword.isEmpty ? .green : .gray)
             })
             .padding(.trailing, 10)
             
             HStack(spacing: .zero) {
-                TextField("keyword", text: $viewModel.chat)
+                TextField("keyword", text: $viewModel.keyword)
                     .fontWeight(.light)
                     .padding(.leading, 10)
                     .onSubmit {
-                        viewModel.send(.sendButtonTapped(viewModel.chat))
+                        viewModel.send(.sendButtonTapped)
                     }
                 
                 Button(action: {
-                    if viewModel.chat.isEmpty {
-                        self.chatFlowCoordinator.navigate(.chatResult(viewModel.chats))
+                    if viewModel.keyword.isEmpty {
                     } else {
-                        viewModel.send(.sendButtonTapped(viewModel.chat))
+                        viewModel.send(.sendButtonTapped)
                     }
                 }, label: {
-                    Image(systemName: viewModel.chat.isEmpty ? "arrow.right.circle.fill" : "arrow.up.circle.fill")
-                        .foregroundColor(viewModel.chat.isEmpty ? .gray : .green)
+                    Image(systemName: viewModel.keyword.isEmpty ? "arrow.right.circle.fill" : "arrow.up.circle.fill")
+                        .foregroundColor(viewModel.keyword.isEmpty ? .gray : .green)
                         .font(.title)
                 })
                 .padding(.trailing, 5)
@@ -103,6 +107,6 @@ public struct ChatView: View {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: ChatSceneDIContainer().makeChatViewModel())
+        ChatView(viewModel: ChatSceneDIContainer().makeChatViewModel(dependencies: .init()))
     }
 }

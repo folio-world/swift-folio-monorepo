@@ -16,29 +16,31 @@ public class ChatViewModel: ObservableObject {
     }
     
     enum Action {
-        case sendButtonTapped(String)
+        case sendButtonTapped
     }
     
     private let dependencies: Dependencies
-    private let openAIRepository: OPENAIRepositoryInterface
+    private let chatUseCase: ChatUseCaseInterface
     
-    @Published var chat: String = ""
-    @Published var chats: [String] = []
+    @Published var keyword: String = ""
+    @Published var chats: [ChatEntity] = []
+    
+    @Published var chatResultDependencies: ChatResultViewModel.Dependencies?
     
     public init(
         dependencies: Dependencies,
-        openAIRepository: OPENAIRepositoryInterface
+        chatUseCase: ChatUseCaseInterface
     ) {
         self.dependencies = dependencies
-        self.openAIRepository = openAIRepository
+        self.chatUseCase = chatUseCase
     }
     
     func send(_ action: Action) {
         switch action {
-        case let .sendButtonTapped(chat):
-            if !chat.isEmpty {
-                self.chats.append(chat)
-                self.chat = ""
+        case .sendButtonTapped:
+            if !self.keyword.isEmpty {
+                self.chats.append(.init(content: self.keyword, isSelected: true))
+                self.keyword = ""
             }
         }
     }

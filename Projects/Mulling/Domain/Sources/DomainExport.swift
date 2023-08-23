@@ -7,4 +7,5 @@
 
 import Foundation
 
+@_exported import MullingDomainChatInterface
 @_exported import MullingDomainChat

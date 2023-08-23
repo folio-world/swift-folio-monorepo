@@ -90,7 +90,7 @@ public struct ChatResultView: View {
                 spacing: 5,
                 alignment: .leading,
                 content: { item in
-                    Text(verbatim: item)
+                    Text(verbatim: item.content)
                         .padding(.horizontal, 12)
                         .padding(.vertical, 7)
                         .background(
@@ -146,6 +146,6 @@ public struct ChatResultView: View {
 
 struct ChatResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: ChatSceneDIContainer().makeChatViewModel())
+        ChatView(viewModel: ChatSceneDIContainer().makeChatViewModel(dependencies: .init()))
     }
 }

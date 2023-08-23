@@ -23,13 +23,13 @@ public struct ChatScene: View {
     
     public var body: some View {
         NavigationStack(path: $chatFlowCoordinator.path) {
-            ChatView(viewModel: chatSceneDIContainer.makeChatViewModel())
+            ChatView(viewModel: chatSceneDIContainer.makeChatViewModel(dependencies: .init()))
                 .environmentObject(chatFlowCoordinator)
                 .navigationDestination(for: ChatFlowCoordinator.Scene.self) { scene in
                     switch scene {
-                    case let .chatResult(chats):
+                    case let .chatResult(dependencies):
                         ChatResultView(
-                            viewModel: chatSceneDIContainer.makeChatResultViewModel(chats: chats)
+                            viewModel: chatSceneDIContainer.makeChatResultViewModel(dependencies: dependencies)
                         )
                         .environmentObject(chatFlowCoordinator)
                     }

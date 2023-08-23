@@ -7,9 +7,11 @@
 
 import SwiftUI
 
+import MullingDomain
+
 public protocol ChatFlowCoordinatorDependencies {
-    func makeChatViewModel() -> ChatViewModel
-    func makeChatResultViewModel(chats: [String]) -> ChatResultViewModel
+    func makeChatViewModel(dependencies: ChatViewModel.Dependencies) -> ChatViewModel
+    func makeChatResultViewModel(dependencies: ChatResultViewModel.Dependencies) -> ChatResultViewModel
 }
 
 public final class ChatFlowCoordinator: ObservableObject {
@@ -20,7 +22,7 @@ public final class ChatFlowCoordinator: ObservableObject {
     }
     
     public enum Scene: Hashable {
-        case chatResult([String])
+        case chatResult(ChatResultViewModel.Dependencies)
     }
     
     @Published public var path = NavigationPath()

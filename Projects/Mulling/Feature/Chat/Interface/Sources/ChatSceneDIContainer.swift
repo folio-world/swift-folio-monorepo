@@ -27,15 +27,25 @@ public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     //        return viewModel
     //    }
     
-    public func makeChatViewModel() -> ChatViewModel {
-        let dependencies: ChatViewModel.Dependencies = .init()
+    public func makeChatViewModel(dependencies: ChatViewModel.Dependencies) -> ChatViewModel {
         let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
-        return ChatViewModel(dependencies: dependencies, openAIRepository: openAIRepository)
+        let chatUseCase: ChatUseCaseInterface = ChatUseCase(openAIRepository: openAIRepository)
+        
+        return .init(
+            dependencies: dependencies,
+            chatUseCase: chatUseCase
+        )
     }
     
-    public func makeChatResultViewModel(chats: [String]) -> ChatResultViewModel {
-        let dependencies: ChatResultViewModel.Dependencies = .init(chats: chats)
+    public func makeChatResultViewModel(
+        dependencies: ChatResultViewModel.Dependencies
+    ) -> ChatResultViewModel {
         let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
-        return ChatResultViewModel(dependencies: dependencies, openAIRepository: openAIRepository)
+        let chatUseCase: ChatUseCaseInterface = ChatUseCase(openAIRepository: openAIRepository)
+        
+        return .init(
+            dependencies: dependencies,
+            chatUseCase: chatUseCase
+        )
     }
 }

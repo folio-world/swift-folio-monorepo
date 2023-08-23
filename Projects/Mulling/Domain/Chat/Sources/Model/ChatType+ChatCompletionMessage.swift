@@ -7,6 +7,7 @@
 
 import Foundation
 
+import MullingDomainChatInterface
 import MullingCore
 
 public extension ChatType {

@@ -7,11 +7,12 @@
 
 import Foundation
 
+import MullingDomainChatInterface
 import MullingCore
 import MullingShared
 
-protocol ChatUseCaseInterface {
-    func askToGPT(type: ChatType, chats: [ChatEntity]) async -> Result<[ChatEntity], RequestError>
+public protocol ChatUseCaseInterface {
+    func askToGPT(type: ChatType, chats: [ChatEntity]) async -> Result<[ChatEntity], ChatError>
 }
 
 public enum ChatError: Error {
@@ -24,14 +25,14 @@ public extension RequestError {
     }
 }
 
-final class ChatUseCase {
+public final class ChatUseCase: ChatUseCaseInterface {
     private let openAIRepository: OPENAIRepositoryInterface
     
     public init(openAIRepository: OPENAIRepositoryInterface) {
         self.openAIRepository = openAIRepository
     }
     
-    func askToGPT(type: ChatType, chats: [ChatEntity]) async -> Result<[ChatEntity], ChatError> {
+    public func askToGPT(type: ChatType, chats: [ChatEntity]) async -> Result<[ChatEntity], ChatError> {
         let messages = type.chatCompletionMessages(chats: chats)
         let request = ChatCompletionRequestDTO(
             model: .gpt_3_5_turbo,
