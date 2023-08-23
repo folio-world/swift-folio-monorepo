@@ -7,14 +7,13 @@
 
 import Foundation
 
-import MullingCore
 import MullingShared
 
-enum ChatGPTEndpoint {
+enum OPENAIEndpoint {
     case completion(request: ChatCompletionRequestDTO)
 }
 
-extension ChatGPTEndpoint: Endpoint {
+extension OPENAIEndpoint: Endpoint {
     var scheme: String {
         "https"
     }

@@ -8,11 +8,11 @@
 import Foundation
 
 public struct ChatCompletionResponseDTO: Codable {
-    let id, object: String
-    let created: Int
-    let model: ChatCompletionModelType
-    let choices: [ChatCompletionChoice]
-    let usage: Usage
+    public let id, object: String
+    public let created: Int
+    public let model: ChatCompletionModelType
+    public let choices: [ChatCompletionChoice]
+    public let usage: Usage
 }
 
 public struct ChatCompletionChoice: Codable {
@@ -26,8 +26,8 @@ public struct ChatCompletionChoice: Codable {
     }
 }
 
-struct Usage: Codable {
-    let promptTokens, completionTokens, totalTokens: Int
+public struct Usage: Codable {
+    public let promptTokens, completionTokens, totalTokens: Int
 
     enum CodingKeys: String, CodingKey {
         case promptTokens = "prompt_tokens"

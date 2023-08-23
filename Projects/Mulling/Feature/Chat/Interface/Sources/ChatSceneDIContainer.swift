@@ -8,6 +8,7 @@
 import Foundation
 
 import MullingDomain
+import MullingCore
 
 public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     public init() {
@@ -28,13 +29,13 @@ public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     
     public func makeChatViewModel() -> ChatViewModel {
         let dependencies: ChatViewModel.Dependencies = .init()
-        let chatGPTRepository: ChatGPTRepositoryInterface = ChatGPTRepository()
-        return ChatViewModel(dependencies: dependencies, chatGPTRepository: chatGPTRepository)
+        let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
+        return ChatViewModel(dependencies: dependencies, openAIRepository: openAIRepository)
     }
     
     public func makeChatResultViewModel(chats: [String]) -> ChatResultViewModel {
         let dependencies: ChatResultViewModel.Dependencies = .init(chats: chats)
-        let chatGPTRepository: ChatGPTRepositoryInterface = ChatGPTRepository()
-        return ChatResultViewModel(dependencies: dependencies, chatGPTRepository: chatGPTRepository)
+        let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
+        return ChatResultViewModel(dependencies: dependencies, openAIRepository: openAIRepository)
     }
 }

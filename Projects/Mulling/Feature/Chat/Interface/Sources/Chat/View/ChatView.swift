@@ -40,16 +40,17 @@ public struct ChatView: View {
                         spacing: 5,
                         alignment: .leading,
                         content: { item in
-                            Text(verbatim: item)
-                                .fontWeight(.light)
-                                .padding(10)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
-                                )
-                                .onTapGesture {
-                                    print(item)
-                                }
+                            Button(item, action: {
+                                
+                            })
+                            .fontWeight(.light)
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 7)
+                            .background(
+                                RoundedRectangle(cornerRadius: 20)
+                                    .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
+                            )
                         },
                         elementsSize: [:]
                     )
@@ -72,6 +73,7 @@ public struct ChatView: View {
             
             HStack(spacing: .zero) {
                 TextField("keyword", text: $viewModel.chat)
+                    .fontWeight(.light)
                     .padding(.leading, 10)
                     .onSubmit {
                         viewModel.send(.sendButtonTapped(viewModel.chat))

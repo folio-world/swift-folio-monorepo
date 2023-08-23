@@ -7,5 +7,5 @@
 
 import Foundation
 
-@_exported import MullingCoreNetworkInterface
-@_exported import MullingCoreNetwork
+@_exported import MullingCoreOPENAIInterface
+@_exported import MullingCoreOPENAI

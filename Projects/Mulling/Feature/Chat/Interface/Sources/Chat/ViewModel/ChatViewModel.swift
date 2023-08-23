@@ -8,6 +8,7 @@
 import Foundation
 
 import MullingDomain
+import MullingCore
 
 public class ChatViewModel: ObservableObject {
     public struct Dependencies {
@@ -19,17 +20,17 @@ public class ChatViewModel: ObservableObject {
     }
     
     private let dependencies: Dependencies
-    private let chatGPTRepository: ChatGPTRepositoryInterface
+    private let openAIRepository: OPENAIRepositoryInterface
     
     @Published var chat: String = ""
     @Published var chats: [String] = []
     
     public init(
         dependencies: Dependencies,
-        chatGPTRepository: ChatGPTRepositoryInterface
+        openAIRepository: OPENAIRepositoryInterface
     ) {
         self.dependencies = dependencies
-        self.chatGPTRepository = chatGPTRepository
+        self.openAIRepository = openAIRepository
     }
     
     func send(_ action: Action) {

@@ -7,5 +7,4 @@
 
 import Foundation
 
-@_exported import MullingDomainGPTInterface
-@_exported import MullingDomainGPT
+@_exported import MullingDomainChat

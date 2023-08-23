@@ -7,8 +7,6 @@
 
 import Foundation
 
-import MullingShared
-
 public protocol HTTPClient {
     func sendRequest<T: Decodable>(endpoint: Endpoint, responseModel: T.Type) async -> Result<T, RequestError>
 }

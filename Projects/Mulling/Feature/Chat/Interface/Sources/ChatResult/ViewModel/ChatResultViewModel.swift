@@ -7,7 +7,7 @@
 
 import Foundation
 
-import MullingDomain
+import MullingCore
 
 public class ChatResultViewModel: ObservableObject {
     public struct Dependencies {
@@ -23,7 +23,7 @@ public class ChatResultViewModel: ObservableObject {
     }
     
     private let dependencies: Dependencies
-    private let chatGPTRepository: ChatGPTRepositoryInterface
+    private let openAIRepository: OPENAIRepositoryInterface
     
     let chats: [String]
     
@@ -32,10 +32,10 @@ public class ChatResultViewModel: ObservableObject {
     
     public init(
         dependencies: Dependencies,
-        chatGPTRepository: ChatGPTRepositoryInterface
+        openAIRepository: OPENAIRepositoryInterface
     ) {
         self.dependencies = dependencies
-        self.chatGPTRepository = chatGPTRepository
+        self.openAIRepository = openAIRepository
         self.chats = dependencies.chats
     }
     
@@ -43,7 +43,7 @@ public class ChatResultViewModel: ObservableObject {
         switch action {
         case .gptButtonTapped:
             Task {
-                let tt = await chatGPTRepository
+                let tt = await openAIRepository
                     .postChatCompletion(
                         request: .init(
                             model: .gpt_3_5_turbo,

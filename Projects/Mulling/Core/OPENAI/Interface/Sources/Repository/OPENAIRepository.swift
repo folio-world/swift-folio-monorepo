@@ -7,16 +7,16 @@
 
 import Foundation
 
-import MullingCore
+import MullingShared
 
-public protocol ChatGPTRepositoryInterface {
+public protocol OPENAIRepositoryInterface {
     func postChatCompletion(request: ChatCompletionRequestDTO) async -> Result<ChatCompletionResponseDTO, RequestError>
 }
 
-public struct ChatGPTRepository: HTTPClient, ChatGPTRepositoryInterface {
+public struct OPENAIRepository: HTTPClient, OPENAIRepositoryInterface {
     public init() {}
     
     public func postChatCompletion(request: ChatCompletionRequestDTO) async -> Result<ChatCompletionResponseDTO, RequestError> {
-        return await sendRequest(endpoint: ChatGPTEndpoint.completion(request: request), responseModel: ChatCompletionResponseDTO.self)
+        return await sendRequest(endpoint: OPENAIEndpoint.completion(request: request), responseModel: ChatCompletionResponseDTO.self)
     }
 }

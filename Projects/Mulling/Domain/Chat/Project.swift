@@ -2,4 +2,4 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import ModulePlugin
 
-let project: Project = .core(.Mulling, module: .Network)
+let project: Project = .domain(.Mulling, module: .Chat)
