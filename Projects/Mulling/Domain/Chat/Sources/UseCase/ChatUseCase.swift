@@ -44,6 +44,7 @@ public final class ChatUseCase: ChatUseCaseInterface {
         }.mapError {
             $0.toDomain()
         }
+        
         return result
     }
 }

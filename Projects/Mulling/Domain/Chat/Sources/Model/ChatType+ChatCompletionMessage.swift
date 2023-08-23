@@ -51,7 +51,8 @@ public extension ChatType {
         case .keyword:
             return [
                 .init(role: .system, content: "You are an AI bot that suggests keywords that help with ideas"),
-                .init(role: .system, content: "You have to answer all the questions with a comma separated by keywords")
+                .init(role: .system, content: "You must answer all the questions with a comma separated by keywords"),
+                .init(role: .system, content: "You must answer in the keyword language provided by the user")
             ]
         }
     }

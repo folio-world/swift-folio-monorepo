@@ -45,17 +45,33 @@ public struct ChatView: View {
                         spacing: 5,
                         alignment: .leading,
                         content: { item in
-                            Button(item.content, action: {
-                                
-                            })
-                            .fontWeight(.light)
-                            .foregroundColor(.black)
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 7)
-                            .background(
-                                RoundedRectangle(cornerRadius: 20)
-                                    .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
-                            )
+                            VStack {
+                                if item.isSelected {
+                                    Button(item.content, action: {
+                                        viewModel.send(.chatCellTapped(id: item.id))
+                                    })
+                                    .fontWeight(.light)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 7)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .foregroundColor(.black)
+                                    )
+                                } else {
+                                    Button(item.content, action: {
+                                        viewModel.send(.chatCellTapped(id: item.id))
+                                    })
+                                    .fontWeight(.light)
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 7)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
+                                    )
+                                }
+                            }
                         },
                         elementsSize: [:]
                     )
@@ -69,10 +85,23 @@ public struct ChatView: View {
     private func chatTextFieldView() -> some View {
         HStack(spacing: .zero) {
             Button(action: {
+                viewModel.send(.gptButtonTapped)
             }, label: {
-                Image(systemName: "arrow.counterclockwise.circle.fill")
-                    .font(.title)
-                    .foregroundColor(viewModel.keyword.isEmpty ? .green : .gray)
+                Image(systemName: viewModel.mode == .isLoading ?
+                      "circle.fill"
+                      : "volleyball.circle.fill"
+                )
+                .font(.title)
+                .foregroundColor(viewModel.mode == .inactive ? .gray : .green)
+                .overlay(
+                    viewModel.mode == .isLoading ?
+                    ProgressView()
+                        .progressViewStyle(
+                            CircularProgressViewStyle(tint: .white)
+                        )
+                        .controlSize(.mini)
+                    : nil
+                )
             })
             .padding(.trailing, 10)
             
