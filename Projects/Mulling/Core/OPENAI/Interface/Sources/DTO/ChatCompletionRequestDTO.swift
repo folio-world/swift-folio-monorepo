@@ -10,10 +10,21 @@ import Foundation
 public struct ChatCompletionRequestDTO: Codable {
     public let model: ChatCompletionModelType
     public let messages: [ChatCompletionMessage]
+    public let maxTokens: Int?
     
-    public init(model: ChatCompletionModelType, messages: [ChatCompletionMessage]) {
+    enum CodingKeys: String, CodingKey {
+        case model, messages
+        case maxTokens = "max_tokens"
+    }
+    
+    public init(
+        model: ChatCompletionModelType,
+        messages: [ChatCompletionMessage],
+        maxTokens: Int? = nil
+    ) {
         self.model = model
         self.messages = messages
+        self.maxTokens = maxTokens
     }
 }
 

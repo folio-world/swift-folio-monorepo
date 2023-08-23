@@ -56,6 +56,9 @@ public class ChatViewModel: ObservableObject {
             if !keyword.isEmpty {
                 chats.append(.init(content: keyword, isSelected: true))
                 keyword = ""
+            } else if mode == .active {
+                let filterdChats = chats.filter { $0.isSelected }
+                chatResultDependencies = .init(chats: filterdChats)
             }
             
         case .gptButtonTapped:

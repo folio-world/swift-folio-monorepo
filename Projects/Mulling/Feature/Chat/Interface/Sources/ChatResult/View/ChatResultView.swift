@@ -40,24 +40,25 @@ public struct ChatResultView: View {
                 
                 inputView()
                     .padding(.bottom, 5)
-                
-                VStack(spacing: 5) {
-                    HStack {
-                        Text("GPT")
-                            .fontWeight(.semibold)
-                            .font(.caption)
-                            .foregroundColor(.white)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 4)
-                            .background(
-                                RoundedRectangle(cornerRadius: 30)
-                                    .foregroundColor(.black)
-                            )
+                if !viewModel.idea.isEmpty {
+                    VStack(spacing: 5) {
+                        HStack {
+                            Text("GPT")
+                                .fontWeight(.semibold)
+                                .font(.caption)
+                                .foregroundColor(.white)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 4)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 30)
+                                        .foregroundColor(.black)
+                                )
+                            
+                            Spacer()
+                        }
                         
-                        Spacer()
+                        Text(viewModel.idea)
                     }
-                    
-                    Text("ddasfnjkfjnsnfkjasnfjkansfjknasjkfnjaksnfjkansfjnasjkfnjkasnfjnasjkfnkjasnfjkansjkfnajsknfjkasnfjknasjkfnakjsfnjaksnfkjasnjfknaskfnjaskfjnksjfan")
                 }
             }
             
@@ -68,16 +69,33 @@ public struct ChatResultView: View {
                     viewModel.send(.gptButtonTapped)
                     
                 }, label: {
-                    Label("Ask GPT", systemImage: "volleyball")
-                        .foregroundColor(.white)
+                    Label(viewModel.mode == .isLoading ?
+                          ""
+                          : "Ask GPT",
+                        systemImage: viewModel.mode == .isLoading ?
+                          ""
+                          : "volleyball"
+                    )
+                    .foregroundColor(.white)
                 })
                 .padding(10)
                 .background(
-                    RoundedRectangle(cornerRadius: 20)
-                        .foregroundColor(.black)
+                    VStack {
+                        switch viewModel.mode {
+                        case .isLoading:
+                            ProgressView()
+                        case .active:
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(.black)
+                        case .inactive:
+                            RoundedRectangle(cornerRadius: 20)
+                                .foregroundColor(.gray)
+                        }
+                    }
                 )
             }
             .padding(.vertical)
+            .padding(.horizontal)
         }
         .padding(.horizontal)
     }

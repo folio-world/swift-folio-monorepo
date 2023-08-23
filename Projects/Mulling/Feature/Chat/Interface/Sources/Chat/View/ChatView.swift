@@ -114,10 +114,7 @@ public struct ChatView: View {
                     }
                 
                 Button(action: {
-                    if viewModel.keyword.isEmpty {
-                    } else {
-                        viewModel.send(.sendButtonTapped)
-                    }
+                    viewModel.send(.sendButtonTapped)
                 }, label: {
                     Image(systemName: viewModel.keyword.isEmpty ? "arrow.right.circle.fill" : "arrow.up.circle.fill")
                         .foregroundColor(viewModel.keyword.isEmpty ? .gray : .green)

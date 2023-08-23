@@ -20,4 +20,12 @@ public extension ChatCompletionResponseDTO {
             .init(content: $0)
         }
     }
+    
+    func toDomain() -> ChatEntity {
+        let content = self.choices.compactMap {
+            $0.message.content
+        }.lazy.joined(separator: "\n")
+        
+        return .init(content: content)
+    }
 }
