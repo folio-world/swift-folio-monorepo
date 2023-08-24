@@ -11,6 +11,8 @@ public struct ChatStatusButton: View {
     let status: ChatStatus
     let action : () -> Void
     
+    private let size = 35.0
+    
     public init(status: ChatStatus, action: @escaping () -> Void) {
         self.status = status
         self.action = action
@@ -31,33 +33,33 @@ public struct ChatStatusButton: View {
     
     private func inactiveLabel() -> some View {
         Image(systemName: "volleyball.circle.fill")
-        .font(.title)
-        .foregroundColor(.gray)
+            .font(.system(size: size))
+            .foregroundColor(.gray)
     }
     
     private func activeLabel() -> some View {
         Image(systemName: "volleyball.circle.fill")
-        .font(.title)
-        .foregroundColor(.green)
+            .font(.system(size: size))
+            .foregroundColor(.green)
     }
     
     private func needPointLabel() -> some View {
         Image(systemName: "volleyball.circle.fill")
-        .font(.title)
-        .foregroundColor(.pink)
+            .font(.system(size: size))
+            .foregroundColor(.pink)
     }
     
     private func isLoadingLabel() -> some View {
         Image(systemName: "circle.fill")
-        .font(.title)
-        .foregroundColor(.green)
-        .overlay(
-            ProgressView()
-                .progressViewStyle(
-                    CircularProgressViewStyle(tint: .white)
-                )
-                .controlSize(.mini)
-        )
+            .font(.system(size: size))
+            .foregroundColor(.green)
+            .overlay(
+                ProgressView()
+                    .progressViewStyle(
+                        CircularProgressViewStyle(tint: .white)
+                    )
+                    .controlSize(.mini)
+            )
     }
 }
 

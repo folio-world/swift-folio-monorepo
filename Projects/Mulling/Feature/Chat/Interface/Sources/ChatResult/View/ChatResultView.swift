@@ -14,107 +14,81 @@ public struct ChatResultView: View {
     
     @StateObject public var viewModel: ChatResultViewModel
     
-    private var rewardAd: Rewarded = .init()
-    
     public init(viewModel: ChatResultViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
     
     public var body: some View {
-        VStack {
-            ScrollView(showsIndicators: false) {
-                HStack {
-                    Text("Keyword")
-                        .fontWeight(.semibold)
-                        .font(.caption)
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 4)
-                        .background(
-                            RoundedRectangle(cornerRadius: 30)
-                                .foregroundColor(.black)
-                        )
-                    
-                    Spacer()
-                }
-                
-                chatListView()
-                
-                inputView()
-                    .padding(.bottom, 5)
-                if !viewModel.idea.isEmpty {
-                    VStack(spacing: 5) {
-                        HStack {
-                            Text("GPT")
-                                .fontWeight(.semibold)
-                                .font(.caption)
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 4)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 30)
-                                        .foregroundColor(.black)
-                                )
-                            
-                            Spacer()
-                        }
+        ZStack {
+            VStack {
+                ScrollView(showsIndicators: false) {
+                    HStack {
+                        PointView(point: viewModel.point)
                         
-                        Text(viewModel.idea)
+                        Spacer()
+                    }
+                    
+                    HStack {
+                        Text("Keyword")
+                            .fontWeight(.semibold)
+                            .font(.caption)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 4)
+                            .background(
+                                RoundedRectangle(cornerRadius: 30)
+                                    .foregroundColor(.black)
+                            )
+                        
+                        Spacer()
+                    }
+                    
+                    chatListView()
+                    
+                    inputView()
+                        .padding(.bottom, 5)
+                    if !viewModel.idea.isEmpty {
+                        VStack(spacing: 5) {
+                            HStack {
+                                Text("GPT")
+                                    .fontWeight(.semibold)
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 4)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 30)
+                                            .foregroundColor(.black)
+                                    )
+                                
+                                Spacer()
+                            }
+                            
+                            Text(viewModel.idea)
+                        }
                     }
                 }
+                
+                Spacer()
             }
             
-            Spacer()
-            
-            HStack {
-                Button(action: {
-                    viewModel.send(.gptButtonTapped)
-                    
-                    rewardAd.show {
-                        print($0)
-                    }
-                }, label: {
-                    Label(viewModel.mode == .isLoading ?
-                          ""
-                          : "Ask GPT",
-                        systemImage: viewModel.mode == .isLoading ?
-                          ""
-                          : "volleyball"
-                    )
-                    .foregroundColor(.white)
-                })
-                .padding(10)
-                .background(
-                    VStack {
-                        switch viewModel.mode {
-                        case .isLoading:
-                            ProgressView()
-                        case .active:
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.black)
-                        case .inactive:
-                            RoundedRectangle(cornerRadius: 20)
-                                .foregroundColor(.gray)
-                        }
-                    }
-                )
+            VStack {
+                Spacer()
                 
-                if !viewModel.idea.isEmpty {
-                    Button(action: {
+                HStack {
+                    ChatStatusButton(status: viewModel.status) {
+                        viewModel.send(.gptButtonTapped)
+                    }
+                    
+                    ShareButton(isActive: !viewModel.idea.isEmpty) {
                         viewModel.send(.shareButtonTapped)
-                    }, label: {
-                        Label("Share After AD", systemImage: "square.and.arrow.up")
-                        .foregroundColor(.white)
-                    })
-                    .padding(10)
-                    .background(
-                        RoundedRectangle(cornerRadius: 20)
-                            .foregroundColor(.black)
-                    )
+                    }
                 }
             }
             .padding(.vertical)
-            .padding(.horizontal)
+        }
+        .onAppear {
+            viewModel.send(.onAppear)
         }
         .padding(.horizontal)
         .sheet(isPresented: $viewModel.isShare) {
