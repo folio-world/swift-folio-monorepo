@@ -14,6 +14,8 @@ public struct ChatResultView: View {
     
     @StateObject public var viewModel: ChatResultViewModel
     
+    private var rewardAd: Rewarded = .init()
+    
     public init(viewModel: ChatResultViewModel) {
         self._viewModel = .init(wrappedValue: viewModel)
     }
@@ -67,6 +69,10 @@ public struct ChatResultView: View {
             HStack {
                 Button(action: {
                     viewModel.send(.gptButtonTapped)
+                    
+                    rewardAd.show {
+                        print($0)
+                    }
                 }, label: {
                     Label(viewModel.mode == .isLoading ?
                           ""

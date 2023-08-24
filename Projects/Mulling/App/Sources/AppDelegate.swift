@@ -15,15 +15,11 @@ import AppTrackingTransparency
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication,
                      didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        print("hello")
-        GADMobileAds.sharedInstance().start(completionHandler: nil)
-        
         if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
         
         } else {
             ATTrackingManager.requestTrackingAuthorization { status in
-                print("ddd")
-                
+                GADMobileAds.sharedInstance().start(completionHandler: nil)
             }
         }
 
