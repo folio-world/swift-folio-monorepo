@@ -8,6 +8,7 @@
 import SwiftUI
 
 import MullingShared
+import AppTrackingTransparency
 
 public struct ChatScene: View {
     private let chatSceneDIContainer: ChatSceneDIContainer

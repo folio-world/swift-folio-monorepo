@@ -20,7 +20,7 @@ public struct ChatResultView: View {
     
     public var body: some View {
         VStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 HStack {
                     Text("Keyword")
                         .fontWeight(.semibold)
@@ -67,7 +67,6 @@ public struct ChatResultView: View {
             HStack {
                 Button(action: {
                     viewModel.send(.gptButtonTapped)
-                    
                 }, label: {
                     Label(viewModel.mode == .isLoading ?
                           ""
@@ -93,11 +92,28 @@ public struct ChatResultView: View {
                         }
                     }
                 )
+                
+                if !viewModel.idea.isEmpty {
+                    Button(action: {
+                        viewModel.send(.shareButtonTapped)
+                    }, label: {
+                        Label("Share After AD", systemImage: "square.and.arrow.up")
+                        .foregroundColor(.white)
+                    })
+                    .padding(10)
+                    .background(
+                        RoundedRectangle(cornerRadius: 20)
+                            .foregroundColor(.black)
+                    )
+                }
             }
             .padding(.vertical)
             .padding(.horizontal)
         }
         .padding(.horizontal)
+        .sheet(isPresented: $viewModel.isShare) {
+            SharingView(content: viewModel.shareContent)
+        }
     }
     
     private func chatListView() -> some View {

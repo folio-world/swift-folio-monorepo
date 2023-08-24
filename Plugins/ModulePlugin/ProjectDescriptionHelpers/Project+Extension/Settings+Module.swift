@@ -12,10 +12,16 @@ import ProjectDescription
 
 public extension Settings {
     static func app(_ product: Module.Product) -> Self {
-        return .settings(configurations: [
-            .debug(name: "Debug", xcconfig: .relativeToRoot("\(Path.app(product, module: .IOS).pathString)/Sources/Config/Debug.xcconfig")),
-            .release(name: "Release", xcconfig: .relativeToRoot("\(Path.app(product, module: .IOS).pathString)/Sources/Config/Release.xcconfig")),
-        ])
+        let base = SettingsDictionary()
+            .otherLinkerFlags(["-ObjC"])
+        
+        return .settings(
+            base: base,
+            configurations: [
+                .debug(name: "Debug", xcconfig: .relativeToRoot("\(Path.app(product, module: .IOS).pathString)/Sources/Config/Debug.xcconfig")),
+                .release(name: "Release", xcconfig: .relativeToRoot("\(Path.app(product, module: .IOS).pathString)/Sources/Config/Release.xcconfig")),
+            ]
+        )
     }
 }
 

@@ -7,12 +7,24 @@
 //
 
 import SwiftUI
+import AppTrackingTransparency
 
 import MullingFeature
-
+//if ATTrackingManager.trackingAuthorizationStatus == .notDetermined {
+//
+//} else {
+//    ATTrackingManager.requestTrackingAuthorization { status in
+//        AdmobManager.shared.start()
+//    }
+//}
 @main
 struct RootApp: App {
+    @UIApplicationDelegateAdaptor var delegate: AppDelegate
     let appDIContainer: AppDIContainerInterface = AppDIContainer()
+    
+    init() {
+        
+    }
     
     var body: some Scene {
         WindowGroup {

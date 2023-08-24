@@ -153,6 +153,7 @@ public extension Module {
         case HealthKit
         
         case OPENAI
+        case Admob
         
         public static let name: String = "Core"
         
@@ -160,7 +161,7 @@ public extension Module {
             switch product {
             case .Minimal: return [.HealthKit]
             case .Dying: return []
-            case .Mulling: return [.OPENAI]
+            case .Mulling: return [.OPENAI, .Admob]
             }
         }
         

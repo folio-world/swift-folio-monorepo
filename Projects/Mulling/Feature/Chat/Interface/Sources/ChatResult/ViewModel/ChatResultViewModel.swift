@@ -30,6 +30,7 @@ public class ChatResultViewModel: ObservableObject {
     
     enum Action {
         case gptButtonTapped
+        case shareButtonTapped
     }
     
     private let dependencies: Dependencies
@@ -40,6 +41,8 @@ public class ChatResultViewModel: ObservableObject {
     @Published var subject: String = ""
     @Published var mode: GPTMode = .inactive
     @Published var idea: String = ""
+    @Published var isShare: Bool = false
+    @Published var shareContent: String = ""
     
     public init(
         dependencies: Dependencies,
@@ -72,6 +75,10 @@ public class ChatResultViewModel: ObservableObject {
                     mode = .active
                 }
             }
+        case .shareButtonTapped:
+            shareContent = "Summary\n\nKeywords: \(chats.map { $0.content }.joined(separator: ","))\n\nJob: \(job)\nSubject: \(subject)\n\nGPT: \n\(idea)"
+            isShare = true
+            return
         }
     }
     
