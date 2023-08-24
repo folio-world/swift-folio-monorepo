@@ -11,6 +11,12 @@ import MullingDomainChatInterface
 import MullingCore
 
 public extension ChatCompletionResponseDTO {
+    func toDomain() -> ChatGPTEntity {
+        let chats: [ChatEntity] = self.toDomain()
+        
+        return .init(chats: chats, usedPoint: self.usage.toUsedPoint())
+    }
+    
     func toDomain() -> [ChatEntity] {
         self.choices.flatMap {
             $0.message.content.components(separatedBy: ", ")
@@ -27,5 +33,11 @@ public extension ChatCompletionResponseDTO {
         }.lazy.joined(separator: "\n")
         
         return .init(content: content)
+    }
+}
+
+public extension Usage {
+    func toUsedPoint() -> Int {
+        return self.totalTokens / 10
     }
 }

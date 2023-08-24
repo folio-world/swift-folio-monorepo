@@ -35,7 +35,9 @@ public class ChatResultViewModel: ObservableObject {
     
     private let dependencies: Dependencies
     private let chatUseCase: ChatUseCaseInterface
+    private let pointUseCase: PointUseCaseInterface
     
+    @Published var point: PointEntity = .init(current: 0)
     @Published var chats: [ChatEntity]
     @Published var job: String = ""
     @Published var subject: String = ""
@@ -46,10 +48,12 @@ public class ChatResultViewModel: ObservableObject {
     
     public init(
         dependencies: Dependencies,
-        chatUseCase: ChatUseCaseInterface
+        chatUseCase: ChatUseCaseInterface,
+        pointUseCase: PointUseCaseInterface
     ) {
         self.dependencies = dependencies
         self.chatUseCase = chatUseCase
+        self.pointUseCase = pointUseCase
         
         self.chats = dependencies.chats
         
@@ -66,8 +70,11 @@ public class ChatResultViewModel: ObservableObject {
                     let result = await chatUseCase.askIdeaToGPT(job: job, subject: subject, chats: chats)
                     
                     switch result {
-                    case let .success(chat):
-                        self.idea = chat.content
+                    case let .success(chatGPT):
+                        self.idea = chatGPT.toIdea()
+                        if case let .success(point) =  self.pointUseCase.use(point: chatGPT.usedPoint) {
+                            self.point = point
+                        }
                     case let .failure(failure):
                         print(failure)
                     }
@@ -92,5 +99,11 @@ public class ChatResultViewModel: ObservableObject {
                 }
             }
             .store(in: &subscribers)
+    }
+}
+
+public extension ChatGPTEntity {
+    func toIdea() -> String {
+        return self.chats.first?.content ?? ""
     }
 }

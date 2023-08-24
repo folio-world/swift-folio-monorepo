@@ -22,10 +22,12 @@ public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     public func makeChatViewModel(dependencies: ChatViewModel.Dependencies) -> ChatViewModel {
         let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
         let chatUseCase: ChatUseCaseInterface = ChatUseCase(openAIRepository: openAIRepository)
+        let pointUseCase: PointUseCaseInterface = PointUseCase()
         
         return .init(
             dependencies: dependencies,
-            chatUseCase: chatUseCase
+            chatUseCase: chatUseCase,
+            pointUseCase: pointUseCase
         )
     }
     
@@ -34,10 +36,12 @@ public final class ChatSceneDIContainer: ChatFlowCoordinatorDependencies {
     ) -> ChatResultViewModel {
         let openAIRepository: OPENAIRepositoryInterface = OPENAIRepository()
         let chatUseCase: ChatUseCaseInterface = ChatUseCase(openAIRepository: openAIRepository)
+        let pointUseCase: PointUseCaseInterface = PointUseCase()
         
         return .init(
             dependencies: dependencies,
-            chatUseCase: chatUseCase
+            chatUseCase: chatUseCase,
+            pointUseCase: pointUseCase
         )
     }
 }

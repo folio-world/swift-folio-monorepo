@@ -19,12 +19,36 @@ public struct ChatView: View {
     }
     
     public var body: some View {
-        VStack(spacing: .zero) {
-            chatListView()
-                .padding(.horizontal)
+        ZStack {
+            VStack {
+                chatListView()
+                    .padding(.horizontal)
+                
+                chatTextFieldView()
+                    .padding()
+            }
             
-            chatTextFieldView()
-                .padding()
+            VStack {
+                HStack {
+                    Text("\(viewModel.point.current) P")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 30)
+                                .foregroundColor(viewModel.point.current >= 0 ? .black : .pink)
+                        )
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+        }
+        .onAppear {
+            viewModel.send(.onAppear)
         }
         .onReceive(viewModel.$chatResultDependencies) { dependenciesOrNil in
             if let dependencies = dependenciesOrNil {
@@ -84,25 +108,9 @@ public struct ChatView: View {
     
     private func chatTextFieldView() -> some View {
         HStack(spacing: .zero) {
-            Button(action: {
+            ChatStatusButton(status: viewModel.status) {
                 viewModel.send(.gptButtonTapped)
-            }, label: {
-                Image(systemName: viewModel.mode == .isLoading ?
-                      "circle.fill"
-                      : "volleyball.circle.fill"
-                )
-                .font(.title)
-                .foregroundColor(viewModel.mode == .inactive ? .gray : .green)
-                .overlay(
-                    viewModel.mode == .isLoading ?
-                    ProgressView()
-                        .progressViewStyle(
-                            CircularProgressViewStyle(tint: .white)
-                        )
-                        .controlSize(.mini)
-                    : nil
-                )
-            })
+            }
             .padding(.trailing, 10)
             
             HStack(spacing: .zero) {

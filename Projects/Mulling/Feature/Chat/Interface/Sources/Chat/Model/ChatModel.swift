@@ -8,7 +8,7 @@
 import Foundation
 
 public enum ChatStatus {
-    case needToken
+    case needPoint
     case inactive
     case active
     case isLoading

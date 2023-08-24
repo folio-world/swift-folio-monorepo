@@ -12,8 +12,8 @@ import MullingCore
 import MullingShared
 
 public protocol ChatUseCaseInterface {
-    func askKeywordsToGPT(chats: [ChatEntity]) async -> Result<[ChatEntity], ChatError>
-    func askIdeaToGPT(job: String, subject: String, chats: [ChatEntity]) async -> Result<ChatEntity, ChatError>
+    func askKeywordsToGPT(chats: [ChatEntity]) async -> Result<ChatGPTEntity, ChatError>
+    func askIdeaToGPT(job: String, subject: String, chats: [ChatEntity]) async -> Result<ChatGPTEntity, ChatError>
 }
 
 public enum ChatError: Error {
@@ -33,7 +33,7 @@ public final class ChatUseCase: ChatUseCaseInterface {
         self.openAIRepository = openAIRepository
     }
     
-    public func askKeywordsToGPT(chats: [ChatEntity]) async -> Result<[ChatEntity], ChatError> {
+    public func askKeywordsToGPT(chats: [ChatEntity]) async -> Result<ChatGPTEntity, ChatError> {
         let keywords = chats.map { $0.content }.joined(separator: ",")
         let messages: [ChatCompletionMessage] = [
             .init(role: .system, content: "You are an AI bot that suggests keywords that help with ideas"),
@@ -47,7 +47,7 @@ public final class ChatUseCase: ChatUseCaseInterface {
             maxTokens: 150
         )
         let resposne = await openAIRepository.postChatCompletion(request: request)
-        let result: Result<[ChatEntity], ChatError> = resposne.map {
+        let result: Result<ChatGPTEntity, ChatError> = resposne.map {
             $0.toDomain()
         }.mapError {
             $0.toDomain()
@@ -56,7 +56,7 @@ public final class ChatUseCase: ChatUseCaseInterface {
         return result
     }
     
-    public func askIdeaToGPT(job: String, subject: String, chats: [ChatEntity]) async -> Result<ChatEntity, ChatError> {
+    public func askIdeaToGPT(job: String, subject: String, chats: [ChatEntity]) async -> Result<ChatGPTEntity, ChatError> {
         let keywords = chats.map { $0.content }.joined(separator: ",")
         let messages: [ChatCompletionMessage] = [
             .init(role: .system, content: "You're an AI bot that uses keywords to suggest ideas"),
@@ -69,8 +69,9 @@ public final class ChatUseCase: ChatUseCaseInterface {
             messages: messages
         )
         let resposne = await openAIRepository.postChatCompletion(request: request)
-        let result: Result<ChatEntity, ChatError> = resposne.map {
-            $0.toDomain()
+        let result: Result<ChatGPTEntity, ChatError> = resposne.map {
+            let chatEntity: ChatEntity = $0.toDomain()
+            return ChatGPTEntity(chats: [chatEntity], usedPoint: $0.usage.toUsedPoint())
         }.mapError {
             $0.toDomain()
         }

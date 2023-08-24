@@ -9,6 +9,6 @@ import Foundation
 
 public protocol PointUseCaseInterface {
     func fetch() -> Result<PointEntity, PointError>
-    func use(point: PointEntity) -> Result<PointEntity, PointError>
-    func earn(point: PointEntity) -> Result<PointEntity, PointError>
+    func use(point: Int) -> Result<PointEntity, PointError>
+    func earn(point: Int) -> Result<PointEntity, PointError>
 }
