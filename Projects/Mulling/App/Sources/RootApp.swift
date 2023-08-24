@@ -23,6 +23,7 @@ struct RootApp: App {
     var body: some Scene {
         WindowGroup {
             ChatScene(chatSceneDIContainer: appDIContainer.makeChatSceneDIContainer())
+                .onAppear(perform : UIApplication.shared.hideKeyboard)
         }
     }
 }
