@@ -18,12 +18,6 @@ public class ChatViewModel: ObservableObject {
         public init() { }
     }
     
-    enum GPTMode {
-        case inactive
-        case active
-        case isLoading
-    }
-    
     enum Action {
         case sendButtonTapped
         case gptButtonTapped
@@ -35,7 +29,7 @@ public class ChatViewModel: ObservableObject {
     
     @Published var keyword: String = ""
     @Published var chats: [ChatEntity] = []
-    @Published var mode: GPTMode = .inactive
+    @Published var status: ChatStatus = .inactive
     
     @Published var chatResultDependencies: ChatResultViewModel.Dependencies?
     
@@ -56,15 +50,15 @@ public class ChatViewModel: ObservableObject {
             if !keyword.isEmpty {
                 chats.append(.init(content: keyword, isSelected: true))
                 keyword = ""
-            } else if mode == .active {
+            } else if status == .active {
                 let filterdChats = chats.filter { $0.isSelected }
                 chatResultDependencies = .init(chats: filterdChats)
             }
             
         case .gptButtonTapped:
-            if self.mode == .active {
+            if self.status == .active {
                 Task {
-                    mode = .isLoading
+                    status = .isLoading
                     let filteredChats = chats.filter({ $0.isSelected })
                     let response = await chatUseCase.askKeywordsToGPT(chats: filteredChats)
                     switch response {
@@ -74,7 +68,7 @@ public class ChatViewModel: ObservableObject {
                     case let .failure(failure):
                         print(failure)
                     }
-                    mode = .active
+                    status = .active
                 }
             }
             
@@ -87,8 +81,8 @@ public class ChatViewModel: ObservableObject {
     
     func bind() {
         $chats.receive(on: DispatchQueue.main).sink { [weak self] chats in
-            if chats.contains(where: { $0.isSelected }) && self?.mode != .isLoading {
-                self?.mode = .active
+            if chats.contains(where: { $0.isSelected }) && self?.status != .isLoading {
+                self?.status = .active
                 self?.chats.sort{ $0.isSelected && !$1.isSelected }
             }
         }.store(in: &subscribers)

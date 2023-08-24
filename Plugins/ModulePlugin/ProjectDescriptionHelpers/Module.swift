@@ -116,6 +116,7 @@ public extension Module {
     enum Domain: String, CaseIterable {
         case Health
         case Chat
+        case Point
         
         public static let name: String = "Domain"
         
@@ -123,7 +124,7 @@ public extension Module {
             switch product {
             case .Minimal: return []
             case .Dying: return [.Health]
-            case .Mulling: return [.Chat]
+            case .Mulling: return [.Chat, .Point]
             }
         }
         
