@@ -12,7 +12,7 @@ import MullingCore
 import MullingShared
 
 public final class PointUseCase: PointUseCaseInterface {
-    public static let INIT_POINT = 1000
+    public static let INIT_POINT = 500
     
     enum UserDefaultsKey: String {
         case point

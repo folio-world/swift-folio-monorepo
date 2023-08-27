@@ -10,6 +10,7 @@ import Combine
 
 import MullingDomain
 import MullingCore
+import MullingShared
 
 public class ChatViewModel: ObservableObject {
     private var subscribers: Set<AnyCancellable> = []
@@ -28,6 +29,8 @@ public class ChatViewModel: ObservableObject {
     private let dependencies: Dependencies
     private let chatUseCase: ChatUseCaseInterface
     private let pointUseCase: PointUseCaseInterface
+    
+    private let rewardAd: Rewarded = .init()
     
     @Published var point: PointEntity = .init(current: 0)
     @Published var keyword: String = ""
@@ -68,7 +71,15 @@ public class ChatViewModel: ObservableObject {
             }
             
         case .gptButtonTapped:
-            if self.status == .active {
+            switch status {
+            case .needPoint:
+                rewardAd.show { reward in
+                    if case let .success(point) = self.pointUseCase.earn(point: Int(truncating: reward.amount)) {
+                        self.point = point
+                    }
+                }
+                
+            case .active:
                 Task {
                     status = .isLoading
                     let filteredChats = chats.filter({ $0.isSelected })
@@ -85,6 +96,8 @@ public class ChatViewModel: ObservableObject {
                     }
                     status = .active
                 }
+            case .inactive, .isLoading:
+                break
             }
             
         case let .chatCellTapped(id):
@@ -95,17 +108,38 @@ public class ChatViewModel: ObservableObject {
     }
     
     func bind() {
-        $chats.receive(on: DispatchQueue.main).sink { [weak self] chats in
-            if chats.contains(where: { $0.isSelected }) && self?.status == .inactive {
-                self?.status = .active
-                self?.chats.sort{ $0.isSelected && !$1.isSelected }
-            }
-        }.store(in: &subscribers)
+        $chats
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] chats in
+                self?.status = self?.currentStatus() ?? .active
+            }.store(in: &subscribers)
         
-        $status.receive(on: DispatchQueue.main).sink { [weak self] status in
-            if case let .success(pointEntity) = self?.pointUseCase.fetch(), pointEntity.current < 0 {
-                self?.status = .needPoint
+        $status
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] status in
+                self?.status = self?.currentStatus() ?? .active
+            }.store(in: &subscribers)
+
+        $point
+            .removeDuplicates(by: { $0.current == $1.current })
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.status = self?.currentStatus() ?? .active
             }
-        }.store(in: &subscribers)
+            .store(in: &subscribers)
+    }
+    
+    private func currentStatus() -> ChatStatus {
+        if status == .isLoading {
+            return .isLoading
+        } else if point.current < 0 {
+            return .needPoint
+        } else if chats.contains(where: { $0.isSelected }) {
+            return .active
+        } else {
+            return .inactive
+        }
     }
 }

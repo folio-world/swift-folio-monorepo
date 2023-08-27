@@ -32,7 +32,8 @@ public class ChatResultViewModel: ObservableObject {
     private let dependencies: Dependencies
     private let chatUseCase: ChatUseCaseInterface
     private let pointUseCase: PointUseCaseInterface
-    private var rewardAd: Rewarded = .init()
+    
+    private let rewardAd: Rewarded = .init()
     
     @Published var point: PointEntity = .init(current: 0)
     @Published var chats: [ChatEntity]

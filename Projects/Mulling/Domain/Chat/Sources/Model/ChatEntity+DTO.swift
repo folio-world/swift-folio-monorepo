@@ -38,6 +38,6 @@ public extension ChatCompletionResponseDTO {
 
 public extension Usage {
     func toUsedPoint() -> Int {
-        return self.totalTokens / 10
+        return self.totalTokens / 5
     }
 }

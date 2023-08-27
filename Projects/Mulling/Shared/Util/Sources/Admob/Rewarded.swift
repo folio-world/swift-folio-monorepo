@@ -6,6 +6,7 @@
 //
 import SwiftUI
 import GoogleMobileAds
+import MullingSharedUtilInterface
 import UIKit
 
 public final class Rewarded: NSObject {
@@ -21,7 +22,7 @@ public final class Rewarded: NSObject {
     private func load(){
         let request = GADRequest()
         GADRewardedAd.load(
-            withAdUnitID:"ca-app-pub-3940256099942544/1712485313",
+            withAdUnitID: Environment.rewardedId,
             request: request,
             completionHandler: { [self] ad, error in
                 if let error = error {
