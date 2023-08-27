@@ -10,7 +10,7 @@ import ProjectDescription
 
 //MARK: App
 
-public extension Target {
+public extension Target {    
     static func app(_ product: Module.Product) -> Self {
         return .init(
             name: .Name.app(product),
@@ -27,13 +27,15 @@ public extension Target {
             entitlements: nil,
             scripts: [],
             dependencies: {
-                var dependencies: [TargetDependency] = [
-                    .feature(product)
-                ]
+                var dependencies: [TargetDependency] = [.feature(product)]
                 
-                dependencies += Module.App.targets(product).map { app in
+                dependencies += Module.appPackages(product).map { product, app in
                         .app(product, module: app)
                 }
+                
+//                dependencies += Module.App.targets(product).map { app in
+//                        .app(product, module: app)
+//                }
                 
                 return dependencies
             }(),
@@ -98,9 +100,13 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-                dependencies += Module.Feature.targets(product).map { feature in
+                dependencies += Module.featurePackages(product).map { product, feature in
                         .feature(product, module: feature)
                 }
+                
+//                dependencies += Module.Feature.targets(product).map { feature in
+//                        .feature(product, module: feature)
+//                }
                 
                 return dependencies
             }(),
@@ -170,9 +176,13 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = [.core(product)]
                 
-                dependencies += Module.Domain.targets(product).map { domain in
+                dependencies += Module.domainPackages(product).map { product, domain in
                         .domain(product, module: domain)
                 }
+                
+//                dependencies += Module.Domain.targets(product).map { domain in
+//                        .domain(product, module: domain)
+//                }
                 
                 return dependencies
             }(),
@@ -242,9 +252,13 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = [.shared(product)]
                 
-                dependencies += Module.Core.targets(product).map { core in
+                dependencies += Module.corePackages(product).map { product, core in
                         .core(product, module: core)
                 }
+                
+//                dependencies += Module.Core.targets(product).map { core in
+//                        .core(product, module: core)
+//                }
                 
                 return dependencies
             }(),
@@ -314,9 +328,13 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-                dependencies += Module.Shared.targets(product).map { shared in
+                dependencies += Module.sharedPackages(product).map { product, shared in
                         .shared(product, module: shared)
                 }
+                
+//                dependencies += Module.Shared.targets(product).map { shared in
+//                        .shared(product, module: shared)
+//                }
                 
                 return dependencies
             }(),

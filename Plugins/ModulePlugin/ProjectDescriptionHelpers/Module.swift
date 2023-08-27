@@ -32,6 +32,90 @@ public enum Module {
     case domain(Domain)
     case core(Core)
     case shared(Shared)
+    
+    public typealias AppPackage = (Product, App)
+    public typealias FeaturePackage = (Product, Feature)
+    public typealias DomainPackage = (Product, Domain)
+    public typealias CorePackage = (Product, Core)
+    public typealias SharedPackage = (Product, Shared)
+}
+
+public extension Module {
+    static func appPackages(_ product: Product) -> [AppPackage] {
+        switch product {
+        case .Minimal:
+            return [
+                (.Minimal, .IOS)
+            ]
+        case .Dying:
+            return [
+                (.Dying, .IOS)
+            ]
+        case .Mulling:
+            return [
+                (.Mulling, .IOS)
+            ]
+        case .Toolinder:
+            return [
+                (.Toolinder, .IOS)
+            ]
+        }
+    }
+    
+    static func featurePackages(_ product: Product) -> [FeaturePackage] {
+        switch product {
+        case .Minimal: return []
+        case .Dying:
+            return []
+        case .Mulling:
+            return [
+                (.Mulling, .Chat),
+                (.Mulling, .Home)
+            ]
+        case .Toolinder:
+            return []
+        }
+    }
+    
+    static func domainPackages(_ product: Product) -> [DomainPackage] {
+        switch product {
+        case .Minimal: return []
+        case .Dying: return []
+        case .Mulling:
+            return [
+                (.Mulling, .Chat),
+                (.Mulling, .Point)
+            ]
+        case .Toolinder: return []
+        }
+    }
+    
+    static func corePackages(_ product: Product) -> [CorePackage] {
+        switch product {
+        case .Minimal: return []
+        case .Dying: return []
+        case .Mulling:
+            return [
+                (.Mulling, .Admob),
+                (.Mulling, .OPENAI)
+            ]
+        case .Toolinder: return []
+        }
+    }
+    
+    static func sharedPackages(_ product: Product) -> [SharedPackage] {
+        switch product {
+        case .Minimal: return []
+        case .Dying: return []
+        case .Mulling:
+            return [
+                (.Mulling, .DesignSystem),
+                (.Mulling, .ThirdPartyLib),
+                (.Mulling, .Util),
+            ]
+        case .Toolinder: return []
+        }
+    }
 }
 
 // MARK: Product
@@ -41,6 +125,7 @@ public extension Module {
         case Minimal
         case Dying
         case Mulling
+        case Toolinder
         
         public static let name: String = "Product"
     }
@@ -55,14 +140,6 @@ public extension Module {
         case WatchExtension
         
         public static let name: String = "App"
-        
-        public static func targets(_ product: Product) -> [Module.App] {
-            switch product {
-            case .Minimal: return [.IOS]
-            case .Dying: return [.IOS]
-            case .Mulling: return [.IOS]
-            }
-        }
     }
 }
 
@@ -83,29 +160,8 @@ public extension Module {
         
         public static let name: String = "Feature"
         
-        public static func targets(_ product: Product) -> [Module.Feature] {
-            switch product {
-            case .Minimal: return []
-            case .Dying: return [.Onboarding, .Home, .MyPage, .Lifespan, .Goal, .Health]
-            case .Mulling: return [.Home, .MyPage, .Chat]
-            }
-        }
-        
-        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
-            switch product {
-            case .Minimal:
-                switch self {
-                default: return MicroTargetType.allCases
-                }
-            case .Dying:
-                switch self {
-                default: return MicroTargetType.allCases
-                }
-            case .Mulling:
-                switch self {
-                default: return MicroTargetType.allCases
-                }
-            }
+        public var microTargetTypes: [MicroTargetType] {
+            return MicroTargetType.allCases
         }
     }
 }
@@ -120,29 +176,8 @@ public extension Module {
         
         public static let name: String = "Domain"
         
-        public static func targets(_ product: Product) -> [Module.Domain] {
-            switch product {
-            case .Minimal: return []
-            case .Dying: return [.Health]
-            case .Mulling: return [.Chat, .Point]
-            }
-        }
-        
-        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
-            switch product {
-            case .Minimal:
-                switch self {
-                default: return MicroTargetType.allCases
-                }
-            case .Dying:
-                switch self {
-                default: return [.implement, .interface, .testing, .tests]
-                }
-            case .Mulling:
-                switch self {
-                default: return [.implement, .interface, .testing, .tests]
-                }
-            }
+        public var microTargetTypes: [MicroTargetType] {
+            return [.implement, .interface, .testing, .tests]
         }
     }
 }
@@ -158,31 +193,9 @@ public extension Module {
         
         public static let name: String = "Core"
         
-        public static func targets(_ product: Product) -> [Module.Core] {
-            switch product {
-            case .Minimal: return [.HealthKit]
-            case .Dying: return []
-            case .Mulling: return [.OPENAI, .Admob]
-            }
+        public var microTargetTypes: [MicroTargetType] {
+            return [.implement, .interface, .testing, .tests]
         }
-        
-        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
-            switch product {
-            case .Minimal:
-                switch self {
-                default: return MicroTargetType.allCases
-                }
-            case .Dying:
-                switch self {
-                default: return [.implement, .interface, .testing, .tests]
-                }
-            case .Mulling:
-                switch self {
-                default: return [.implement, .interface, .testing, .tests]
-                }
-            }
-        }
-
     }
 }
 
@@ -196,29 +209,8 @@ public extension Module {
         
         public static let name: String = "Shared"
         
-        public static func targets(_ product: Product) -> [Module.Shared] {
-            switch product {
-            case .Minimal: return [.Util, .DesignSystem]
-            case .Dying: return [.Util, .DesignSystem, .ThirdPartyLib]
-            case .Mulling: return [.Util, .DesignSystem, .ThirdPartyLib]
-            }
-        }
-        
-        public func microTargetTypes(_ product: Product) -> [MicroTargetType] {
-            switch product {
-            case .Minimal:
-                switch self {
-                default: return [.implement, .interface]
-                }
-            case .Dying:
-                switch self {
-                default: return [.implement, .interface]
-                }
-            case .Mulling:
-                switch self {
-                default: return [.implement, .interface]
-                }
-            }
+        public var microTargetTypes: [MicroTargetType] {
+            return [.implement, .interface]
         }
     }
 }

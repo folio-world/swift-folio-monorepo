@@ -17,6 +17,7 @@ public extension String {
             case .Minimal: return "Folio"
             case .Dying: return "Dying"
             case .Mulling: return "Mulling"
+            case .Toolinder: return "Toolinder"
             }
         }
     }
