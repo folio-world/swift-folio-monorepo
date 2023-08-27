@@ -13,8 +13,7 @@ public extension Date {
         formatter.formatterBehavior = .behavior10_4
         formatter.dateStyle = dateStyle
         formatter.timeStyle = timeStyle
-//        let result =
+
         return formatter.string(from: self)
-//        DateFormatter.localizedString(from: self, dateStyle: <#T##DateFormatter.Style#>, timeStyle: <#T##DateFormatter.Style#>)
     }
 }

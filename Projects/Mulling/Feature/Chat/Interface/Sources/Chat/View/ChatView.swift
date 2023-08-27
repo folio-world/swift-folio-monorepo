@@ -10,19 +10,50 @@ import SwiftUI
 import MullingShared
 
 public struct ChatView: View {
+    @EnvironmentObject public var chatFlowCoordinator: ChatFlowCoordinator
+    
     @StateObject public var viewModel: ChatViewModel
     
-    public init(viewModel: StateObject<ChatViewModel>) {
-        self._viewModel = viewModel
+    public init(viewModel: ChatViewModel) {
+        self._viewModel = .init(wrappedValue: viewModel)
     }
     
     public var body: some View {
-        VStack(spacing: .zero) {
-            chatListView()
-                .padding(.horizontal)
+        ZStack {
+            VStack {
+                chatListView()
+                    .padding(.horizontal)
+                
+                chatTextFieldView()
+                    .padding()
+            }
             
-            chatTextFieldView()
-                .padding()
+            VStack {
+                HStack {
+                    Text("\(viewModel.point.current) P")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 4)
+                        .background(
+                            RoundedRectangle(cornerRadius: 30)
+                                .foregroundColor(viewModel.point.current >= 0 ? .black : .pink)
+                        )
+                    
+                    Spacer()
+                }
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+        }
+        .onAppear {
+            viewModel.send(.onAppear)
+        }
+        .onReceive(viewModel.$chatResultDependencies) { dependenciesOrNil in
+            if let dependencies = dependenciesOrNil {
+                chatFlowCoordinator.navigate(.chatResult(dependencies))
+            }
         }
     }
     
@@ -38,16 +69,33 @@ public struct ChatView: View {
                         spacing: 5,
                         alignment: .leading,
                         content: { item in
-                            Text(verbatim: item)
-                                .fontWeight(.light)
-                                .padding(10)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 20)
-                                        .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
-                                )
-                                .onTapGesture {
-                                    print(item)
+                            VStack {
+                                if item.isSelected {
+                                    Button(item.content, action: {
+                                        viewModel.send(.chatCellTapped(id: item.id))
+                                    })
+                                    .fontWeight(.light)
+                                    .foregroundColor(.white)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 7)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .foregroundColor(.black)
+                                    )
+                                } else {
+                                    Button(item.content, action: {
+                                        viewModel.send(.chatCellTapped(id: item.id))
+                                    })
+                                    .fontWeight(.light)
+                                    .foregroundColor(.black)
+                                    .padding(.horizontal, 12)
+                                    .padding(.vertical, 7)
+                                    .background(
+                                        RoundedRectangle(cornerRadius: 20)
+                                            .strokeBorder(.gray, style: StrokeStyle(lineWidth: 1))
+                                    )
                                 }
+                            }
                         },
                         elementsSize: [:]
                     )
@@ -60,24 +108,24 @@ public struct ChatView: View {
     
     private func chatTextFieldView() -> some View {
         HStack(spacing: .zero) {
-            Button(action: {
-                
-            }, label: {
-                Image(systemName: "arrow.counterclockwise.circle.fill")
-                    .font(.title)
-                    .foregroundColor(viewModel.chat.isEmpty ? .green : .gray)
-            })
+            ChatStatusButton(status: viewModel.status) {
+                viewModel.send(.gptButtonTapped)
+            }
             .padding(.trailing, 10)
             
             HStack(spacing: .zero) {
-                TextField("keyword", text: $viewModel.chat)
+                TextField("keyword", text: $viewModel.keyword)
+                    .fontWeight(.light)
                     .padding(.leading, 10)
+                    .onSubmit {
+                        viewModel.send(.sendButtonTapped)
+                    }
                 
                 Button(action: {
-                    viewModel.send(.sendButtonTapped(viewModel.chat))
+                    viewModel.send(.sendButtonTapped)
                 }, label: {
-                    Image(systemName: viewModel.chat.isEmpty ? "arrow.right.circle.fill" : "arrow.up.circle.fill")
-                        .foregroundColor(viewModel.chat.isEmpty ? .gray : .green)
+                    Image(systemName: viewModel.keyword.isEmpty ? "arrow.right.circle.fill" : "arrow.up.circle.fill")
+                        .foregroundColor(viewModel.keyword.isEmpty ? .gray : .green)
                         .font(.title)
                 })
                 .padding(.trailing, 5)
@@ -93,6 +141,6 @@ public struct ChatView: View {
 
 struct ChatView_Previews: PreviewProvider {
     static var previews: some View {
-        ChatView(viewModel: .init(wrappedValue: .init()))
+        ChatView(viewModel: ChatSceneDIContainer().makeChatViewModel(dependencies: .init()))
     }
 }

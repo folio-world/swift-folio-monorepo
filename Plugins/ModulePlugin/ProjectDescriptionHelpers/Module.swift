@@ -115,6 +115,8 @@ public extension Module {
 public extension Module {
     enum Domain: String, CaseIterable {
         case Health
+        case Chat
+        case Point
         
         public static let name: String = "Domain"
         
@@ -122,7 +124,7 @@ public extension Module {
             switch product {
             case .Minimal: return []
             case .Dying: return [.Health]
-            case .Mulling: return []
+            case .Mulling: return [.Chat, .Point]
             }
         }
         
@@ -151,13 +153,16 @@ public extension Module {
     enum Core: String, CaseIterable {
         case HealthKit
         
+        case OPENAI
+        case Admob
+        
         public static let name: String = "Core"
         
         public static func targets(_ product: Product) -> [Module.Core] {
             switch product {
             case .Minimal: return [.HealthKit]
             case .Dying: return []
-            case .Mulling: return []
+            case .Mulling: return [.OPENAI, .Admob]
             }
         }
         

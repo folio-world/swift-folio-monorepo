@@ -7,6 +7,9 @@
 
 import Foundation
 
-public class ChatModel {
-    
+public enum ChatStatus {
+    case needPoint
+    case inactive
+    case active
+    case isLoading
 }

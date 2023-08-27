@@ -7,16 +7,23 @@
 //
 
 import SwiftUI
+import AppTrackingTransparency
 
 import MullingFeature
 
 @main
 struct RootApp: App {
+    @UIApplicationDelegateAdaptor var delegate: AppDelegate
     let appDIContainer: AppDIContainerInterface = AppDIContainer()
+    
+    init() {
+        
+    }
     
     var body: some Scene {
         WindowGroup {
-            ChatView(viewModel: .init(wrappedValue: appDIContainer.chatDependencies()))
+            ChatScene(chatSceneDIContainer: appDIContainer.makeChatSceneDIContainer())
+                .onAppear(perform : UIApplication.shared.hideKeyboard)
         }
     }
 }

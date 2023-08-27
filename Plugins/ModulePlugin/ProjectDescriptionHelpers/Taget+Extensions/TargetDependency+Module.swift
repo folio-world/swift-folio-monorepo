@@ -111,7 +111,12 @@ public extension [TargetDependency] {
         switch product {
         case .Minimal: return []
         case .Dying: return [.package(product: "ComposableArchitecture")]
-        default: return []
+        case .Mulling:
+            return [
+                .external(name: "GoogleMobileAds")
+//                .package(product: "GoogleMobileAds"),
+//                .package(product: "ComposableArchitecture")
+            ]
         }
     }
 }

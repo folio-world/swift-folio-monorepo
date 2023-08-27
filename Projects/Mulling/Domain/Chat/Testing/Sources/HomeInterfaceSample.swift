@@ -1,6 +1,6 @@
 //
-//  CoreSample.swift
-//  Core
+//  HomeInterfaceSample.swift
+//  FeatureHome
 //
 //  Created by 송영모 on 2023/04/26.
 //
