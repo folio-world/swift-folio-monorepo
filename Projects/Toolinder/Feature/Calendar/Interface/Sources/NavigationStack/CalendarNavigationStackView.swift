@@ -21,7 +21,7 @@ public struct CalendarNavigationStackView: View {
                 state: \.path,
                 action: CalendarNavigationStackStore.Action.path)) {
             WithViewStore(self.store, observe: { $0 }) { viewStore in
-                GoalMainView(
+                CalendarMainView(
                     store: self.store.scope(
                         state: \.main,
                         action: CalendarNavigationStackStore.Action.main))

@@ -13,7 +13,7 @@ public struct CalendarNavigationStackStore: Reducer {
     public struct State: Equatable {
         var path: StackState<Path.State> = .init()
         
-        var main: GoalMainStore.State = .init()
+        var main: CalendarMainStore.State = .init()
         
         public init() {}
     }
@@ -23,7 +23,7 @@ public struct CalendarNavigationStackStore: Reducer {
         
         case onAppear
         
-        case main(GoalMainStore.Action)
+        case main(CalendarMainStore.Action)
         case path(StackAction<Path.State, Path.Action>)
     }
     
@@ -62,11 +62,11 @@ public struct CalendarNavigationStackStore: Reducer {
         }
         
         Scope(state: \.main, action: /Action.main) {
-            GoalMainStore()._printChanges()
+            CalendarMainStore()._printChanges()
         }
         
         .forEach(\.path, action: /Action.path) {
-          Path()
+            Path()
         }
     }
 }
