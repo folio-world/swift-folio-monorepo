@@ -25,12 +25,6 @@ public extension Project {
                     return .app(product, module: app)
                 }
                 
-//                targets += Module.App.targets(product).map { app in
-//                    return .app(product, module: app)
-//                }
-                
-                
-                
                 return targets
             }(),
             schemes: [],
@@ -71,11 +65,7 @@ public extension Project {
                 targets += module.microTargetTypes.map { type in
                     .feature(product, module: module, type: type)
                 }
-                
-//                targets += module.microTargetTypes(product).map {
-//                    .feature(product, module: module, type: $0)
-//                }
-                
+            
                 return targets
             }(),
             schemes: [],
@@ -117,10 +107,6 @@ public extension Project {
                 targets += module.microTargetTypes.map { type in
                     .domain(product, module: module, type: type)
                 }
-                
-//                targets += module.microTargetTypes(product).map {
-//                    .domain(product, module: module, type: $0)
-//                }
                 
                 return targets
             }(),
@@ -164,10 +150,6 @@ public extension Project {
                     .core(product, module: module, type: type)
                 }
                 
-//                targets += module.microTargetTypes(product).map {
-//                    .core(product, module: module, type: $0)
-//                }
-                
                 return targets
             }(),
             schemes: [],
@@ -209,10 +191,6 @@ public extension Project {
                 targets += module.microTargetTypes.map { type in
                     .shared(product, module: module, type: type)
                 }
-                
-//                targets += module.microTargetTypes(product).map {
-//                    .shared(product, module: module, type: $0)
-//                }
                 
                 return targets
             }(),

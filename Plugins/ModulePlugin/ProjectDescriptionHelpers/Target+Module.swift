@@ -33,10 +33,6 @@ public extension Target {
                         .app(product, module: app)
                 }
                 
-//                dependencies += Module.App.targets(product).map { app in
-//                        .app(product, module: app)
-//                }
-                
                 return dependencies
             }(),
             settings: .app(product),
@@ -103,10 +99,6 @@ public extension Target {
                 dependencies += Module.featurePackages(product).map { product, feature in
                         .feature(product, module: feature)
                 }
-                
-//                dependencies += Module.Feature.targets(product).map { feature in
-//                        .feature(product, module: feature)
-//                }
                 
                 return dependencies
             }(),
@@ -180,10 +172,6 @@ public extension Target {
                         .domain(product, module: domain)
                 }
                 
-//                dependencies += Module.Domain.targets(product).map { domain in
-//                        .domain(product, module: domain)
-//                }
-                
                 return dependencies
             }(),
             settings: .domain(product),
@@ -200,7 +188,7 @@ public extension Target {
             platform: .domain(product, module: module),
             product: .domain(product, module: module),
             productName: .ProductName.domain(product, module: module),
-            bundleId: .BundleId.domain(product, module: module),
+            bundleId: .BundleId.domain(product, module: module, type: type),
             deploymentTarget: .domain(product, module: module),
             infoPlist: .domain(product, module: module),
             sources: .path(type: type),
@@ -256,10 +244,6 @@ public extension Target {
                         .core(product, module: core)
                 }
                 
-//                dependencies += Module.Core.targets(product).map { core in
-//                        .core(product, module: core)
-//                }
-                
                 return dependencies
             }(),
             settings: .core(product),
@@ -276,7 +260,7 @@ public extension Target {
             platform: .core(product, module: module),
             product: .core(product, module: module),
             productName: .ProductName.core(product, module: module),
-            bundleId: .BundleId.core(product, module: module),
+            bundleId: .BundleId.core(product, module: module, type: type),
             deploymentTarget: .core(product, module: module),
             infoPlist: .core(product, module: module),
             sources: .path(type: type),
@@ -289,7 +273,9 @@ public extension Target {
                 var dependencies: [TargetDependency] = []
 
                 if type == .interface {
-                    dependencies += [.shared(product)]
+                    dependencies += [
+                        .shared(product)
+                    ]
                 }
                 
                 dependencies += type.dependencies().map {
@@ -331,10 +317,6 @@ public extension Target {
                 dependencies += Module.sharedPackages(product).map { product, shared in
                         .shared(product, module: shared)
                 }
-                
-//                dependencies += Module.Shared.targets(product).map { shared in
-//                        .shared(product, module: shared)
-//                }
                 
                 return dependencies
             }(),

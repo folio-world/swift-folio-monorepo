@@ -59,6 +59,8 @@ public extension Module {
             return [
                 (.Toolinder, .IOS)
             ]
+        case .Folio:
+            return []
         }
     }
     
@@ -73,7 +75,10 @@ public extension Module {
                 (.Mulling, .Home)
             ]
         case .Toolinder:
-            return []
+            return [
+                (.Toolinder, .Home)
+            ]
+        case .Folio: return []
         }
     }
     
@@ -87,6 +92,7 @@ public extension Module {
                 (.Mulling, .Point)
             ]
         case .Toolinder: return []
+        case .Folio: return []
         }
     }
     
@@ -96,10 +102,13 @@ public extension Module {
         case .Dying: return []
         case .Mulling:
             return [
-                (.Mulling, .Admob),
-                (.Mulling, .OPENAI)
+                (.Folio, .OPENAI)
             ]
         case .Toolinder: return []
+        case .Folio:
+            return [
+                (.Folio, .OPENAI)
+            ]
         }
     }
     
@@ -114,6 +123,7 @@ public extension Module {
                 (.Mulling, .Util),
             ]
         case .Toolinder: return []
+        case .Folio: return []
         }
     }
 }
@@ -126,6 +136,7 @@ public extension Module {
         case Dying
         case Mulling
         case Toolinder
+        case Folio
         
         public static let name: String = "Product"
     }

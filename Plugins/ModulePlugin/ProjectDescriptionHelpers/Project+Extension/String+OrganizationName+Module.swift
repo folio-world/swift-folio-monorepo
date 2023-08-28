@@ -15,7 +15,9 @@ public extension String {
         case .Minimal: return "folio.world"
         case .Dying: return "folio.world"
         case .Mulling: return "folio.world"
-        case .Toolinder: return "folio.world"
+        case .Toolinder: return ""
+        case .Folio: return "folio.world"
+        default: return "folio.world"
         }
     }
 }
