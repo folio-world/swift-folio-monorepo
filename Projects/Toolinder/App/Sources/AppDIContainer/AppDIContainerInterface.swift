@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import MullingFeature
+import ToolinderFeature
 
 protocol AppDIContainerInterface {
     func makeChatSceneDIContainer() -> ChatSceneDIContainer

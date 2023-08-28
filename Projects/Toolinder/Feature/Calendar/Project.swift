@@ -2,4 +2,4 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import ModulePlugin
 
-let project: Project = .domain(.Mulling, module: .Point)
+let project: Project = .feature(.Toolinder, module: .Calendar)

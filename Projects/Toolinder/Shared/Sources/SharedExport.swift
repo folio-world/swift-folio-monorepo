@@ -7,11 +7,17 @@
 
 import Foundation
 
-@_exported import MullingSharedUtilInterface
-@_exported import MullingSharedUtil
+@_exported import FolioSharedDesignSystemInterface
+@_exported import FolioSharedDesignSystem
 
-@_exported import MullingSharedThirdPartyLibInterface
-@_exported import MullingSharedThirdPartyLib
+@_exported import FolioSharedFoundationInterface
+@_exported import FolioSharedFoundation
 
-@_exported import MullingSharedDesignSystemInterface
-@_exported import MullingSharedDesignSystem
+@_exported import FolioSharedNetworkInterface
+@_exported import FolioSharedNetwork
+
+@_exported import FolioSharedUtilInterface
+@_exported import FolioSharedUtil
+
+@_exported import FolioSharedThirdPartyLibInterface
+@_exported import FolioSharedThirdPartyLib

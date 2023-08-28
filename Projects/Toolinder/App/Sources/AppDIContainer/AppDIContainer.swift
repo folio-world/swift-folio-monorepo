@@ -8,25 +8,10 @@
 
 import Foundation
 
-import MullingFeature
+import ToolinderFeature
 
 public final class AppDIContainer: AppDIContainerInterface {
     public func makeChatSceneDIContainer() -> ChatSceneDIContainer {
         return ChatSceneDIContainer()
     }
-//    func appSearchDependencies() -> AppSearchViewModel {
-//        let dataSource : AppSearchDataSourceInterface = AppSearchDataSource(networkProvider: NetworkProvider())
-//        let repository : AppSearchRepositoryInterface = AppSearchRepository(dataSource: dataSource)
-//        let useCase : AppSearchUseCaseInterface = AppSearchUseCase(searchRepository: repository, recentKeywordRepository: getRecentKeywordDependencies())
-//        let viewModel : AppSearchViewModel = AppSearchViewModel(useCase: useCase)
-//
-//        return viewModel
-//    }
-    
-//    private func getRecentKeywordDependencies() -> RecentKeywordRepositoryInterface {
-//        let recentKeywordStorage: RecentKeywordStorageInterface = RecentKeywordStorage()
-//        let recentKeywordRepository: RecentKeywordRepositoryInterface = RecentKeywordRepository(recentKeywordStorage: recentKeywordStorage)
-//
-//        return recentKeywordRepository
-//    }
 }
