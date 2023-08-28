@@ -27,6 +27,16 @@ public extension String.BundleId {
     }
     
     static func app(_ product: Module.Product, module: Module.App) -> String {
+        switch product {
+        case .Toolinder:
+            switch module {
+            case .IOS: return "com.tamsadan.toolinder"
+            case .Watch: break
+            case .WatchExtension: break
+            }
+        default: break
+        }
+        
         let id = self.prefix(product) + "." + Module.App.name + "." + module.rawValue
         
         return id.lowercased()

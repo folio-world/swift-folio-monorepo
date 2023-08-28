@@ -19,7 +19,7 @@ public final class PointUseCase: PointUseCaseInterface {
     }
     
     public func fetch() -> Result<PointEntity, PointError> {
-        if let point = UserDefaults.fetch(key: UserDefaultsKey.point.rawValue) as? Int {
+        if let point = UserDefaultsManager.fetch(key: UserDefaultsKey.point.rawValue) as? Int {
             return .success(.init(current: point))
         } else {
             return .failure(.fail)
@@ -29,7 +29,7 @@ public final class PointUseCase: PointUseCaseInterface {
     public func use(point: Int) -> Result<PointEntity, PointError> {
         if case let .success(pointEntity) = fetch() {
             let newPoint = pointEntity.current - point
-            UserDefaults.save(key: UserDefaultsKey.point.rawValue, value: newPoint)
+            UserDefaultsManager.save(key: UserDefaultsKey.point.rawValue, value: newPoint)
             return fetch()
         } else {
             return .failure(.fail)
@@ -39,7 +39,7 @@ public final class PointUseCase: PointUseCaseInterface {
     public func earn(point: Int) -> Result<PointEntity, PointError> {
         if case let .success(pointEntity) = fetch() {
             let newPoint = pointEntity.current + point
-            UserDefaults.save(key: UserDefaultsKey.point.rawValue, value: newPoint)
+            UserDefaultsManager.save(key: UserDefaultsKey.point.rawValue, value: newPoint)
             return fetch()
         } else {
             return .failure(.fail)
@@ -48,7 +48,7 @@ public final class PointUseCase: PointUseCaseInterface {
     
     public init() {
         if case .failure = fetch() {
-            UserDefaults.save(key: UserDefaultsKey.point.rawValue, value: PointUseCase.INIT_POINT)
+            UserDefaultsManager.save(key: UserDefaultsKey.point.rawValue, value: PointUseCase.INIT_POINT)
         }
     }
 }

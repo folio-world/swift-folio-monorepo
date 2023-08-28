@@ -6,6 +6,5 @@
 //
 
 import ProjectDescription
-import DependencyPlugin
 
-let workspace = Workspace(name: "Folio-World", projects: ["Projects/*"])
+let workspace = Workspace(name: "Folio-World", projects: ["Projects/Minimal/*"])

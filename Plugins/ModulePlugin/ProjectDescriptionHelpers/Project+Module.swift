@@ -21,7 +21,7 @@ public extension Project {
             targets: {
                 var targets: [Target] = []
                 
-                targets += Module.App.targets(product).map { app in
+                targets += Module.appPackages(product).map { product, app in
                     return .app(product, module: app)
                 }
                 
@@ -62,10 +62,10 @@ public extension Project {
             targets: {
                 var targets: [Target] = []
                 
-                targets += module.microTargetTypes(product).map {
-                    .feature(product, module: module, type: $0)
+                targets += module.microTargetTypes.map { type in
+                    .feature(product, module: module, type: type)
                 }
-                
+            
                 return targets
             }(),
             schemes: [],
@@ -104,8 +104,8 @@ public extension Project {
             targets: {
                 var targets: [Target] = []
                 
-                targets += module.microTargetTypes(product).map {
-                    .domain(product, module: module, type: $0)
+                targets += module.microTargetTypes.map { type in
+                    .domain(product, module: module, type: type)
                 }
                 
                 return targets
@@ -146,8 +146,8 @@ public extension Project {
             targets: {
                 var targets: [Target] = []
                 
-                targets += module.microTargetTypes(product).map {
-                    .core(product, module: module, type: $0)
+                targets += module.microTargetTypes.map { type in
+                    .core(product, module: module, type: type)
                 }
                 
                 return targets
@@ -188,8 +188,8 @@ public extension Project {
             targets: {
                 var targets: [Target] = []
                 
-                targets += module.microTargetTypes(product).map {
-                    .shared(product, module: module, type: $0)
+                targets += module.microTargetTypes.map { type in
+                    .shared(product, module: module, type: type)
                 }
                 
                 return targets

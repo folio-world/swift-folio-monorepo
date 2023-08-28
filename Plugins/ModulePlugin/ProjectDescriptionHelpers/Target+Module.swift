@@ -10,7 +10,7 @@ import ProjectDescription
 
 //MARK: App
 
-public extension Target {
+public extension Target {    
     static func app(_ product: Module.Product) -> Self {
         return .init(
             name: .Name.app(product),
@@ -27,11 +27,9 @@ public extension Target {
             entitlements: nil,
             scripts: [],
             dependencies: {
-                var dependencies: [TargetDependency] = [
-                    .feature(product)
-                ]
+                var dependencies: [TargetDependency] = [.feature(product)]
                 
-                dependencies += Module.App.targets(product).map { app in
+                dependencies += Module.appPackages(product).map { product, app in
                         .app(product, module: app)
                 }
                 
@@ -98,7 +96,7 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-                dependencies += Module.Feature.targets(product).map { feature in
+                dependencies += Module.featurePackages(product).map { product, feature in
                         .feature(product, module: feature)
                 }
                 
@@ -170,7 +168,7 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = [.core(product)]
                 
-                dependencies += Module.Domain.targets(product).map { domain in
+                dependencies += Module.domainPackages(product).map { product, domain in
                         .domain(product, module: domain)
                 }
                 
@@ -190,7 +188,7 @@ public extension Target {
             platform: .domain(product, module: module),
             product: .domain(product, module: module),
             productName: .ProductName.domain(product, module: module),
-            bundleId: .BundleId.domain(product, module: module),
+            bundleId: .BundleId.domain(product, module: module, type: type),
             deploymentTarget: .domain(product, module: module),
             infoPlist: .domain(product, module: module),
             sources: .path(type: type),
@@ -242,7 +240,7 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = [.shared(product)]
                 
-                dependencies += Module.Core.targets(product).map { core in
+                dependencies += Module.corePackages(product).map { product, core in
                         .core(product, module: core)
                 }
                 
@@ -262,7 +260,7 @@ public extension Target {
             platform: .core(product, module: module),
             product: .core(product, module: module),
             productName: .ProductName.core(product, module: module),
-            bundleId: .BundleId.core(product, module: module),
+            bundleId: .BundleId.core(product, module: module, type: type),
             deploymentTarget: .core(product, module: module),
             infoPlist: .core(product, module: module),
             sources: .path(type: type),
@@ -275,7 +273,9 @@ public extension Target {
                 var dependencies: [TargetDependency] = []
 
                 if type == .interface {
-                    dependencies += [.shared(product)]
+                    dependencies += [
+                        .shared(product)
+                    ]
                 }
                 
                 dependencies += type.dependencies().map {
@@ -314,7 +314,7 @@ public extension Target {
             dependencies: {
                 var dependencies: [TargetDependency] = []
                 
-                dependencies += Module.Shared.targets(product).map { shared in
+                dependencies += Module.sharedPackages(product).map { product, shared in
                         .shared(product, module: shared)
                 }
                 

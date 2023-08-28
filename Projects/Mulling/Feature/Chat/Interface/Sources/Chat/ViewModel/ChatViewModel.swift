@@ -30,7 +30,7 @@ public class ChatViewModel: ObservableObject {
     private let chatUseCase: ChatUseCaseInterface
     private let pointUseCase: PointUseCaseInterface
     
-    private let rewardAd: Rewarded = .init()
+    private let rewardAd: Rewarded = .init(id: Environment.rewardedId)
     
     @Published var point: PointEntity = .init(current: 0)
     @Published var keyword: String = ""

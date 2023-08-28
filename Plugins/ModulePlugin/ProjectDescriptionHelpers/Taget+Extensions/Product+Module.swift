@@ -11,7 +11,7 @@ import ProjectDescription
 
 //MARK: App
 
-public extension Product {
+public extension Product {    
     static func app(_ product: Module.Product) -> Self {
         switch product {
         case .Minimal: return .app
