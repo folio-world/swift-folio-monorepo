@@ -6,9 +6,3 @@
 //
 
 import Foundation
-
-@_exported import MullingDomainChatInterface
-@_exported import MullingDomainChat
-
-@_exported import MullingDomainPointInterface
-@_exported import MullingDomainPoint

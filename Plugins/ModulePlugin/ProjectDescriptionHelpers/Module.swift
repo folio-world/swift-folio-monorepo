@@ -76,8 +76,9 @@ public extension Module {
             ]
         case .Toolinder:
             return [
-                (.Toolinder, .Home),
-                (.Toolinder, .Calendar)
+                (.Toolinder, .Calendar),
+                (.Toolinder, .Portfolio),
+                (.Toolinder, .MyPage)
             ]
         case .Folio: return []
         }
@@ -123,7 +124,9 @@ public extension Module {
             return sharedPackages(.Folio)
             
         case .Toolinder:
-            return sharedPackages(.Folio)
+            return [
+                (.Toolinder, .ThirdPartyLib)
+            ] + sharedPackages(.Folio)
             
         case .Folio:
             return [
@@ -179,6 +182,7 @@ public extension Module {
         case Chat
         
         case Calendar
+        case Portfolio
         
         public static let name: String = "Feature"
         
