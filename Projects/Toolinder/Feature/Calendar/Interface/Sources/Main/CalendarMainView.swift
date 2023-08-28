@@ -21,15 +21,15 @@ public struct CalendarMainView: View {
             GeometryReader { proxy in
                 TabView {
                     CalendarView()
-                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
                         .background(.yellow)
                     
                     CalendarView()
-                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
                         .background(.green)
                     
                     CalendarView()
-                        .frame(maxWidth: .infinity)
+                        .frame(maxHeight: .infinity)
                         .background(.red)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
