@@ -102,12 +102,14 @@ public extension Module {
         case .Dying: return []
         case .Mulling:
             return [
-                (.Folio, .OPENAI)
+                (.Folio, .OPENAI),
+                (.Folio, .Admob)
             ]
         case .Toolinder: return []
         case .Folio:
             return [
-                (.Folio, .OPENAI)
+                (.Folio, .OPENAI),
+                (.Folio, .Admob)
             ]
         }
     }
@@ -117,13 +119,17 @@ public extension Module {
         case .Minimal: return []
         case .Dying: return []
         case .Mulling:
-            return [
-                (.Mulling, .DesignSystem),
-                (.Mulling, .ThirdPartyLib),
-                (.Mulling, .Util),
-            ]
+            return sharedPackages(.Folio)
+            
         case .Toolinder: return []
-        case .Folio: return []
+        case .Folio:
+            return [
+                (.Folio, .DesignSystem),
+                (.Folio, .Network),
+                (.Folio, .Util),
+                (.Folio, .Foundation),
+                (.Folio, .ThirdPartyLib)
+            ]
         }
     }
 }
@@ -217,6 +223,9 @@ public extension Module {
         case Util
         case DesignSystem
         case ThirdPartyLib
+        
+        case Network
+        case Foundation
         
         public static let name: String = "Shared"
         

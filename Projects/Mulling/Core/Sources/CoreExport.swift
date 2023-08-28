@@ -7,5 +7,8 @@
 
 import Foundation
 
-@_exported import MullingCoreOPENAIInterface
-@_exported import MullingCoreOPENAI
+@_exported import FolioCoreOPENAIInterface
+@_exported import FolioCoreOPENAI
+
+@_exported import FolioCoreAdmobInterface
+@_exported import FolioCoreAdmob
