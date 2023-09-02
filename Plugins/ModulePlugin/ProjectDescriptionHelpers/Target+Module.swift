@@ -24,7 +24,7 @@ public extension Target {
             resources: .path(type: .implement),
             copyFiles: nil,
             headers: nil,
-            entitlements: Path(String.Name.app(product) + ".entitlements"),
+            entitlements: nil,
             scripts: [],
             dependencies: {
                 var dependencies: [TargetDependency] = [.feature(product)]
@@ -56,7 +56,7 @@ public extension Target {
             resources: .path(type: .implement),
             copyFiles: nil,
             headers: nil,
-            entitlements: nil,
+            entitlements: Path(String.Name.app(product, module: module) + ".entitlements"),
             scripts: [],
             dependencies: {
                 var dependencies: [TargetDependency] = [
