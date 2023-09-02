@@ -16,7 +16,8 @@ public struct CalendarView: View {
         GeometryReader { proxy in
             LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
                 ForEach(0..<30) { i in
-                    Text("\(i)")
+                    CalendarCell()
+                        .frame(height: proxy.size.height * 0.2)
                 }
             }
         }
