@@ -1,18 +1,18 @@
 //
-//  CalendarMainView.swift
+//  EditTradeView.swift
 //  ToolinderFeatureCalendarInterface
 //
-//  Created by 송영모 on 2023/08/29.
+//  Created by 송영모 on 2023/09/02.
 //
 
 import SwiftUI
 
 import ComposableArchitecture
 
-public struct CalendarMainView: View {
-    let store: StoreOf<CalendarMainStore>
+public struct EditTradeView: View {
+    let store: StoreOf<EditTradeStore>
     
-    public init(store: StoreOf<CalendarMainStore>) {
+    public init(store: StoreOf<EditTradeStore>) {
         self.store = store
     }
     
@@ -34,3 +34,4 @@ public struct CalendarMainView: View {
         }
     }
 }
+

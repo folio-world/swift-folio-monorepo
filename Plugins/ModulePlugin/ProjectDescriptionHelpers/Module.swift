@@ -107,7 +107,10 @@ public extension Module {
                 (.Folio, .OPENAI),
                 (.Folio, .Admob)
             ]
-        case .Toolinder: return []
+        case .Toolinder:
+            return [
+                (.Toolinder, .LocalStorage)
+            ]
         case .Folio:
             return [
                 (.Folio, .OPENAI),
@@ -199,6 +202,7 @@ public extension Module {
         case Health
         case Chat
         case Point
+        case Trade
         
         public static let name: String = "Domain"
         
@@ -216,6 +220,7 @@ public extension Module {
         
         case OPENAI
         case Admob
+        case LocalStorage
         
         public static let name: String = "Core"
         

@@ -44,9 +44,8 @@ public extension [Package] {
 
 public extension [Package] {
     static func shared(_ product: Module.Product) -> Self {
-        return [
-//            .remote(url: "https://github.com/pointfreeco/swift-composable-architecture", requirement: .upToNextMajor(from: "1.0.0")),
-//            .remote(url: "https://github.com/googleads/swift-package-manager-google-mobile-ads", requirement: .upToNextMajor(from: "10.9.0"))
-        ]
+        switch product {
+        default: return []
+        }
     }
 }

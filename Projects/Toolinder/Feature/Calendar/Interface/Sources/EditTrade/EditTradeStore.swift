@@ -1,13 +1,13 @@
 //
-//  CalendarMainStore.swift
+//  EditTradeStore.swift
 //  ToolinderFeatureCalendarInterface
 //
-//  Created by 송영모 on 2023/08/29.
+//  Created by 송영모 on 2023/09/02.
 //
 
 import ComposableArchitecture
 
-public struct CalendarMainStore: Reducer {
+public struct EditTradeStore: Reducer {
     public init() {}
     
     public struct State: Equatable {

@@ -6,3 +6,6 @@
 //
 
 import Foundation
+
+@_exported import ToolinderDomainTradeInterface
+@_exported import ToolinderDomainTrade

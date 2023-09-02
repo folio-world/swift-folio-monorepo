@@ -114,7 +114,7 @@ public extension [TargetDependency] {
         case .Mulling: return []
         case .Toolinder:
             return [
-                .external(name: "ComposableArchitecture")
+                .external(name: "ComposableArchitecture"),
             ]
         case .Folio:
             return [

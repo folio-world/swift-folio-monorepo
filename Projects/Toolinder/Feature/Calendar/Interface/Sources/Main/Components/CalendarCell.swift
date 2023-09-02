@@ -13,7 +13,7 @@ public struct CalendarCell: View {
     public init() {}
     
     public var body: some View {
-        VStack {
+        VStack(spacing: 2) {
             Text("2")
                 .font(.subheadline)
                 .fontWeight(.semibold)

@@ -24,7 +24,7 @@ public extension Target {
             resources: .path(type: .implement),
             copyFiles: nil,
             headers: nil,
-            entitlements: nil,
+            entitlements: Path(String.Name.app(product) + ".entitlements"),
             scripts: [],
             dependencies: {
                 var dependencies: [TargetDependency] = [.feature(product)]
@@ -285,7 +285,7 @@ public extension Target {
                 return dependencies
             }(),
             settings: .core(product),
-            coreDataModels: [],
+            coreDataModels: .core(product, module: module, type: type),
             environment: [:],
             launchArguments: [],
             additionalFiles: [],
