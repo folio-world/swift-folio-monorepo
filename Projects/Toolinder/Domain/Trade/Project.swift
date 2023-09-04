@@ -2,4 +2,4 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 import ModulePlugin
 
-let project: Project = .core(.Toolinder, module: .LocalStorage)
+let project: Project = .domain(.Toolinder, module: .Trade)

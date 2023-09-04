@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 import ComposableArchitecture
 
+import ToolinderDomain
+
 public struct CalendarMainView: View {
+    @Environment(\.modelContext) private var context
+    
     let store: StoreOf<CalendarMainStore>
     
     public init(store: StoreOf<CalendarMainStore>) {
@@ -29,8 +34,18 @@ public struct CalendarMainView: View {
                     CalendarView()
                         .background(.red)
                 }
+                .onAppear {
+                    viewStore.send(.fetched(self.fetch()))
+                }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
         }
+    }
+    
+    private func fetch() -> [Trade] {
+        let descriptor = FetchDescriptor<Trade>(sortBy: [SortDescriptor(\Trade.date)])
+        let trades = try? context.fetch(descriptor)
+        
+        return trades ?? []
     }
 }

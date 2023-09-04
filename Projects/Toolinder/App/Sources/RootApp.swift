@@ -7,8 +7,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 import ComposableArchitecture
+
+import ToolinderDomain
 
 @main
 struct RootApp: App {
@@ -21,5 +24,6 @@ struct RootApp: App {
                 }
             )
         }
+        .modelContainer(for: [Trade.self])
     }
 }

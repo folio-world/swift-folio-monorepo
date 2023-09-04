@@ -93,7 +93,10 @@ public extension Module {
                 (.Mulling, .Chat),
                 (.Mulling, .Point)
             ]
-        case .Toolinder: return []
+        case .Toolinder: 
+            return [
+                (.Toolinder, .Trade)
+            ]
         case .Folio: return []
         }
     }
@@ -107,10 +110,7 @@ public extension Module {
                 (.Folio, .OPENAI),
                 (.Folio, .Admob)
             ]
-        case .Toolinder:
-            return [
-                (.Toolinder, .LocalStorage)
-            ]
+        case .Toolinder: return []
         case .Folio:
             return [
                 (.Folio, .OPENAI),
@@ -220,7 +220,6 @@ public extension Module {
         
         case OPENAI
         case Admob
-        case LocalStorage
         
         public static let name: String = "Core"
         

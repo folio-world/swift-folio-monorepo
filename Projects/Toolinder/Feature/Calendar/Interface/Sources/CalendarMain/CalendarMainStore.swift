@@ -7,17 +7,21 @@
 
 import ComposableArchitecture
 
+import ToolinderDomain
+
 public struct CalendarMainStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
-        public init() {
-            
-        }
+        public var trades: [Trade] = []
+        
+        public init() {}
     }
     
     public enum Action: Equatable {
         case onAppear
+        
+        case fetched([Trade])
         
         case goToGoalDetail(GoalDetailStore.State)
     }
@@ -25,6 +29,10 @@ public struct CalendarMainStore: Reducer {
     public func reduce(into state: inout State, action: Action) -> Effect<Action>  {
         switch action {
         case .onAppear:
+            return .none
+            
+        case let .fetched(trades):
+            state.trades = trades
             return .none
             
         default:

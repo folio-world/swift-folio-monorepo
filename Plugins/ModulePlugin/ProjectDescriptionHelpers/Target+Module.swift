@@ -285,7 +285,7 @@ public extension Target {
                 return dependencies
             }(),
             settings: .core(product),
-            coreDataModels: .core(product, module: module, type: type),
+            coreDataModels: [],
             environment: [:],
             launchArguments: [],
             additionalFiles: [],
