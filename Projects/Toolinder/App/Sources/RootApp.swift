@@ -15,6 +15,15 @@ import ToolinderDomain
 
 @main
 struct RootApp: App {
+    let modelContainer: ModelContainer
+    
+    init() {
+        do {
+            modelContainer = try ModelContainer(for: Trade.self)
+        } catch {
+            fatalError("Could not initialize ModelContainer \(error)")
+        }
+    }
     var body: some Scene {
         WindowGroup {
             RootView(
@@ -24,6 +33,6 @@ struct RootApp: App {
                 }
             )
         }
-        .modelContainer(for: [Trade.self])
+        .modelContainer(modelContainer)
     }
 }

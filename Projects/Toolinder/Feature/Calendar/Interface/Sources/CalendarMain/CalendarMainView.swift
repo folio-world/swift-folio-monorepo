@@ -10,7 +10,7 @@ import SwiftData
 
 import ComposableArchitecture
 
-import ToolinderDomain
+import ToolinderDomainTradeInterface
 
 public struct CalendarMainView: View {
     @Environment(\.modelContext) private var context
@@ -23,22 +23,20 @@ public struct CalendarMainView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            GeometryReader { proxy in
-                TabView {
-                    CalendarView()
-                        .background(.yellow)
-                    
-                    CalendarView()
-                        .background(.green)
-                    
-                    CalendarView()
-                        .background(.red)
-                }
-                .onAppear {
-                    viewStore.send(.fetched(self.fetch()))
-                }
-                .tabViewStyle(.page(indexDisplayMode: .never))
+            TabView {
+                CalendarView(store: self.store.scope(state: \.prevCalendar, action: CalendarMainStore.Action.prevCalendar))
+                    .background(.yellow)
+                
+                CalendarView(store: self.store.scope(state: \.calendar, action: CalendarMainStore.Action.calendar))
+                    .background(.green)
+                
+                CalendarView(store: self.store.scope(state: \.nextCalendar, action: CalendarMainStore.Action.nextCalendar))
+                    .background(.red)
             }
+            .onAppear {
+                viewStore.send(.fetched(self.fetch()))
+            }
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
     }
     

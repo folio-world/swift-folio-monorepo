@@ -15,6 +15,10 @@ public struct CalendarMainStore: Reducer {
     public struct State: Equatable {
         public var trades: [Trade] = []
         
+        public var calendar: CalendarStore.State = .init()
+        public var prevCalendar: CalendarStore.State = .init()
+        public var nextCalendar: CalendarStore.State = .init()
+        
         public init() {}
     }
     
@@ -23,20 +27,34 @@ public struct CalendarMainStore: Reducer {
         
         case fetched([Trade])
         
+        case calendar(CalendarStore.Action)
+        case prevCalendar(CalendarStore.Action)
+        case nextCalendar(CalendarStore.Action)
+        
         case goToGoalDetail(GoalDetailStore.State)
     }
     
-    public func reduce(into state: inout State, action: Action) -> Effect<Action>  {
-        switch action {
-        case .onAppear:
-            return .none
-            
-        case let .fetched(trades):
-            state.trades = trades
-            return .none
-            
-        default:
-            return .none
+    public var body: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+                
+            case .onAppear:
+                state = .init()
+                return .none
+                
+            default:
+                return .none
+            }
+        }
+
+        Scope(state: \.calendar, action: /Action.calendar) {
+            CalendarStore()._printChanges()
+        }
+        Scope(state: \.prevCalendar, action: /Action.prevCalendar) {
+            CalendarStore()._printChanges()
+        }
+        Scope(state: \.nextCalendar, action: /Action.nextCalendar) {
+            CalendarStore()._printChanges()
         }
     }
 }
