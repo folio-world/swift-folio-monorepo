@@ -128,7 +128,8 @@ public extension Module {
             
         case .Toolinder:
             return [
-                (.Toolinder, .ThirdPartyLib)
+                (.Toolinder, .ThirdPartyLib),
+                (.Toolinder, .Util)
             ] + sharedPackages(.Folio)
             
         case .Folio:
