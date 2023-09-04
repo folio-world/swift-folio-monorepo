@@ -42,4 +42,9 @@ public extension Date {
         let calendar = Calendar.current
         return calendar.date(byAdding: byAdding, value: value, to: self) ?? self
     }
+    
+    func isEqual(date: Date) -> Bool {
+        let calendar = Calendar.current
+        return calendar.isDate(self, inSameDayAs: date)
+    }
 }
