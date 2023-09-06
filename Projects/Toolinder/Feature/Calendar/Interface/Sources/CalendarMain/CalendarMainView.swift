@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import Combine
 
 import ComposableArchitecture
 
@@ -23,20 +24,21 @@ public struct CalendarMainView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            TabView {
-                CalendarView(store: self.store.scope(state: \.prevCalendar, action: CalendarMainStore.Action.prevCalendar))
-                    .background(.yellow)
-                
-                CalendarView(store: self.store.scope(state: \.calendar, action: CalendarMainStore.Action.calendar))
-                    .background(.green)
-                
-                CalendarView(store: self.store.scope(state: \.nextCalendar, action: CalendarMainStore.Action.nextCalendar))
-                    .background(.red)
+            GeometryReader { proxy in
+                TabView(selection: viewStore.binding(get: \.currentTab, send: CalendarMainStore.Action.selectTab)) {
+                    ForEachStore(
+                        self.store.scope(state: \.calendars, action: CalendarMainStore.Action.calendar(id:action:))
+                    ) {
+                        CalendarView(store: $0)
+                            .frame(width: proxy.size.width, height: proxy.size.height)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
             }
             .onAppear {
+                UIScrollView.appearance().isPagingEnabled = true
                 viewStore.send(.fetched(self.fetch()))
             }
-            .tabViewStyle(.page(indexDisplayMode: .never))
         }
     }
     

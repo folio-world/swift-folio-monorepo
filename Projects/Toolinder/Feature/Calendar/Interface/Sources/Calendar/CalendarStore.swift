@@ -14,14 +14,20 @@ import ToolinderDomain
 public struct CalendarStore: Reducer {
     public init() {}
     
-    public struct State: Equatable {
+    public struct State: Equatable, Identifiable {
+        public var id: UUID
+        public var offset: Int
         public var calendars: [CalendarEntity]
         public var selectedDate: Date
         
         public init(
+            id: UUID = .init(),
+            offset: Int,
             calendars: [CalendarEntity],
             selectedDate: Date
         ) {
+            self.id = id
+            self.offset = offset
             self.calendars = calendars
             self.selectedDate = selectedDate
         }

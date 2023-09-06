@@ -43,6 +43,7 @@ public struct CalendarView: View {
                     .padding(.horizontal, 5)
                 }
             }
+            .tag(viewStore.offset)
         }
     }
 }

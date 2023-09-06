@@ -16,10 +16,13 @@ public struct CalendarMainStore: Reducer {
     public struct State: Equatable {
         public var trades: [Trade] = []
         public var selectedDate: Date = .now
+        public var currentTab: Int = 0
         
-        public var calendar: CalendarStore.State = .init(calendars: [], selectedDate: .now)
-        public var prevCalendar: CalendarStore.State = .init(calendars: [], selectedDate: .now.add(byAdding: .month, value: -1))
-        public var nextCalendar: CalendarStore.State = .init(calendars: [], selectedDate: .now.add(byAdding: .month, value: 1))
+        public var calendars: IdentifiedArrayOf<CalendarStore.State> = [
+            .init(offset: -1, calendars: [], selectedDate: .now.add(byAdding: .month, value: -1)),
+            .init(offset: 0, calendars: [], selectedDate: .now),
+            .init(offset: 1, calendars: [], selectedDate: .now.add(byAdding: .month, value: 1)),
+        ]
         
         public init() {}
     }
@@ -27,12 +30,12 @@ public struct CalendarMainStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
+        case selectTab(Int)
+        
         case fetched([Trade])
         case refreshCalendar(Date, [Trade])
         
-        case calendar(CalendarStore.Action)
-        case prevCalendar(CalendarStore.Action)
-        case nextCalendar(CalendarStore.Action)
+        case calendar(id: CalendarStore.State.ID, action: CalendarStore.Action)
         
         case goToGoalDetail(GoalDetailStore.State)
     }
@@ -44,25 +47,53 @@ public struct CalendarMainStore: Reducer {
                 state = .init()
                 return .none
                 
+            case let .selectTab(tab):
+                switch tab {
+                case state.calendars.first?.offset:
+                    let offset = tab - 1
+                    let date = Date.now.add(byAdding: .month, value: offset)
+                    let calendarEntities = CalendarEntity.toDomain(date: date, trades: state.trades)
+                    let calendarState = CalendarStore.State(
+                        offset: offset,
+                        calendars: calendarEntities,
+                        selectedDate: date
+                    )
+                    state.calendars.insert(calendarState, at: 0)
+                case state.calendars.last?.offset:
+                    let offset = tab + 1
+                    let date = Date.now.add(byAdding: .month, value: offset)
+                    let calendarEntities = CalendarEntity.toDomain(date: date, trades: state.trades)
+                    let calendarState = CalendarStore.State(
+                        offset: offset,
+                        calendars: calendarEntities,
+                        selectedDate: .now.add(byAdding: .month, value: offset)
+                    )
+                    state.calendars.append(calendarState)
+                default: break
+                }
+                state.currentTab = tab
+                return .none
+                
             case let .fetched(trades):
+                state.trades = trades
                 return .send(.refreshCalendar(state.selectedDate, trades))
                 
             case let .refreshCalendar(date, trades):
                 let prevDate = date.add(byAdding: .month, value: -1)
                 let nextDate = date.add(byAdding: .month, value: 1)
-                
-                state.calendar = .init(
-                    calendars: CalendarEntity.toDomain(date: date, trades: trades),
-                    selectedDate: date
-                )
-                state.prevCalendar = .init(
-                    calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
-                    selectedDate: prevDate
-                )
-                state.nextCalendar = .init(
-                    calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
-                    selectedDate: nextDate
-                )
+                return .none
+//                state.currentCalendar = .init(
+//                    calendars: CalendarEntity.toDomain(date: date, trades: trades),
+//                    selectedDate: date
+//                )
+//                state.prevCalendar = .init(
+//                    calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
+//                    selectedDate: prevDate
+//                )
+//                state.nextCalendar = .init(
+//                    calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
+//                    selectedDate: nextDate
+//                )
                 return .none
                 
             default:
@@ -70,14 +101,8 @@ public struct CalendarMainStore: Reducer {
             }
         }
 
-        Scope(state: \.calendar, action: /Action.calendar) {
-            CalendarStore()._printChanges()
-        }
-        Scope(state: \.prevCalendar, action: /Action.prevCalendar) {
-            CalendarStore()._printChanges()
-        }
-        Scope(state: \.nextCalendar, action: /Action.nextCalendar) {
-            CalendarStore()._printChanges()
+        .forEach(\.calendars, action: /Action.calendar(id:action:)) {
+            CalendarStore()
         }
     }
 }
