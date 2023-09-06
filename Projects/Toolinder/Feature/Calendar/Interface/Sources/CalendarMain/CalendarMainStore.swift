@@ -18,11 +18,7 @@ public struct CalendarMainStore: Reducer {
         public var selectedDate: Date = .now
         public var currentTab: Int = 0
         
-        public var calendars: IdentifiedArrayOf<CalendarStore.State> = [
-            .init(offset: -1, calendars: [], selectedDate: .now.add(byAdding: .month, value: -1)),
-            .init(offset: 0, calendars: [], selectedDate: .now),
-            .init(offset: 1, calendars: [], selectedDate: .now.add(byAdding: .month, value: 1)),
-        ]
+        public var calendars: IdentifiedArrayOf<CalendarStore.State> = []
         
         public init() {}
     }
@@ -81,19 +77,23 @@ public struct CalendarMainStore: Reducer {
             case let .refreshCalendar(date, trades):
                 let prevDate = date.add(byAdding: .month, value: -1)
                 let nextDate = date.add(byAdding: .month, value: 1)
-                return .none
-//                state.currentCalendar = .init(
-//                    calendars: CalendarEntity.toDomain(date: date, trades: trades),
-//                    selectedDate: date
-//                )
-//                state.prevCalendar = .init(
-//                    calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
-//                    selectedDate: prevDate
-//                )
-//                state.nextCalendar = .init(
-//                    calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
-//                    selectedDate: nextDate
-//                )
+                state.calendars = [
+                    .init(
+                        offset: -1,
+                        calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
+                        selectedDate: prevDate
+                    ),
+                    .init(
+                        offset: 0,
+                        calendars: CalendarEntity.toDomain(date: date, trades: trades),
+                        selectedDate: .now
+                    ),
+                    .init(
+                        offset: 1,
+                        calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
+                        selectedDate: nextDate
+                    )
+                ]
                 return .none
                 
             default:

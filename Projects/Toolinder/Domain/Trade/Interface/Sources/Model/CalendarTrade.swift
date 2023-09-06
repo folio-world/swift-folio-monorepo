@@ -9,9 +9,20 @@ import Foundation
 
 import ToolinderShared
 
-public struct CalendarEntity: Equatable {
-    let date: Date
-    let trades: [Trade]
+public struct CalendarEntity: Equatable, Identifiable {
+    public let id: UUID
+    public let date: Date
+    public let trades: [Trade]
+    
+    public init(
+        id: UUID = .init(),
+        date: Date,
+        trades: [Trade]
+    ) {
+        self.id = id
+        self.date = date
+        self.trades = trades
+    }
     
     public static func toDomain(date: Date, trades: [Trade]) -> [CalendarEntity] {
         var calendars: [CalendarEntity] = []

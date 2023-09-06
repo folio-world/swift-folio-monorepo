@@ -22,28 +22,58 @@ public struct CalendarView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             GeometryReader { proxy in
                 ScrollView(showsIndicators: false) {
-                    LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
-                        ForEach(0..<30) { i in
-                            CalendarCell()
-                                .frame(height: proxy.size.height * 0.15)
+                    VStack(spacing: .zero) {
+                        HStack {
+                            Text("\(Calendar.current.shortMonthSymbols[viewStore.state.selectedDate.month - 1])".uppercased())
+                                .font(.largeTitle)
+                                .fontWeight(.semibold)
+                            
+                            Spacer()
                         }
+                        .padding(.horizontal, 5)
+                        
+                        calender(viewStore: viewStore, proxy: proxy)
+                        
+                        tradeItemList(viewStore: viewStore)
+                            .padding(.horizontal, 5)
+                        
+                        Spacer()
                     }
-                    
-                    VStack(alignment: .leading) {
-                        Text("2023년 9월 2일 (토)")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                        
-                        TradeItem()
-                        
-                        TradeItem()
-                        
-                        TradeItem()
-                    }
-                    .padding(.horizontal, 5)
                 }
             }
             .tag(viewStore.offset)
+        }
+    }
+    
+    private func calender(viewStore: ViewStoreOf<CalendarStore>, proxy: GeometryProxy) -> some View {
+        LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
+            ForEach(viewStore.state.calendars) { calendar in
+                CalendarItem(
+                    date: calendar.date,
+                    trades: calendar.trades,
+                    isSelected: calendar.date.isEqual(date: viewStore.selectedDate)
+                )
+                .frame(height: proxy.size.height * 0.15)
+                .onTapGesture {
+                    viewStore.send(.selectDate(calendar.date))
+                }
+            }
+            
+            Spacer()
+        }
+    }
+    
+    private func tradeItemList(viewStore: ViewStoreOf<CalendarStore>) -> some View {
+        VStack(alignment: .leading) {
+            Text(viewStore.selectedDate.localizedString(dateStyle: .medium, timeStyle: .none))
+                .font(.title3)
+                .fontWeight(.bold)
+            
+            TradeItem()
+            
+            TradeItem()
+            
+            TradeItem()
         }
     }
 }

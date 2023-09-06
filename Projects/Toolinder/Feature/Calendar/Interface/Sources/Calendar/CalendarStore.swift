@@ -36,12 +36,16 @@ public struct CalendarStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case tap
+        case selectDate(Date)
     }
     
     public func reduce(into state: inout State, action: Action) -> Effect<Action>  {
         switch action {
         case .onAppear:
+            return .none
+            
+        case let .selectDate(date):
+            state.selectedDate = date
             return .none
             
         default:
