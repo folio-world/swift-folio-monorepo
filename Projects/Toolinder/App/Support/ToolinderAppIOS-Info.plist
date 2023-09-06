@@ -23,7 +23,7 @@
 	<key>UILaunchStoryboardName</key>
 	<string>Launch</string>
 	<key>CFBundleDisplayName</key>
-	<string>Mulling</string>
+	<string>Toolinder</string>
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>GADApplicationIdentifier</key>

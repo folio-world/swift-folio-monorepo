@@ -7,8 +7,5 @@
 
 import Foundation
 
-@_exported import MullingDomainChatInterface
-@_exported import MullingDomainChat
-
-@_exported import MullingDomainPointInterface
-@_exported import MullingDomainPoint
+@_exported import ToolinderDomainTradeInterface
+@_exported import ToolinderDomainTrade

@@ -69,7 +69,7 @@ struct SizePreferenceKey: PreferenceKey {
     static var defaultValue: CGSize = .zero
     static func reduce(value: inout CGSize, nextValue: () -> CGSize) {}
 }
-extension View {
+public extension View {
     func readSize(onChange: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { geometryProxy in

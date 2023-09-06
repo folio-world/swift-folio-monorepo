@@ -112,7 +112,10 @@ public extension [TargetDependency] {
         case .Minimal: return []
         case .Dying: return [.package(product: "ComposableArchitecture")]
         case .Mulling: return []
-        case .Toolinder: return []
+        case .Toolinder:
+            return [
+                .external(name: "ComposableArchitecture"),
+            ]
         case .Folio:
             return [
                 .external(name: "GoogleMobileAds")

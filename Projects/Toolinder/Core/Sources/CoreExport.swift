@@ -6,6 +6,3 @@
 //
 
 import Foundation
-
-@_exported import MullingCoreOPENAIInterface
-@_exported import MullingCoreOPENAI
