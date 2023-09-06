@@ -1,30 +1,21 @@
 //
-//  TradeItem.swift
+//  TradeNewItem.swift
 //  ToolinderFeatureCalendarInterface
 //
-//  Created by 송영모 on 2023/09/02.
+//  Created by 송영모 on 2023/09/06.
 //
 
 import SwiftUI
 
-import ToolinderShared
-
-public struct TradeItem: View {
+public struct TradeNewItem: View {
     public init() {}
     
     public var body: some View {
         HStack(spacing: 10) {
-            Text("16:00")
+            Image(systemName: "plus")
                 .font(.headline)
-                .fontWeight(.semibold)
-            
-            RoundedRectangle(cornerRadius: 3)
-                .fill(.pink)
-                .frame(width: 3, height: 30)
-            
-            Text("삼성전자")
-                .font(.body)
-                .fontWeight(.semibold)
+
+            Text("New")
             
             Spacer()
         }

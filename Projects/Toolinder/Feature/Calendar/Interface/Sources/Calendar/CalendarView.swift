@@ -21,8 +21,23 @@ public struct CalendarView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             GeometryReader { proxy in
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: .zero) {
+                ZStack {
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: .zero) {
+                            
+                            calender(viewStore: viewStore, proxy: proxy)
+                                .padding(.horizontal, 10)
+                                .padding(.bottom, 10)
+                            
+                            tradeItemList(viewStore: viewStore)
+                                .padding(.horizontal, 10)
+                            
+                            Spacer()
+                        }
+                        .padding(.top, 45)
+                    }
+                    
+                    VStack(alignment: .leading) {
                         HStack {
                             Text("\(Calendar.current.shortMonthSymbols[viewStore.state.selectedDate.month - 1])".uppercased())
                                 .font(.largeTitle)
@@ -30,12 +45,8 @@ public struct CalendarView: View {
                             
                             Spacer()
                         }
-                        .padding(.horizontal, 5)
-                        
-                        calender(viewStore: viewStore, proxy: proxy)
-                        
-                        tradeItemList(viewStore: viewStore)
-                            .padding(.horizontal, 5)
+                        .padding(.horizontal, 10)
+                        .background(.white.opacity(0.7))
                         
                         Spacer()
                     }
@@ -53,7 +64,7 @@ public struct CalendarView: View {
                     trades: calendar.trades,
                     isSelected: calendar.date.isEqual(date: viewStore.selectedDate)
                 )
-                .frame(height: proxy.size.height * 0.15)
+                .frame(height: proxy.size.height * 0.1)
                 .onTapGesture {
                     viewStore.send(.selectDate(calendar.date))
                 }
@@ -73,7 +84,7 @@ public struct CalendarView: View {
             
             TradeItem()
             
-            TradeItem()
+            TradeNewItem()
         }
     }
 }
