@@ -29,7 +29,7 @@ public struct TradeItem: View {
             Spacer()
         }
         .padding(10)
-        .background(.blue)
+        .background(Color(uiColor: .systemGray6))
         .clipShape(
             RoundedRectangle(
                 cornerRadius: 8
