@@ -32,6 +32,7 @@ struct RootApp: App {
                         ._printChanges()
                 }
             )
+            .onAppear(perform: UIApplication.shared.hideKeyboard)
         }
         .modelContainer(modelContainer)
     }

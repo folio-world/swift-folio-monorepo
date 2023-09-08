@@ -18,9 +18,9 @@ public struct TradeItem: View {
                 .font(.headline)
                 .fontWeight(.semibold)
             
-            RoundedRectangle(cornerRadius: 3)
-                .fill(.pink)
-                .frame(width: 3, height: 30)
+            Image(systemName: "staroflife.circle.fill")
+                .font(.title3)
+                .foregroundStyle(.pink)
             
             Text("삼성전자")
                 .font(.body)

@@ -7,6 +7,7 @@
 
 import Foundation
 
-public enum TradeType: Codable {
+public enum TickerType: Codable {
     case stock
+    case coin
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Tradecurrency: String, Codable {
+public enum Currency: String, Codable {
     case krw = "KRW"
     case usd = "USD"
     case btc = "BTC"

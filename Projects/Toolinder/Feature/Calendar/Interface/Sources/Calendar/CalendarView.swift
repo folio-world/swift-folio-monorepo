@@ -37,22 +37,35 @@ public struct CalendarView: View {
                         .padding(.top, 45)
                     }
                     
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text("\(Calendar.current.shortMonthSymbols[viewStore.state.selectedDate.month - 1])".uppercased())
-                                .font(.largeTitle)
-                                .fontWeight(.semibold)
-                            
-                            Spacer()
-                        }
-                        .padding(.horizontal, 10)
-                        .background(.white.opacity(0.7))
-                        
-                        Spacer()
-                    }
+                    header(viewStore: viewStore)
                 }
             }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$addTicker,
+                    action: { .addTicker($0) }
+                )
+            ) { store in
+                AddTickerView(store: store)
+                    .presentationDetents([.medium])
+                    .interactiveDismissDisabled()
+            }
             .tag(viewStore.offset)
+        }
+    }
+    
+    private func header(viewStore: ViewStoreOf<CalendarStore>) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("\(Calendar.current.shortMonthSymbols[viewStore.state.selectedDate.month - 1])".uppercased())
+                    .font(.largeTitle)
+                
+                Spacer()
+            }
+            .padding(.horizontal, 10)
+            .background(.white.opacity(0.7))
+            
+            Spacer()
         }
     }
     
@@ -85,6 +98,9 @@ public struct CalendarView: View {
             TradeItem()
             
             TradeNewItem()
+                .onTapGesture {
+                    viewStore.send(.newButtonTapped)
+                }
         }
     }
 }
