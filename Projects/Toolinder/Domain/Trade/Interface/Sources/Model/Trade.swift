@@ -10,7 +10,6 @@ import SwiftData
 
 @Model
 public class Trade {
-    public var ticker: Ticker?
     public var currency: Currency?
     public var side: TradeSide?
     public var price: Double?
@@ -19,12 +18,13 @@ public class Trade {
     public var note: String?
     public var date: Date = Date()
     
+    public var ticker: Ticker?
+    
     public init(
-        ticker: Ticker?,
-        currency: Currency? = .krw,
-        side: TradeSide? = .buy,
-        price: Double? = 0.0,
-        volume: Double? = 0.0,
+        currency: Currency,
+        side: TradeSide,
+        price: Double,
+        volume: Double,
         images: [Data] = [],
         note: String? = "",
         date: Date = Date()

@@ -9,6 +9,7 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import ToolinderDomain
 import ToolinderShared
 
 public struct AddTradeView: View {

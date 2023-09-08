@@ -15,12 +15,14 @@ public struct AddTickerStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
-        public var name: String = ""
+        @BindingState public var name: String = ""
         
         public init() { }
     }
     
-    public enum Action: Equatable {
+    public enum Action: BindableAction, Equatable {
+        case binding(BindingAction<State>)
+        
         case onAppear
         
         case setName(String)

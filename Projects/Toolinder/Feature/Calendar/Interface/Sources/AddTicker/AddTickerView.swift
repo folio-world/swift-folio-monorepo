@@ -36,7 +36,7 @@ public struct AddTickerView: View {
                     })
                 }
                 
-                TextField("Name", text: viewStore.binding(get: \.name, send: AddTickerStore.Action.setName))
+                TextField("Name", text: viewStore.$name)
                 
                 Spacer()
             }

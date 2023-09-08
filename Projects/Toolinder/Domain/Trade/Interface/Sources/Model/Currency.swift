@@ -8,7 +8,7 @@
 import Foundation
 
 public enum Currency: String, Codable {
-    case krw = "KRW"
+    case won = "WON"
     case usd = "USD"
     case btc = "BTC"
 }
