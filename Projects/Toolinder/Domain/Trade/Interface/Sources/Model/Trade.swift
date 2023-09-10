@@ -27,7 +27,8 @@ public class Trade {
         volume: Double,
         images: [Data] = [],
         note: String? = "",
-        date: Date = Date()
+        date: Date = Date(),
+        ticker: Ticker? = nil
     ) {
         self.currency = currency
         self.side = side
@@ -36,5 +37,6 @@ public class Trade {
         self.volume = volume
         self.note = note
         self.date = date
+        self.ticker = ticker
     }
 }

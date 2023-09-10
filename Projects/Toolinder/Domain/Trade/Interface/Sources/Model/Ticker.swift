@@ -10,11 +10,11 @@ import SwiftData
 
 @Model
 public class Ticker {
-    public var type: TickerType?
-    public var currency: Currency?
-    public var name: String?
+    public var type: TickerType? = TickerType.stock
+    public var currency: Currency? = Currency.dollar
+    public var name: String? = ""
     
-    @Relationship(inverse: \Trade.ticker) public var trades: [Trade]?
+    @Relationship(inverse: \Trade.ticker) public var trades: [Trade]? = []
 
     public init(
         type: TickerType,

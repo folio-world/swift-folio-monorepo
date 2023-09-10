@@ -21,7 +21,7 @@ extension Currency {
         case .ruble: return "rublesign.circle.fill"
         case .euro: return "eurosign.circle.fill"
         case .dong: return "dongsign.circle.fill"
-        case .indianrupee: return "indianrupesign.circle.fill"
+        case .indianrupee: return "indianrupeesign.circle.fill"
         case .tenge: return "tengesign.circle.fill"
         case .peseta: return "pesetasign.circle.fill"
         case .peso: return "pesosign.circle.fill"

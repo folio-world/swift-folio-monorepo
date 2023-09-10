@@ -10,6 +10,7 @@ import Foundation
 import ComposableArchitecture
 
 import ToolinderDomain
+import ToolinderDomainTradeInterface
 
 public struct AddTickerStore: Reducer {
     public init() {}
@@ -18,6 +19,9 @@ public struct AddTickerStore: Reducer {
         public var name: String = ""
         public var tickerType: TickerType?
         public var currency: Currency?
+        public var tickers: [Ticker] = []
+        
+        public var newTicker: Ticker?
         
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
         @PresentationState var selectCurrency: SelectCurrencyStore.State?
@@ -28,9 +32,12 @@ public struct AddTickerStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
+        case fetched([Ticker])
+        
         case setName(String)
         case tickerTypeViewTapped
         case currencyViewTapped
+        case nextButtonTapped
         
         case selectTickerType(PresentationAction<SelectTickerTypeStore.Action>)
         case selectCurrency(PresentationAction<SelectCurrencyStore.Action>)
@@ -48,6 +55,10 @@ public struct AddTickerStore: Reducer {
             case .onAppear:
                 return .none
                 
+            case let .fetched(tickers):
+                state.tickers = tickers
+                return .none
+                
             case let .setName(name):
                 state.name = name
                 return .none
@@ -58,6 +69,14 @@ public struct AddTickerStore: Reducer {
                 
             case .currencyViewTapped:
                 state.selectCurrency = .init()
+                return .none
+                
+            case .nextButtonTapped:
+                guard let tickerType = state.tickerType else { return .none }
+                guard let currency = state.currency else { return .none }
+                guard state.name.isEmpty == false else { return .none }
+                
+                state.newTicker = .init(type: tickerType, currency: currency, name: state.name)
                 return .none
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):

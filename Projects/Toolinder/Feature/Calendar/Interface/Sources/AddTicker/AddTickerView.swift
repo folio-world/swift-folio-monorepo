@@ -6,13 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 import ComposableArchitecture
 
 import ToolinderDomain
+import ToolinderDomainTradeInterface
 import ToolinderShared
 
 public struct AddTickerView: View {
+    @Environment(\.modelContext) private var context
     let store: StoreOf<AddTickerStore>
     
     public init(store: StoreOf<AddTickerStore>) {
@@ -32,10 +35,25 @@ public struct AddTickerView: View {
                 
                 currencyView(viewStore: viewStore)
                 
+                tickersView(viewStore: viewStore)
+                
                 Spacer()
                 
-                nextButtonView()
+                nextButtonView(viewStore: viewStore)
                     .padding()
+            }
+            .onReceive(viewStore.newTicker.publisher) {
+                Ticker.init(type: .crypto, currency: .austral, name: "")
+//                Trade(currency: .austral, side: .buy, price: 0, volume: 0)
+//                Ticker(backingData: <#T##BackingData<Ticker>#>)
+                let ticker = Ticker(backingData: $0.persistentBackingData)
+                context.insert(ticker)
+            }
+            .onAppear {
+                let descriptor = FetchDescriptor<Ticker>(sortBy: [])
+                let tickers = try? context.fetch(descriptor)
+                
+                viewStore.send(.fetched(tickers ?? []))
             }
             .sheet(
                 store: self.store.scope(
@@ -44,6 +62,15 @@ public struct AddTickerView: View {
                 )
             ) { store in
                 SelectCurrencyView(store: store)
+                    .presentationDetents([.medium])
+            }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$selectTickerType,
+                    action: { .selectTickerType($0) }
+                )
+            ) { store in
+                SelectTickerTypeView(store: store)
                     .presentationDetents([.medium])
             }
         }
@@ -90,8 +117,69 @@ public struct AddTickerView: View {
         }
     }
     
-    private func nextButtonView() -> some View {
-        Button(action: {}, label: {
+    private func tickersView(viewStore: ViewStoreOf<AddTickerStore>) -> some View {
+        ScrollView(.horizontal) {
+            ForEach(viewStore.state.tickers) { ticker in
+                VStack(spacing: .zero) {
+                    HStack {
+                        Image(systemName: ticker.type?.systemImageName ?? "")
+                            .font(.body)
+                        
+                        Text("\(ticker.name ?? "") 4")
+                            .font(.body)
+                            .fontWeight(.semibold)
+                            .padding(.trailing)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "checkmark.circle")
+                            .font(.caption)
+                    }
+                    .padding(.bottom, 10)
+                    
+                    HStack(spacing: .zero) {
+                        Spacer()
+
+                        Text("++76 ")
+                            .font(.caption2)
+                            .foregroundStyle(.pink)
+                        Text("--59")
+                            .font(.caption2)
+                            .foregroundStyle(.mint)
+                        Text(" 12 cnt")
+                            .font(.caption2)
+                    }
+                    
+                    HStack(spacing: .zero) {
+                        Spacer()
+                        
+                        Text("++76,249 ")
+                            .font(.caption2)
+                            .foregroundStyle(.pink)
+                        Text("--76,249")
+                            .font(.caption2)
+                            .foregroundStyle(.mint)
+                        Text(" 12 \(ticker.currency?.rawValue.lowercased() ?? "")")
+                            .font(.caption2)
+                    }
+                }
+                .padding(10)
+                .background(Color(uiColor: .systemGray6))
+                .clipShape(
+                    RoundedRectangle(
+                        cornerRadius: 8,
+                        style: .continuous
+                    )
+                )
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    private func nextButtonView(viewStore: ViewStoreOf<AddTickerStore>) -> some View {
+        Button(action: {
+            viewStore.send(.nextButtonTapped)
+        }, label: {
             HStack {
                 Spacer()
                 
@@ -111,5 +199,25 @@ public struct AddTickerView: View {
                 style: .continuous
             )
         )
+    }
+}
+
+//FIXME: Xcode 버전 문제로 예상. 중복 코드로 해결
+@Model
+public class Ticker {
+    public var type: TickerType? = TickerType.stock
+    public var currency: Currency? = Currency.dollar
+    public var name: String? = ""
+    
+    @Relationship(inverse: \Trade.ticker) public var trades: [Trade]? = []
+
+    public init(
+        type: TickerType,
+        currency: Currency,
+        name: String
+    ) {
+        self.type = type
+        self.currency = currency
+        self.name = name
     }
 }
