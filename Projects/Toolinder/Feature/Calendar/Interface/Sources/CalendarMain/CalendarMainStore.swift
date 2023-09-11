@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 import ComposableArchitecture
 
 import ToolinderDomain
@@ -13,15 +14,12 @@ import ToolinderDomain
 public struct CalendarMainStore: Reducer {
     public init() {}
     
-    @Dependency(\.tradeClient) var tradeClient
-    
     public struct State: Equatable {
         public var trades: [Trade] = []
         public var selectedDate: Date = .now
         public var currentTab: Int = 0
         
         public var calendars: IdentifiedArrayOf<CalendarStore.State> = []
-        @BindingState public var refreshTrigger: UUID?
         
         public init() {}
     }
@@ -43,6 +41,8 @@ public struct CalendarMainStore: Reducer {
             case detail(Trade)
         }
     }
+    
+    @Dependency(\.tradeClient) var tradeClient
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in

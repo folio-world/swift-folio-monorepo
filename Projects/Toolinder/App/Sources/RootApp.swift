@@ -11,7 +11,6 @@ import SwiftData
 
 import ComposableArchitecture
 
-//import ToolinderFeature
 import ToolinderDomain
 
 @main

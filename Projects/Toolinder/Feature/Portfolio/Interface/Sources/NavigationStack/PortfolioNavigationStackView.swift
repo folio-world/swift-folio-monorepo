@@ -21,10 +21,12 @@ public struct PortfolioNavigationStackView: View {
                 state: \.path,
                 action: PortfolioNavigationStackStore.Action.path)) {
             WithViewStore(self.store, observe: { $0 }) { viewStore in
-                GoalMainView(
+                PortfolioMainView(
                     store: self.store.scope(
                         state: \.main,
-                        action: PortfolioNavigationStackStore.Action.main))
+                        action: PortfolioNavigationStackStore.Action.main
+                    )
+                )
                 .onAppear {
                     viewStore.send(.onAppear)
                 }
