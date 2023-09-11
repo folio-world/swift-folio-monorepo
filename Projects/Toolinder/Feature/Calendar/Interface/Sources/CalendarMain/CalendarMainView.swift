@@ -41,6 +41,7 @@ public struct CalendarMainView: View {
             .onAppear {
                 UIScrollView.appearance().isPagingEnabled = true
                 viewStore.send(.fetched(self.fetch()))
+                viewStore.send(.onAppear)
             }
         }
     }

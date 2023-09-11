@@ -13,6 +13,8 @@ import ToolinderDomain
 public struct CalendarMainStore: Reducer {
     public init() {}
     
+    @Dependency(\.tradeClient) var tradeClient
+    
     public struct State: Equatable {
         public var trades: [Trade] = []
         public var selectedDate: Date = .now
@@ -46,7 +48,16 @@ public struct CalendarMainStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state = .init()
+                switch tradeClient.fetchTrades() {
+                case let .success(trades):
+                    print("[D] \(trades)")
+//                    return .send(.refreshCalendar(state.selectedDate, trades))
+//                    state.trades = trades
+                default: break
+                }
+                
+                tradeClient.saveTicker(.init(type: .stock, currency: .austral, name: ""))
+                
                 return .none
                 
             case let .refreshTrigger(id):
