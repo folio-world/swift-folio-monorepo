@@ -14,7 +14,6 @@ import ToolinderDomain
 import ToolinderShared
 
 public struct AddTradeView: View {
-    @Environment(\.modelContext) private var context
     let store: StoreOf<AddTradeStore>
     
     public init(store: StoreOf<AddTradeStore>) {

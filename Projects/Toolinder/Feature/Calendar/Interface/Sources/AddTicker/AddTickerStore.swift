@@ -20,7 +20,6 @@ public struct AddTickerStore: Reducer {
         public var currency: Currency?
         public var tickers: [Ticker] = []
         
-        public var newTicker: Ticker?
         public var selectedTicker: Ticker?
         
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
@@ -53,11 +52,15 @@ public struct AddTickerStore: Reducer {
         }
     }
     
+    @Dependency(\.tradeClient) var tradeClient
+    
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .none
+                let tickers = (try? tradeClient.fetchTickers().get()) ?? []
+                
+                return .send(.fetched(tickers))
                 
             case let .fetched(tickers):
                 state.tickers = tickers
@@ -88,14 +91,12 @@ public struct AddTickerStore: Reducer {
                 if let ticker = state.selectedTicker {
                     return .send(.delegate(.next(ticker)))
                 }
-                guard let tickerType = state.tickerType else { return .none }
-                guard let currency = state.currency else { return .none }
-                guard state.name.isEmpty == false else { return .none }
                 
-                let newTicker = Ticker(type: tickerType, currency: currency, name: state.name)
-                state.newTicker = newTicker
-                
-                return .none
+                return validateAndSaveTickerEffect(
+                    tickerType: state.tickerType,
+                    currency: state.currency,
+                    name: state.name
+                )
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):
                 state.selectTickerType = nil
@@ -118,6 +119,18 @@ public struct AddTickerStore: Reducer {
             default:
                 return .none
             }
+        }
+    }
+    
+    private func validateAndSaveTickerEffect(tickerType: TickerType?, currency: Currency?, name: String) -> Effect<AddTickerStore.Action> {
+        guard let tickerType = tickerType else { return .none }
+        guard let currency = currency else { return .none }
+        guard name.isEmpty == false else { return .none }
+        
+        if let ticker = try? tradeClient.saveTicker(.init(type: tickerType, currency: currency, name: name)).get() {
+            return .send(.delegate(.next(ticker)))
+        } else {
+            return .none
         }
     }
 }

@@ -14,7 +14,6 @@ import ToolinderDomainTradeInterface
 import ToolinderShared
 
 public struct AddTickerView: View {
-    @Environment(\.modelContext) private var context
     let store: StoreOf<AddTickerStore>
     
     public init(store: StoreOf<AddTickerStore>) {
@@ -45,17 +44,8 @@ public struct AddTickerView: View {
                 nextButtonView(viewStore: viewStore)
                     .padding()
             }
-            .onChange(of: viewStore.newTicker, initial: false) { old, new  in
-                if let ticker = new {
-                    context.insert(ticker)
-                    viewStore.send(.delegate(.next(ticker)))
-                }
-            }
             .onAppear {
-                let descriptor = FetchDescriptor<Ticker>(sortBy: [])
-                let tickers = try? context.fetch(descriptor)
-                
-                viewStore.send(.fetched(tickers ?? []))
+                viewStore.send(.onAppear)
             }
             .sheet(
                 store: self.store.scope(

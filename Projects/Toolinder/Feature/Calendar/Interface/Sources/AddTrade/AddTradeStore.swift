@@ -14,6 +14,8 @@ import ToolinderDomain
 public struct AddTradeStore: Reducer {
     public init() {}
     
+    @Dependency(\.tradeClient) var tradeClient
+    
     public struct State: Equatable {
         public var ticker: Ticker
         
@@ -21,8 +23,6 @@ public struct AddTradeStore: Reducer {
         public var price: Double = .zero
         public var selectedDate: Date = .now
         public var selectedTradeSide: TradeSide = .buy
-        
-        public var newTrade: Trade?
         
         public init(ticker: Ticker) {
             self.ticker = ticker
@@ -77,18 +77,44 @@ public struct AddTradeStore: Reducer {
             return .send(.delegate(.dismiss))
             
         case .saveButtonTapped:
-            let newTrade = Trade(
+            return validateAndSaveTradeEffect(
                 side: state.selectedTradeSide,
                 price: state.price,
                 volume: state.count,
-                images: [],
-                note: "",
+                images: [], note: "",
                 date: state.selectedDate,
                 ticker: state.ticker
             )
-            return .send(.delegate(.save(newTrade)))
             
         default:
+            return .none
+        }
+    }
+    
+    private func validateAndSaveTradeEffect(
+        side: TradeSide,
+        price: Double,
+        volume: Double,
+        images: [Data],
+        note: String,
+        date: Date,
+        ticker: Ticker?
+    ) -> Effect<AddTradeStore.Action> {
+        guard let ticker = ticker else { return .none }
+        guard !price.isZero else { return .none }
+        guard !volume.isZero else { return .none }
+        
+        if let trade = try? tradeClient.saveTrade(.init(
+            side: side,
+            price: price,
+            volume: volume,
+            images: images,
+            note: note,
+            date: date,
+            ticker: ticker
+        )).get() {
+            return .send(.delegate(.save(trade)))
+        } else {
             return .none
         }
     }
