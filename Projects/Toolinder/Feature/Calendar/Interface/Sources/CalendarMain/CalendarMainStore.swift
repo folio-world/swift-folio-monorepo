@@ -28,7 +28,7 @@ public struct CalendarMainStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
-        case refreshTrigger(UUID)
+        case fetch
         
         case selectTab(Int)
         
@@ -48,21 +48,14 @@ public struct CalendarMainStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                switch tradeClient.fetchTrades() {
-                case let .success(trades):
-                    print("[D] \(trades)")
-//                    return .send(.refreshCalendar(state.selectedDate, trades))
-//                    state.trades = trades
-                default: break
+                return .send(.fetch)
+                
+            case .fetch:
+                if let trades = try? tradeClient.fetchTrades().get() {
+                    return .send(.fetched(trades))
+                } else {
+                    return .none
                 }
-                
-                tradeClient.saveTicker(.init(type: .stock, currency: .austral, name: ""))
-                
-                return .none
-                
-            case let .refreshTrigger(id):
-                state.refreshTrigger = id
-                return .none
                 
             case let .selectTab(tab):
                 switch tab {
@@ -127,10 +120,10 @@ public struct CalendarMainStore: Reducer {
             case let .calendar(id, action):
                 switch action {
                 case .addTrade(.presented(.delegate(.save))):
-                    return .send(.refreshTrigger(.init()))
+                    return .send(.fetch)
                     
                 case .addTrade(.dismiss):
-                    return .send(.refreshTrigger(.init()))
+                    return .send(.fetch)
                     
                 case let .delegate(.detail(trade)):
                     return .send(.delegate(.detail(trade)))

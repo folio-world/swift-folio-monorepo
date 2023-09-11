@@ -14,8 +14,6 @@ import ComposableArchitecture
 import ToolinderDomainTradeInterface
 
 public struct CalendarMainView: View {
-    @Environment(\.modelContext) private var context
-    
     let store: StoreOf<CalendarMainStore>
     
     public init(store: StoreOf<CalendarMainStore>) {
@@ -35,21 +33,10 @@ public struct CalendarMainView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
-            .onChange(of: viewStore.state.refreshTrigger, initial: false) {
-                viewStore.send(.fetched(self.fetch()))
-            }
             .onAppear {
                 UIScrollView.appearance().isPagingEnabled = true
-                viewStore.send(.fetched(self.fetch()))
                 viewStore.send(.onAppear)
             }
         }
-    }
-    
-    private func fetch() -> [Trade] {
-        let descriptor = FetchDescriptor<Trade>(sortBy: [SortDescriptor(\Trade.date)])
-        let trades = try? context.fetch(descriptor)
-        
-        return trades ?? []
     }
 }
