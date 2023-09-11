@@ -35,9 +35,11 @@ public struct CalendarMainView: View {
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
+            .onReceive(viewStore.state.refreshTrigger.publisher) { id in
+                viewStore.send(.fetched(self.fetch()))
+            }
             .onAppear {
                 UIScrollView.appearance().isPagingEnabled = true
-                viewStore.send(.fetched(self.fetch()))
             }
         }
     }

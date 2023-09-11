@@ -22,11 +22,14 @@ public struct AddTickerStore: Reducer {
         public var tickers: [Ticker] = []
         
         public var newTicker: Ticker?
+        public var selectedTicker: Ticker?
         
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
         @PresentationState var selectCurrency: SelectCurrencyStore.State?
         
-        public init() { }
+        public init(selectedTicker: Ticker? = nil) {
+            self.selectedTicker = selectedTicker
+        }
     }
     
     public enum Action: Equatable {
@@ -35,6 +38,7 @@ public struct AddTickerStore: Reducer {
         case fetched([Ticker])
         
         case setName(String)
+        case tickerTapped(Ticker)
         case tickerTypeViewTapped
         case currencyViewTapped
         case nextButtonTapped
@@ -44,8 +48,9 @@ public struct AddTickerStore: Reducer {
         
         case delegate(Delegate)
         
-        public enum Delegate {
+        public enum Delegate: Equatable {
             case cancel
+            case next(Ticker)
         }
     }
     
@@ -63,6 +68,15 @@ public struct AddTickerStore: Reducer {
                 state.name = name
                 return .none
                 
+            case let .tickerTapped(ticker):
+                if ticker == state.selectedTicker {
+                    state.selectedTicker = nil
+                } else {
+                    state.selectedTicker = ticker
+                }
+                
+                return .none
+                
             case .tickerTypeViewTapped:
                 state.selectTickerType = .init()
                 return .none
@@ -72,11 +86,16 @@ public struct AddTickerStore: Reducer {
                 return .none
                 
             case .nextButtonTapped:
+                if let ticker = state.selectedTicker {
+                    return .send(.delegate(.next(ticker)))
+                }
                 guard let tickerType = state.tickerType else { return .none }
                 guard let currency = state.currency else { return .none }
                 guard state.name.isEmpty == false else { return .none }
                 
-                state.newTicker = .init(type: tickerType, currency: currency, name: state.name)
+                let newTicker = Ticker(type: tickerType, currency: currency, name: state.name)
+                state.newTicker = newTicker
+                
                 return .none
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):

@@ -21,6 +21,7 @@ public struct CalendarStore: Reducer {
         public var selectedDate: Date
         
         @PresentationState var addTicker: AddTickerStore.State?
+        @PresentationState var addTrade: AddTradeStore.State?
         
         public init(
             id: UUID = .init(),
@@ -42,6 +43,7 @@ public struct CalendarStore: Reducer {
         case newButtonTapped
         
         case addTicker(PresentationAction<AddTickerStore.Action>)
+        case addTrade(PresentationAction<AddTradeStore.Action>)
     }
     
     public var body: some ReducerOf<Self> {
@@ -58,12 +60,31 @@ public struct CalendarStore: Reducer {
                 state.addTicker = .init()
                 return .none
                 
+            case .addTicker(.presented(.delegate(.cancel))):
+                state.addTicker = nil
+                return .none
+                
+            case let .addTicker(.presented(.delegate(.next(ticker)))):
+                state.addTicker = nil
+                state.addTrade = .init(ticker: ticker)
+                return .none
+                
             case .addTicker(.dismiss):
                 state.addTicker = nil
                 return .none
                 
-            case .addTicker(.presented(.delegate(.cancel))):
+            case .addTrade(.presented(.delegate(.save))):
                 state.addTicker = nil
+                state.addTrade = nil
+                return .none
+                
+            case let .addTrade(.presented(.delegate(.cancel(ticker)))):
+                state.addTicker = .init(selectedTicker: ticker)
+                state.addTrade = nil
+                return .none
+                
+            case .addTrade(.dismiss), .addTrade(.presented(.delegate(.dismiss))):
+                state.addTrade = nil
                 return .none
                 
             default:
@@ -72,6 +93,9 @@ public struct CalendarStore: Reducer {
         }
         .ifLet(\.$addTicker, action: /Action.addTicker) {
             AddTickerStore()
+        }
+        .ifLet(\.$addTrade, action: /Action.addTrade) {
+            AddTradeStore()
         }
     }
 }

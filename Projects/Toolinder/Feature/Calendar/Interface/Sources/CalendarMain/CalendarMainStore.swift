@@ -19,12 +19,14 @@ public struct CalendarMainStore: Reducer {
         public var currentTab: Int = 0
         
         public var calendars: IdentifiedArrayOf<CalendarStore.State> = []
+        public var refreshTrigger: UUID?
         
         public init() {}
     }
     
     public enum Action: Equatable {
         case onAppear
+        case refreshTrigger(UUID)
         
         case selectTab(Int)
         
@@ -41,6 +43,10 @@ public struct CalendarMainStore: Reducer {
             switch action {
             case .onAppear:
                 state = .init()
+                return .none
+                
+            case let .refreshTrigger(id):
+                state.refreshTrigger = id
                 return .none
                 
             case let .selectTab(tab):
@@ -95,6 +101,15 @@ public struct CalendarMainStore: Reducer {
                     )
                 ]
                 return .none
+                
+            case let .calendar(id, action):
+                switch action {
+                case .addTrade(.presented(.delegate(.save))):
+                    return .send(.refreshTrigger(id))
+                    
+                default:
+                    return .none
+                }
                 
             default:
                 return .none

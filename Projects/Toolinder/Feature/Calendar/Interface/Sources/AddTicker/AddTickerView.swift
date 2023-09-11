@@ -26,7 +26,13 @@ public struct AddTickerView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: 20) {
                 headerView(viewStore: viewStore)
-                    .padding()
+                    .padding(.top)
+                    .padding(.horizontal)
+                
+                tickersView(viewStore: viewStore)
+                
+                Divider()
+                    .padding(.horizontal)
                 
                 TextField("Name", text: viewStore.binding(get: \.name, send: AddTickerStore.Action.setName))
                     .padding(.horizontal)
@@ -35,19 +41,15 @@ public struct AddTickerView: View {
                 
                 currencyView(viewStore: viewStore)
                 
-                tickersView(viewStore: viewStore)
-                
                 Spacer()
                 
                 nextButtonView(viewStore: viewStore)
                     .padding()
             }
             .onReceive(viewStore.newTicker.publisher) {
-                Ticker.init(type: .crypto, currency: .austral, name: "")
-//                Trade(currency: .austral, side: .buy, price: 0, volume: 0)
-//                Ticker(backingData: <#T##BackingData<Ticker>#>)
                 let ticker = Ticker(backingData: $0.persistentBackingData)
                 context.insert(ticker)
+                viewStore.send(.delegate(.next(ticker)))
             }
             .onAppear {
                 let descriptor = FetchDescriptor<Ticker>(sortBy: [])
@@ -125,7 +127,7 @@ public struct AddTickerView: View {
                         Image(systemName: ticker.type?.systemImageName ?? "")
                             .font(.body)
                         
-                        Text("\(ticker.name ?? "") 4")
+                        Text("\(ticker.name ?? "") \(ticker.trades?.count ?? 0)")
                             .font(.body)
                             .fontWeight(.semibold)
                             .padding(.trailing)
@@ -146,31 +148,28 @@ public struct AddTickerView: View {
                         Text("--59")
                             .font(.caption2)
                             .foregroundStyle(.mint)
-                        Text(" 12 cnt")
+                        Text(" 12 vol")
                             .font(.caption2)
                     }
                     
                     HStack(spacing: .zero) {
                         Spacer()
                         
-                        Text("++76,249 ")
-                            .font(.caption2)
-                            .foregroundStyle(.pink)
-                        Text("--76,249")
-                            .font(.caption2)
-                            .foregroundStyle(.mint)
-                        Text(" 12 \(ticker.currency?.rawValue.lowercased() ?? "")")
+                        Text("(avg) 12,000 \(ticker.currency?.rawValue ?? "")")
                             .font(.caption2)
                     }
                 }
                 .padding(10)
-                .background(Color(uiColor: .systemGray6))
+                .background(ticker == viewStore.state.selectedTicker ? Color(uiColor: .systemGray5) : Color(uiColor: .systemGray6))
                 .clipShape(
                     RoundedRectangle(
                         cornerRadius: 8,
                         style: .continuous
                     )
                 )
+                .onTapGesture {
+                    viewStore.send(.tickerTapped(ticker))
+                }
             }
             .padding(.horizontal)
         }
@@ -199,25 +198,5 @@ public struct AddTickerView: View {
                 style: .continuous
             )
         )
-    }
-}
-
-//FIXME: Xcode 버전 문제로 예상. 중복 코드로 해결
-@Model
-public class Ticker {
-    public var type: TickerType? = TickerType.stock
-    public var currency: Currency? = Currency.dollar
-    public var name: String? = ""
-    
-    @Relationship(inverse: \Trade.ticker) public var trades: [Trade]? = []
-
-    public init(
-        type: TickerType,
-        currency: Currency,
-        name: String
-    ) {
-        self.type = type
-        self.currency = currency
-        self.name = name
     }
 }

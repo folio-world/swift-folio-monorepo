@@ -15,20 +15,37 @@ public struct AddTradeStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
-        public var price: String = ""
+        public var ticker: Ticker
         
-        public init() { }
+        public var count: Double = .zero
+        public var price: Double = .zero
+        public var selectedDate: Date = .now
+        public var selectedTradeSide: TradeSide = .buy
+        
+        public var newTrade: Trade?
+        
+        public init(ticker: Ticker) {
+            self.ticker = ticker
+        }
     }
     
     public enum Action: Equatable {
         case onAppear
         
-        case setName(String)
+        case setCount(Double)
+        case setPrice(Double)
+        case selectDate(Date)
+        case selectTradeSide(TradeSide)
+        case dismissButtonTapped
+        case cancleButtonTapped
+        case saveButtonTapped
         
         case delegate(Delegate)
         
-        public enum Delegate {
-            case cancel
+        public enum Delegate: Equatable {
+            case dismiss
+            case cancel(Ticker)
+            case save
         }
     }
     
@@ -37,7 +54,38 @@ public struct AddTradeStore: Reducer {
         case .onAppear:
             return .none
             
-        case let .setName(name):
+        case let .setCount(count):
+            state.count = count
+            return .none
+            
+        case let .setPrice(price):
+            state.price = price
+            return .none
+            
+        case let .selectDate(date):
+            state.selectedDate = date
+            return .none
+            
+        case let .selectTradeSide(tradeSide):
+            state.selectedTradeSide = tradeSide
+            return .none
+            
+        case .dismissButtonTapped:
+            return .send(.delegate(.cancel(state.ticker)))
+            
+        case .cancleButtonTapped:
+            return .send(.delegate(.dismiss))
+            
+        case .saveButtonTapped:
+            state.newTrade = Trade(
+                side: state.selectedTradeSide,
+                price: state.price,
+                volume: state.count,
+                images: [],
+                note: "",
+                date: state.selectedDate,
+                ticker: state.ticker
+            )
             return .none
             
         default:

@@ -45,9 +45,19 @@ public struct CalendarView: View {
                     state: \.$addTicker,
                     action: { .addTicker($0) }
                 )
-            ) { store in
-                AddTickerView(store: store)
+            ) {
+                AddTickerView(store: $0)
                     .presentationDetents([.medium])
+                    .interactiveDismissDisabled()
+            }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$addTrade,
+                    action: { .addTrade($0) }
+                )
+            ) {
+                AddTradeView(store: $0)
+                    .presentationDetents([.medium, .large])
                     .interactiveDismissDisabled()
             }
             .tag(viewStore.offset)
