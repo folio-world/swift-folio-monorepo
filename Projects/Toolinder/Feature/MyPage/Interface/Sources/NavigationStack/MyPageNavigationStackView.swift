@@ -21,10 +21,12 @@ public struct MyPageNavigationStackView: View {
                 state: \.path,
                 action: MyPageNavigationStackStore.Action.path)) {
             WithViewStore(self.store, observe: { $0 }) { viewStore in
-                GoalMainView(
+                MyPageMainView(
                     store: self.store.scope(
                         state: \.main,
-                        action: MyPageNavigationStackStore.Action.main))
+                        action: MyPageNavigationStackStore.Action.main
+                    )
+                )
                 .onAppear {
                     viewStore.send(.onAppear)
                 }
