@@ -45,7 +45,7 @@ public struct AddTradeStore: Reducer {
         public enum Delegate: Equatable {
             case dismiss
             case cancel(Ticker)
-            case save
+            case save(Trade)
         }
     }
     
@@ -77,7 +77,7 @@ public struct AddTradeStore: Reducer {
             return .send(.delegate(.dismiss))
             
         case .saveButtonTapped:
-            state.newTrade = Trade(
+            let newTrade = Trade(
                 side: state.selectedTradeSide,
                 price: state.price,
                 volume: state.count,
@@ -86,7 +86,7 @@ public struct AddTradeStore: Reducer {
                 date: state.selectedDate,
                 ticker: state.ticker
             )
-            return .none
+            return .send(.delegate(.save(newTrade)))
             
         default:
             return .none

@@ -35,11 +35,6 @@ public struct AddTradeView: View {
                 
                 saveButtonView(viewStore: viewStore)
             }
-            .onReceive(viewStore.state.newTrade.publisher) { newTrade in
-                let trade = Trade(backingData: newTrade.persistentBackingData)
-                context.insert(trade)
-                viewStore.send(.delegate(.save))
-            }
             .padding()
         }
     }

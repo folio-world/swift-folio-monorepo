@@ -19,7 +19,7 @@ public struct CalendarMainStore: Reducer {
         public var currentTab: Int = 0
         
         public var calendars: IdentifiedArrayOf<CalendarStore.State> = []
-        public var refreshTrigger: UUID?
+        @BindingState public var refreshTrigger: UUID?
         
         public init() {}
     }
@@ -81,31 +81,41 @@ public struct CalendarMainStore: Reducer {
                 return .send(.refreshCalendar(state.selectedDate, trades))
                 
             case let .refreshCalendar(date, trades):
-                let prevDate = date.add(byAdding: .month, value: -1)
-                let nextDate = date.add(byAdding: .month, value: 1)
-                state.calendars = [
-                    .init(
-                        offset: -1,
-                        calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
-                        selectedDate: prevDate
-                    ),
-                    .init(
-                        offset: 0,
-                        calendars: CalendarEntity.toDomain(date: date, trades: trades),
-                        selectedDate: .now
-                    ),
-                    .init(
-                        offset: 1,
-                        calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
-                        selectedDate: nextDate
-                    )
-                ]
+                if state.calendars.isEmpty {
+                    let prevDate = date.add(byAdding: .month, value: -1)
+                    let nextDate = date.add(byAdding: .month, value: 1)
+                    state.calendars = [
+                        .init(
+                            offset: -1,
+                            calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
+                            selectedDate: prevDate
+                        ),
+                        .init(
+                            offset: 0,
+                            calendars: CalendarEntity.toDomain(date: date, trades: trades),
+                            selectedDate: .now
+                        ),
+                        .init(
+                            offset: 1,
+                            calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
+                            selectedDate: nextDate
+                        )
+                    ]
+                } else {
+                    for (index, calendar) in state.calendars.enumerated() {
+                        state.calendars[index].calendars = CalendarEntity.toDomain(date: calendar.selectedDate, trades: state.trades)
+                    }
+                }
+                
                 return .none
                 
             case let .calendar(id, action):
                 switch action {
                 case .addTrade(.presented(.delegate(.save))):
-                    return .send(.refreshTrigger(id))
+                    return .send(.refreshTrigger(.init()))
+                    
+                case .addTrade(.dismiss):
+                    return .send(.refreshTrigger(.init()))
                     
                 default:
                     return .none
@@ -115,7 +125,7 @@ public struct CalendarMainStore: Reducer {
                 return .none
             }
         }
-
+        
         .forEach(\.calendars, action: /Action.calendar(id:action:)) {
             CalendarStore()
         }
