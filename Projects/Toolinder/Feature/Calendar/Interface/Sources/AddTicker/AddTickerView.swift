@@ -10,7 +10,6 @@ import SwiftData
 
 import ComposableArchitecture
 
-import ToolinderDomain
 import ToolinderDomainTradeInterface
 import ToolinderShared
 
@@ -46,10 +45,11 @@ public struct AddTickerView: View {
                 nextButtonView(viewStore: viewStore)
                     .padding()
             }
-            .onReceive(viewStore.newTicker.publisher) {
-                let ticker = Ticker(backingData: $0.persistentBackingData)
-                context.insert(ticker)
-                viewStore.send(.delegate(.next(ticker)))
+            .onChange(of: viewStore.newTicker, initial: false) { old, new  in
+                if let ticker = new {
+                    context.insert(ticker)
+                    viewStore.send(.delegate(.next(ticker)))
+                }
             }
             .onAppear {
                 let descriptor = FetchDescriptor<Ticker>(sortBy: [])
@@ -121,54 +121,14 @@ public struct AddTickerView: View {
     
     private func tickersView(viewStore: ViewStoreOf<AddTickerStore>) -> some View {
         ScrollView(.horizontal) {
-            ForEach(viewStore.state.tickers) { ticker in
-                VStack(spacing: .zero) {
-                    HStack {
-                        Image(systemName: ticker.type?.systemImageName ?? "")
-                            .font(.body)
-                        
-                        Text("\(ticker.name ?? "") \(ticker.trades?.count ?? 0)")
-                            .font(.body)
-                            .fontWeight(.semibold)
-                            .padding(.trailing)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "checkmark.circle")
-                            .font(.caption)
+            HStack {
+                ForEach(viewStore.state.tickers) { ticker in
+                    TickerItem(
+                        ticker: ticker,
+                        isSelected: ticker == viewStore.selectedTicker
+                    ) {
+                        viewStore.send(.tickerTapped(ticker))
                     }
-                    .padding(.bottom, 10)
-                    
-                    HStack(spacing: .zero) {
-                        Spacer()
-
-                        Text("++76 ")
-                            .font(.caption2)
-                            .foregroundStyle(.pink)
-                        Text("--59")
-                            .font(.caption2)
-                            .foregroundStyle(.mint)
-                        Text(" 12 vol")
-                            .font(.caption2)
-                    }
-                    
-                    HStack(spacing: .zero) {
-                        Spacer()
-                        
-                        Text("(avg) 12,000 \(ticker.currency?.rawValue ?? "")")
-                            .font(.caption2)
-                    }
-                }
-                .padding(10)
-                .background(ticker == viewStore.state.selectedTicker ? Color(uiColor: .systemGray5) : Color(uiColor: .systemGray6))
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: 8,
-                        style: .continuous
-                    )
-                )
-                .onTapGesture {
-                    viewStore.send(.tickerTapped(ticker))
                 }
             }
             .padding(.horizontal)

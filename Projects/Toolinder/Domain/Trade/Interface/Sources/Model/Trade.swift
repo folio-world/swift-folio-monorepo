@@ -17,7 +17,7 @@ public class Trade {
     public var note: String?
     public var date: Date = Date()
     
-    public var ticker: Ticker?
+    @Relationship public var ticker: Ticker?
     
     public init(
         side: TradeSide? = nil,
@@ -26,7 +26,7 @@ public class Trade {
         images: [Data] = [],
         note: String? = "",
         date: Date = Date(),
-        ticker: Ticker
+        ticker: Ticker? = nil
     ) {
         self.side = side
         self.images = images

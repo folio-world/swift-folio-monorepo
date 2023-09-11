@@ -40,6 +40,9 @@ public struct CalendarView: View {
                     header(viewStore: viewStore)
                 }
             }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
             .sheet(
                 store: self.store.scope(
                     state: \.$addTicker,
@@ -103,9 +106,14 @@ public struct CalendarView: View {
                 .font(.title3)
                 .fontWeight(.bold)
             
-            TradeItem()
-            
-            TradeItem()
+            ForEach(viewStore.state.selectedCalendar?.trades ?? []) { trade in
+                TradeItem(
+                    trade: trade,
+                    action: {
+                        viewStore.send(.tradeItemTapped(trade))
+                    }
+                )
+            }
             
             TradeNewItem()
                 .onTapGesture {

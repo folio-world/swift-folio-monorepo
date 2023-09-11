@@ -35,7 +35,11 @@ public struct CalendarMainStore: Reducer {
         
         case calendar(id: CalendarStore.State.ID, action: CalendarStore.Action)
         
-        case goToGoalDetail(GoalDetailStore.State)
+        case delegate(Delegate)
+        
+        public enum Delegate: Equatable {
+            case detail(Trade)
+        }
     }
     
     public var body: some ReducerOf<Self> {
@@ -116,6 +120,9 @@ public struct CalendarMainStore: Reducer {
                     
                 case .addTrade(.dismiss):
                     return .send(.refreshTrigger(.init()))
+                    
+                case let .delegate(.detail(trade)):
+                    return .send(.delegate(.detail(trade)))
                     
                 default:
                     return .none

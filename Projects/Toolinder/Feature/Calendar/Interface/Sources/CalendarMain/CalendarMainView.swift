@@ -36,7 +36,6 @@ public struct CalendarMainView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
             .onChange(of: viewStore.state.refreshTrigger, initial: false) {
-                print("[D] fetched")
                 viewStore.send(.fetched(self.fetch()))
             }
             .onAppear {

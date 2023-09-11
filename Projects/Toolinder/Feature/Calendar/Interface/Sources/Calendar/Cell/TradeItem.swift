@@ -8,21 +8,35 @@
 import SwiftUI
 
 import ToolinderShared
+import ToolinderDomain
 
 public struct TradeItem: View {
-    public init() {}
+    private let trade: Trade
+    
+    public var action: () -> Void
+    public var trailingAction: () -> Void
+    
+    public init(
+        trade: Trade,
+        action: @escaping () -> Void = {},
+        trailingAction: @escaping () -> Void = {}
+    ) {
+        self.trade = trade
+        self.action = action
+        self.trailingAction = trailingAction
+    }
     
     public var body: some View {
         HStack(spacing: 10) {
-            Text("16:00")
+            Text(trade.date.localizedString(dateStyle: .none, timeStyle: .short))
                 .font(.headline)
                 .fontWeight(.semibold)
             
-            Image(systemName: "staroflife.circle.fill")
+            trade.ticker?.type?.image
                 .font(.title3)
-                .foregroundStyle(.pink)
+                .foregroundStyle(trade.side == .buy ? .pink : .mint)
             
-            Text("삼성전자")
+            Text(trade.ticker?.name ?? "")
                 .font(.body)
                 .fontWeight(.semibold)
             
@@ -36,5 +50,8 @@ public struct TradeItem: View {
                 cornerRadius: 8
             )
         )
+        .onTapGesture {
+            self.action()
+        }
     }
 }

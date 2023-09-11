@@ -16,4 +16,8 @@ extension TickerType {
         case .crypto: return "tornado.circle.fill"
         }
     }
+    
+    var image: Image {
+        return .init(systemName: self.systemImageName)
+    }
 }

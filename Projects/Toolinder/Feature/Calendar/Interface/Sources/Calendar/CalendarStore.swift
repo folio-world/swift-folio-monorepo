@@ -18,7 +18,9 @@ public struct CalendarStore: Reducer {
         public var id: UUID
         public var offset: Int
         public var calendars: [CalendarEntity]
+        
         public var selectedDate: Date
+        public var selectedCalendar: CalendarEntity?
         
         @PresentationState var addTicker: AddTickerStore.State?
         @PresentationState var addTrade: AddTradeStore.State?
@@ -41,24 +43,35 @@ public struct CalendarStore: Reducer {
         
         case selectDate(Date)
         case newButtonTapped
+        case tradeItemTapped(Trade)
         
         case addTicker(PresentationAction<AddTickerStore.Action>)
         case addTrade(PresentationAction<AddTradeStore.Action>)
+        
+        case delegate(Delegate)
+        
+        public enum Delegate: Equatable {
+            case detail(Trade)
+        }
     }
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .none
+                return .send(.selectDate(state.selectedDate))
                 
             case let .selectDate(date):
                 state.selectedDate = date
+                state.selectedCalendar = state.calendars.first(where: { $0.date.isEqual(date: date) })
                 return .none
                 
             case .newButtonTapped:
                 state.addTicker = .init()
                 return .none
+                
+            case let .tradeItemTapped(trade):
+                return .send(.delegate(.detail(trade)))
                 
             case .addTicker(.presented(.delegate(.cancel))):
                 state.addTicker = nil
