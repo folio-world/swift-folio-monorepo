@@ -25,9 +25,7 @@ public struct TradeDetailView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack {
-                    HStack {
-                        Text("Ticker")
-                    }
+                    tradeView(viewStore: viewStore)
                     
                     HStack {
                         if let ticker = viewStore.state.trade.ticker {
@@ -36,97 +34,79 @@ public struct TradeDetailView: View {
                         
                         Spacer()
                     }
-                    .padding()
+                    .padding(.horizontal)
+                    
+                    tradeListView(viewStore: viewStore)
                 }
             }
             .navigationTitle(viewStore.state.trade.ticker?.name ?? "Back")
         }
     }
     
-    private func headerView(viewStore: ViewStoreOf<AddTradeStore>) -> some View {
-        HStack {
-            Button(action: {
-                viewStore.send(.dismissButtonTapped)
-            }, label: {
-                Image(systemName: "chevron.left")
-                    .font(.title)
-                    .foregroundStyle(.foreground)
-            })
-            
-            Text(viewStore.state.ticker.name ?? "")
-                .font(.title)
-            
-            Spacer()
-            
-            Button(action: {
-                viewStore.send(.cancleButtonTapped)
-            }, label: {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.black)
-                    .font(.title)
-            })
-        }
-    }
-    
-    private func pickerView(viewStore: ViewStoreOf<AddTradeStore>) -> some View {
-        HStack {
-            Picker("", selection: viewStore.binding(get: \.selectedTradeSide, send: AddTradeStore.Action.selectTradeSide)) {
-                ForEach(TradeSide.allCases, id: \.self) { tradeSide in
-                    Text(tradeSide.rawValue)
-                        .tag(tradeSide)
-                }
-            }
-            .pickerStyle(.segmented)
-            
-            DatePicker("", selection: viewStore.binding(get: \.selectedDate, send: AddTradeStore.Action.selectDate))
-        }
-    }
-    
-    private func inputView(viewStore: ViewStoreOf<AddTradeStore>) -> some View {
-        VStack(spacing: 20) {
+    private func tradeView(viewStore: ViewStoreOf<TradeDetailStore>) -> some View {
+        VStack {
             HStack {
-                Image(systemName: "cart.circle.fill")
-                
-                TextField("Count", value: viewStore.binding(get: \.count, send: AddTradeStore.Action.setCount), format: .number)
-                    .keyboardType(.numberPad)
-                
-                Spacer()
-            }
-            
-            HStack {
-                viewStore.state.ticker.currency?.image
-                
-                TextField("Count", value: viewStore.binding(get: \.price, send: AddTradeStore.Action.setPrice), format: .number)
-                    .keyboardType(.numberPad)
-                
-                Spacer()
-            }
-        }
-    }
-    
-    private func saveButtonView(viewStore: ViewStoreOf<AddTradeStore>) -> some View {
-        Button(action: {
-            viewStore.send(.saveButtonTapped)
-        }, label: {
-            HStack {
-                Spacer()
-                
-                Text("Save")
+                Text("Trade")
                     .font(.title3)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.white)
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            HStack {
+                Text(scaledString(valueOrNil: viewStore.state.trade.volume))
+                    .font(.title)
+                    .fontWeight(.semibold)
+                
+                Text("vol")
+                    .fontWeight(.semibold)
                 
                 Spacer()
             }
-            .padding(.vertical, 10)
-        })
-        .background(.black)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 8,
-                style: .continuous
-            )
-        )
+            .padding(.horizontal)
+            
+            HStack {
+                Text(scaledString(valueOrNil: viewStore.state.trade.price))
+                    .font(.title)
+                    .fontWeight(.semibold)
+                
+                Text("\(viewStore.state.trade.ticker?.currency?.rawValue.lowercased() ?? "")")
+                    .fontWeight(.semibold)
+                
+                Spacer()
+            }
+            .padding(.horizontal)
+        }
+    }
+    
+    private func tradeListView(viewStore: ViewStoreOf<TradeDetailStore>) -> some View {
+        VStack {
+            HStack {
+                Text("History")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+            
+            ForEach(viewStore.state.trade.ticker?.trades ?? []) { trade in
+                TradeItem(trade: trade, isShowOnlyTime: false, isShowEdit: true)
+            }
+            
+            TradeNewItem()
+        }
+        .padding(.horizontal)
+    }
+    
+    private func scaledString(valueOrNil: Double?) -> String {
+        if let value = valueOrNil {
+            if value.isZero {
+                return "0"
+            } else {
+                return String(describing: "\(value)")
+            }
+        } else {
+            return "0"
+        }
     }
 }
 
