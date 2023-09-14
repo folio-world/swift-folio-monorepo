@@ -29,16 +29,16 @@ public struct MyPageNavigationStackStore: Reducer {
     
     public struct Path: Reducer {
         public enum State: Equatable {
-            case detail(GoalDetailStore.State)
+            case existingUserPolicy(ExistingUserPolicyStore.State)
         }
         
         public enum Action: Equatable {
-            case detail(GoalDetailStore.Action)
+            case existingUserPolicy(ExistingUserPolicyStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
-            Scope(state: /State.detail, action: /Action.detail) {
-                GoalDetailStore()
+            Scope(state: /State.existingUserPolicy, action: /Action.existingUserPolicy) {
+                ExistingUserPolicyStore()
             }
         }
     }
@@ -49,6 +49,10 @@ public struct MyPageNavigationStackStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                return .none
+                
+            case .main(.delegate(.existingUserPolicy)):
+                state.path.append(.existingUserPolicy(.init()))
                 return .none
                 
             default:

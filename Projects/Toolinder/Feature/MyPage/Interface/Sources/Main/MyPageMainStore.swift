@@ -18,6 +18,13 @@ public struct MyPageMainStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
+        case delegate(Delegate)
+        
+        case existingUserPolicyTapped
+        
+        public enum Delegate: Equatable {
+            case existingUserPolicy
+        }
     }
     
     public var body: some ReducerOf<Self> {
@@ -25,6 +32,9 @@ public struct MyPageMainStore: Reducer {
             switch action {
             case .onAppear:
                 return .none
+                
+            case .existingUserPolicyTapped:
+                return .send(.delegate(.existingUserPolicy))
                 
             default:
                 return .none

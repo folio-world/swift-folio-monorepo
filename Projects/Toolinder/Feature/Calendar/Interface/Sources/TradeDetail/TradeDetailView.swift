@@ -39,41 +39,34 @@ public struct TradeDetailView: View {
                     tradeListView(viewStore: viewStore)
                 }
             }
-            .navigationTitle(viewStore.state.trade.ticker?.name ?? "Back")
+            .navigationTitle(viewStore.state.trade.ticker?.name ?? "")
+            .navigationBarTitleDisplayMode(.large)
         }
     }
     
     private func tradeView(viewStore: ViewStoreOf<TradeDetailStore>) -> some View {
-        VStack {
-            HStack {
-                Text("Trade")
-                    .font(.title3)
-                    .fontWeight(.semibold)
+        VStack(alignment: .trailing) {
+            HStack(alignment: .bottom, spacing: .zero) {
                 Spacer()
-            }
-            .padding(.horizontal)
-            
-            HStack {
+                
                 Text(scaledString(valueOrNil: viewStore.state.trade.volume))
                     .font(.title)
                     .fontWeight(.semibold)
                 
                 Text("vol")
                     .fontWeight(.semibold)
-                
-                Spacer()
             }
             .padding(.horizontal)
             
-            HStack {
+            HStack(alignment: .bottom, spacing: .zero) {
+                Spacer()
+                
                 Text(scaledString(valueOrNil: viewStore.state.trade.price))
                     .font(.title)
                     .fontWeight(.semibold)
                 
                 Text("\(viewStore.state.trade.ticker?.currency?.rawValue.lowercased() ?? "")")
                     .fontWeight(.semibold)
-                
-                Spacer()
             }
             .padding(.horizontal)
         }
