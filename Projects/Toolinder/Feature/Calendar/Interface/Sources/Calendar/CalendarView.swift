@@ -109,6 +109,7 @@ public struct CalendarView: View {
             ForEach(viewStore.state.selectedCalendar?.trades ?? []) { trade in
                 TradeItem(
                     trade: trade,
+                    isShowEdit: false,
                     action: {
                         viewStore.send(.tradeItemTapped(trade))
                     }

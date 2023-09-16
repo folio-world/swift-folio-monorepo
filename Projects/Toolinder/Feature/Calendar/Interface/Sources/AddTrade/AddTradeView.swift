@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 import ComposableArchitecture
 
@@ -15,6 +16,7 @@ import ToolinderShared
 
 public struct AddTradeView: View {
     let store: StoreOf<AddTradeStore>
+    @State var images: [UIImage] = []
     
     public init(store: StoreOf<AddTradeStore>) {
         self.store = store
@@ -29,7 +31,7 @@ public struct AddTradeView: View {
                     .padding(.bottom)
                 
                 inputView(viewStore: viewStore)
-
+                
                 Spacer()
                 
                 saveButtonView(viewStore: viewStore)
@@ -40,26 +42,30 @@ public struct AddTradeView: View {
     
     private func headerView(viewStore: ViewStoreOf<AddTradeStore>) -> some View {
         HStack {
-            Button(action: {
-                viewStore.send(.dismissButtonTapped)
-            }, label: {
-                Image(systemName: "chevron.left")
-                    .font(.title)
-                    .foregroundStyle(.foreground)
-            })
+            if viewStore.state.trade == nil {
+                Button(action: {
+                    viewStore.send(.dismissButtonTapped)
+                }, label: {
+                    Image(systemName: "chevron.left")
+                        .font(.title)
+                        .foregroundStyle(.foreground)
+                })
+            }
             
             Text(viewStore.state.ticker.name ?? "")
                 .font(.title)
             
             Spacer()
             
-            Button(action: {
-                viewStore.send(.cancleButtonTapped)
-            }, label: {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.black)
-                    .font(.title)
-            })
+            if viewStore.state.trade == nil {
+                Button(action: {
+                    viewStore.send(.cancleButtonTapped)
+                }, label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(.black)
+                        .font(.title)
+                })
+            }
         }
     }
     
@@ -96,6 +102,22 @@ public struct AddTradeView: View {
                 
                 Spacer()
             }
+            
+            VStack(alignment: .leading) {
+                Image(systemName: "note.text")
+                
+                TextEditor(text: viewStore.binding(get: \.note, send: AddTradeStore.Action.setNote))
+            }
+            PhotosPicker(selection: viewStore.binding(get: \.selectedPhotosPickerItems, send: AddTradeStore.Action.setPhotoPickerItems),
+                         matching: .images) {
+                Text("Pick Photo")
+            }
+            
+            VStack(alignment: .leading) {
+                Image(systemName: "note.text")
+                
+                TextEditor(text: viewStore.binding(get: \.note, send: AddTradeStore.Action.setNote))
+            }
         }
     }
     
@@ -105,7 +127,7 @@ public struct AddTradeView: View {
                 Button(action: {
                     viewStore.send(.deleteButtonTapped)
                 }, label: {
-                    Text("Delete")
+                    Text("Del")
                         .font(.title3)
                         .fontWeight(.semibold)
                         .foregroundStyle(.white)

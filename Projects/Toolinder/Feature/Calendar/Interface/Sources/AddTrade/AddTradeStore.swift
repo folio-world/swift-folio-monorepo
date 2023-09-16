@@ -5,7 +5,8 @@
 //  Created by 송영모 on 2023/09/08.
 //
 
-import Foundation
+import SwiftUI
+import PhotosUI
 
 import ComposableArchitecture
 
@@ -24,6 +25,10 @@ public struct AddTradeStore: Reducer {
         public var price: Double = .zero
         public var selectedDate: Date = .now
         public var selectedTradeSide: TradeSide = .buy
+        public var note: String = ""
+        public var images: [Data] = []
+        
+        public var selectedPhotosPickerItems: [PhotosPickerItem] = []
         
         public init(ticker: Ticker) {
             self.ticker = ticker
@@ -46,6 +51,8 @@ public struct AddTradeStore: Reducer {
         case setPrice(Double)
         case selectDate(Date)
         case selectTradeSide(TradeSide)
+        case setNote(String)
+        case setPhotoPickerItems([PhotosPickerItem])
         case dismissButtonTapped
         case cancleButtonTapped
         case saveButtonTapped
@@ -81,6 +88,29 @@ public struct AddTradeStore: Reducer {
             
         case let .selectTradeSide(tradeSide):
             state.selectedTradeSide = tradeSide
+            return .none
+            
+        case let .setNote(note):
+            state.note = note
+            return .none
+            
+        case let .setPhotoPickerItems(photosPickerItems):
+            state.selectedPhotosPickerItems = photosPickerItems
+
+            var images: [Data] = []
+            for item in photosPickerItems {
+                item.loadTransferable(type: Data.self) { result in
+                    switch result {
+                    case .success(let imageData):
+                        if let imageData {
+                            images.append(imageData)
+                        }
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+            state.images = images
             return .none
             
         case .dismissButtonTapped:

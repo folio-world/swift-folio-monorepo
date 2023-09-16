@@ -27,6 +27,27 @@ public struct TradeDetailView: View {
                 VStack {
                     tradeView(viewStore: viewStore)
                     
+                    Divider()
+                        .padding(.horizontal)
+                    
+                    
+                    
+                    HStack {
+                        Label("Note", systemImage: "note.text")
+                            .font(.title3)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    
+                    HStack {
+                        Text("월터 테비스[1]의 1983년 소설 《The Queen's Gambit》을 원작으로 넷플릭스에서 제작해 2020년 10월 23일에 공개된 7부작 미니시리즈이다. 제목인 퀸즈 갬빗이 체스 용어이듯 체스를 소재로 한 드라마로, 시청 등급은 청소년 관람불가. 스콧 프랭크[2]가 감독을 맡고 안야 테일러조이가 주인공 엘리자베스 하먼을 연기한다.체스판을 묘사한 대다수의 영화나 텔레비전 쇼와는 달리, 체스판이 정확하게 세팅되어 있고 체스 게임과 포지션 역시 꽤나 현실적인 것이 이 시리즈의 특징이다. 내셔널 마스터 브루스 판돌피니와 전직 세계 챔피언이자 역사상 최고의 체스 플레이어 중 하나로 평가받는 그랜드마스터 가리 카스파로프가 이 시리즈의 컨설턴트 역할을 했다.")
+                            .font(.caption)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal)
+                    
                     HStack {
                         if let ticker = viewStore.state.trade.ticker {
                             TickerItem(ticker: ticker, isSelected: false)
@@ -56,7 +77,6 @@ public struct TradeDetailView: View {
             ) {
                 AddTradeView(store: $0)
                     .presentationDetents([.medium, .large])
-                    .interactiveDismissDisabled()
             }
         }
     }
@@ -92,9 +112,8 @@ public struct TradeDetailView: View {
     private func tradeListView(viewStore: ViewStoreOf<TradeDetailStore>) -> some View {
         VStack {
             HStack {
-                Text("History")
+                Label("History", systemImage: "clock")
                     .font(.title3)
-                    .fontWeight(.semibold)
                 Spacer()
             }
             
