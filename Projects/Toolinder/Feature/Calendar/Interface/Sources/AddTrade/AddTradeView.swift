@@ -26,6 +26,7 @@ public struct AddTradeView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: 20) {
                 headerView(viewStore: viewStore)
+                    .padding(.top)
                 
                 pickerView(viewStore: viewStore)
                     .padding(.bottom)
@@ -108,9 +109,18 @@ public struct AddTradeView: View {
                 
                 TextEditor(text: viewStore.binding(get: \.note, send: AddTradeStore.Action.setNote))
             }
-            PhotosPicker(selection: viewStore.binding(get: \.selectedPhotosPickerItems, send: AddTradeStore.Action.setPhotoPickerItems),
-                         matching: .images) {
-                Text("Pick Photo")
+            
+            ScrollView(.horizontal) {
+                HStack {
+                    ForEach(viewStore.state.images, id: \.self) { imageData in
+                        ImageItem(imageData: imageData)
+                    }
+                    
+                    PhotosPicker(selection: viewStore.binding(get: \.selectedPhotosPickerItems, send: AddTradeStore.Action.setPhotoPickerItems),
+                                 matching: .images) {
+                        ImageNewItem()
+                    }
+                }
             }
             
             VStack(alignment: .leading) {

@@ -15,8 +15,6 @@ import ToolinderDomain
 public struct AddTradeStore: Reducer {
     public init() {}
     
-    @Dependency(\.tradeClient) var tradeClient
-    
     public struct State: Equatable {
         public var trade: Trade?
         public var ticker: Ticker
@@ -58,6 +56,7 @@ public struct AddTradeStore: Reducer {
         case saveButtonTapped
         case deleteButtonTapped
         
+        case photoToDataResponse([Data])
         
         case delegate(Delegate)
         
@@ -68,6 +67,9 @@ public struct AddTradeStore: Reducer {
             case delete(Trade)
         }
     }
+    
+    @Dependency(\.tradeClient) var tradeClient
+    @Dependency(\.photoClient) var photoClient
     
     public func reduce(into state: inout State, action: Action) -> Effect<Action>  {
         switch action {
@@ -97,21 +99,11 @@ public struct AddTradeStore: Reducer {
         case let .setPhotoPickerItems(photosPickerItems):
             state.selectedPhotosPickerItems = photosPickerItems
 
-            var images: [Data] = []
-            for item in photosPickerItems {
-                item.loadTransferable(type: Data.self) { result in
-                    switch result {
-                    case .success(let imageData):
-                        if let imageData {
-                            images.append(imageData)
-                        }
-                    case .failure(let error):
-                        print(error)
-                    }
+            return .run { send in
+                if let data = try? await photoClient.toDataList(photosPickerItems).get() {
+                    return await send(.photoToDataResponse(data))
                 }
             }
-            state.images = images
-            return .none
             
         case .dismissButtonTapped:
             return .send(.delegate(.cancel(state.ticker)))
@@ -134,6 +126,10 @@ public struct AddTradeStore: Reducer {
             if let trade = state.trade, let _ = try? tradeClient.deleteTrade(trade).get() {
                 return .send(.delegate(.delete(trade)))
             }
+            return .none
+            
+        case let .photoToDataResponse(data):
+            state.images = data
             return .none
             
         default:
