@@ -100,27 +100,48 @@ public struct AddTradeView: View {
     }
     
     private func saveButtonView(viewStore: ViewStoreOf<AddTradeStore>) -> some View {
-        Button(action: {
-            viewStore.send(.saveButtonTapped)
-        }, label: {
-            HStack {
-                Spacer()
-                
-                Text("Save")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                
-                Spacer()
+        HStack(spacing: 10) {
+            if viewStore.state.trade != nil {
+                Button(action: {
+                    viewStore.send(.deleteButtonTapped)
+                }, label: {
+                    Text("Delete")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                        .padding(10)
+                })
+                .background(.black)
+                .clipShape(
+                    RoundedRectangle(
+                        cornerRadius: 8,
+                        style: .continuous
+                    )
+                )
             }
-            .padding(.vertical, 10)
-        })
-        .background(.black)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 8,
-                style: .continuous
+            
+            Button(action: {
+                viewStore.send(.saveButtonTapped)
+            }, label: {
+                HStack {
+                    Spacer()
+                    
+                    Text("Save")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.white)
+                    
+                    Spacer()
+                }
+                .padding(.vertical, 10)
+            })
+            .background(.black)
+            .clipShape(
+                RoundedRectangle(
+                    cornerRadius: 8,
+                    style: .continuous
+                )
             )
-        )
+        }
     }
 }

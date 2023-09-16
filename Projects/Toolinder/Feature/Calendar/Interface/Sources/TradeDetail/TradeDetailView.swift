@@ -41,6 +41,23 @@ public struct TradeDetailView: View {
             }
             .navigationTitle(viewStore.state.trade.ticker?.name ?? "")
             .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Edit") {
+                        viewStore.send(.editButtonTapped)
+                    }
+                }
+            }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$addTrade,
+                    action: { .addTrade($0) }
+                )
+            ) {
+                AddTradeView(store: $0)
+                    .presentationDetents([.medium, .large])
+                    .interactiveDismissDisabled()
+            }
         }
     }
     

@@ -90,7 +90,7 @@ public struct CalendarView: View {
                     trades: calendar.trades,
                     isSelected: calendar.date.isEqual(date: viewStore.selectedDate)
                 )
-                .frame(height: proxy.size.height * 0.1)
+                .frame(height: proxy.size.height * 0.12)
                 .onTapGesture {
                     viewStore.send(.selectDate(calendar.date))
                 }

@@ -55,6 +55,10 @@ public struct CalendarNavigationStackStore: Reducer {
                 state.path.append(.detail(.init(trade: trade)))
                 return .none
                 
+            case .path(.element(id: _, action: .detail(.delegate(.delete)))):
+                state.path.removeLast()
+                return .none
+                
             default:
                 return .none
             }

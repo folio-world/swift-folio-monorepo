@@ -17,6 +17,7 @@ public struct AddTradeStore: Reducer {
     @Dependency(\.tradeClient) var tradeClient
     
     public struct State: Equatable {
+        public var trade: Trade?
         public var ticker: Ticker
         
         public var count: Double = .zero
@@ -26,6 +27,15 @@ public struct AddTradeStore: Reducer {
         
         public init(ticker: Ticker) {
             self.ticker = ticker
+        }
+        
+        public init(trade: Trade, ticker: Ticker) {
+            self.trade = trade
+            self.ticker = ticker
+            self.count = trade.volume ?? 0
+            self.price = trade.price ?? 0
+            self.selectedDate = trade.date
+            self.selectedTradeSide = trade.side ?? .buy
         }
     }
     
@@ -39,6 +49,8 @@ public struct AddTradeStore: Reducer {
         case dismissButtonTapped
         case cancleButtonTapped
         case saveButtonTapped
+        case deleteButtonTapped
+        
         
         case delegate(Delegate)
         
@@ -46,6 +58,7 @@ public struct AddTradeStore: Reducer {
             case dismiss
             case cancel(Ticker)
             case save(Trade)
+            case delete(Trade)
         }
     }
     
@@ -78,6 +91,7 @@ public struct AddTradeStore: Reducer {
             
         case .saveButtonTapped:
             return validateAndSaveTradeEffect(
+                trade: state.trade,
                 side: state.selectedTradeSide,
                 price: state.price,
                 volume: state.count,
@@ -86,36 +100,55 @@ public struct AddTradeStore: Reducer {
                 ticker: state.ticker
             )
             
+        case .deleteButtonTapped:
+            if let trade = state.trade, let _ = try? tradeClient.deleteTrade(trade).get() {
+                return .send(.delegate(.delete(trade)))
+            }
+            return .none
+            
         default:
             return .none
         }
     }
     
     private func validateAndSaveTradeEffect(
+        trade: Trade? = nil,
         side: TradeSide,
         price: Double,
         volume: Double,
         images: [Data],
         note: String,
         date: Date,
-        ticker: Ticker?
+        ticker: Ticker
     ) -> Effect<AddTradeStore.Action> {
-        guard let ticker = ticker else { return .none }
         guard !price.isZero else { return .none }
         guard !volume.isZero else { return .none }
         
-        if let trade = try? tradeClient.saveTrade(.init(
-            side: side,
-            price: price,
-            volume: volume,
-            images: images,
-            note: note,
-            date: date,
-            ticker: ticker
-        )).get() {
-            return .send(.delegate(.save(trade)))
+        if let unSavedTrade = trade {
+            if let trade = try? tradeClient.updateTrade(unSavedTrade, .init(
+                side: side,
+                price: price,
+                volume: volume,
+                images: images,
+                note: note,
+                date: date,
+                ticker: ticker
+            )).get() {
+                return .send(.delegate(.save(trade)))
+            }
         } else {
-            return .none
+            if let trade = try? tradeClient.saveTrade(.init(
+                side: side,
+                price: price,
+                volume: volume,
+                images: images,
+                note: note,
+                date: date,
+                ticker: ticker
+            )).get() {
+                return .send(.delegate(.save(trade)))
+            }
         }
+        return .none
     }
 }
