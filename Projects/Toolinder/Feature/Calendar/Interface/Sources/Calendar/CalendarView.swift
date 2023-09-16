@@ -21,27 +21,64 @@ public struct CalendarView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             GeometryReader { proxy in
-                ScrollView(showsIndicators: false) {
-                    VStack(spacing: .zero) {
-                        HStack {
-                            Text("\(Calendar.current.shortMonthSymbols[viewStore.state.selectedDate.month - 1])".uppercased())
-                                .font(.largeTitle)
-                                .fontWeight(.semibold)
+                ZStack {
+                    ScrollView(showsIndicators: false) {
+                        VStack(spacing: .zero) {
+                            
+                            calender(viewStore: viewStore, proxy: proxy)
+                                .padding(.horizontal, 10)
+                                .padding(.bottom, 10)
+                            
+                            tradeItemList(viewStore: viewStore)
+                                .padding(.horizontal, 10)
                             
                             Spacer()
                         }
-                        .padding(.horizontal, 5)
-                        
-                        calender(viewStore: viewStore, proxy: proxy)
-                        
-                        tradeItemList(viewStore: viewStore)
-                            .padding(.horizontal, 5)
-                        
-                        Spacer()
+                        .padding(.top, 45)
                     }
+                    
+                    header(viewStore: viewStore)
                 }
             }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$addTicker,
+                    action: { .addTicker($0) }
+                )
+            ) {
+                AddTickerView(store: $0)
+                    .presentationDetents([.medium])
+                    .interactiveDismissDisabled()
+            }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$addTrade,
+                    action: { .addTrade($0) }
+                )
+            ) {
+                AddTradeView(store: $0)
+                    .presentationDetents([.medium, .large])
+                    .interactiveDismissDisabled()
+            }
             .tag(viewStore.offset)
+        }
+    }
+    
+    private func header(viewStore: ViewStoreOf<CalendarStore>) -> some View {
+        VStack(alignment: .leading) {
+            HStack {
+                Text("\(Calendar.current.shortMonthSymbols[viewStore.state.selectedDate.month - 1])".uppercased())
+                    .font(.largeTitle)
+                
+                Spacer()
+            }
+            .padding(.horizontal, 10)
+            .background(.white.opacity(0.7))
+            
+            Spacer()
         }
     }
     
@@ -53,7 +90,7 @@ public struct CalendarView: View {
                     trades: calendar.trades,
                     isSelected: calendar.date.isEqual(date: viewStore.selectedDate)
                 )
-                .frame(height: proxy.size.height * 0.15)
+                .frame(height: proxy.size.height * 0.12)
                 .onTapGesture {
                     viewStore.send(.selectDate(calendar.date))
                 }
@@ -69,11 +106,20 @@ public struct CalendarView: View {
                 .font(.title3)
                 .fontWeight(.bold)
             
-            TradeItem()
+            ForEach(viewStore.state.selectedCalendar?.trades ?? []) { trade in
+                TradeItem(
+                    trade: trade,
+                    isShowEdit: false,
+                    action: {
+                        viewStore.send(.tradeItemTapped(trade))
+                    }
+                )
+            }
             
-            TradeItem()
-            
-            TradeItem()
+            TradeNewItem()
+                .onTapGesture {
+                    viewStore.send(.newButtonTapped)
+                }
         }
     }
 }

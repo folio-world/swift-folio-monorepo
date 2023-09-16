@@ -35,7 +35,7 @@ public struct CalendarNavigationStackView: View {
                 CaseLet(
                     /CalendarNavigationStackStore.Path.State.detail,
                      action: CalendarNavigationStackStore.Path.Action.detail,
-                     then: GoalDetailView.init(store:))
+                     then: TradeDetailView.init(store:))
             }
         }
     }

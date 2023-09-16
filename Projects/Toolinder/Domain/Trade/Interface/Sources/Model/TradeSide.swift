@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum TradeSide: Codable {
+public enum TradeSide: String, Codable, CaseIterable {
     case buy
     case sell
 }

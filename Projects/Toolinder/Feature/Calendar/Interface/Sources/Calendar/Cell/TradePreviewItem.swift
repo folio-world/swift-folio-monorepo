@@ -7,18 +7,23 @@
 
 import SwiftUI
 
+import ToolinderDomain
 import ToolinderShared
 
 public struct TradePreviewItem: View {
-    public init() {}
+    private let trade: Trade
+    
+    public init(trade: Trade) {
+        self.trade = trade
+    }
     
     public var body: some View {
         HStack(spacing: 2) {
             RoundedRectangle(cornerRadius: 3)
-                .fill(.pink)
+                .fill(trade.side == .buy ? .pink : .mint)
                 .frame(width: 2.5, height: 11)
             
-            Text("삼성전자")
+            Text(trade.ticker?.name ?? "")
                 .font(.caption2)
                 .fontWeight(.light)
         }

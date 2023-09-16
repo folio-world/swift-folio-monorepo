@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 import ComposableArchitecture
 
 import ToolinderDomain
@@ -25,6 +26,7 @@ public struct CalendarMainStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
+        case fetch
         
         case selectTab(Int)
         
@@ -33,15 +35,27 @@ public struct CalendarMainStore: Reducer {
         
         case calendar(id: CalendarStore.State.ID, action: CalendarStore.Action)
         
-        case goToGoalDetail(GoalDetailStore.State)
+        case delegate(Delegate)
+        
+        public enum Delegate: Equatable {
+            case detail(Trade)
+        }
     }
+    
+    @Dependency(\.tradeClient) var tradeClient
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state = .init()
-                return .none
+                return .send(.fetch)
+                
+            case .fetch:
+                if let trades = try? tradeClient.fetchTrades().get() {
+                    return .send(.fetched(trades))
+                } else {
+                    return .none
+                }
                 
             case let .selectTab(tab):
                 switch tab {
@@ -75,32 +89,54 @@ public struct CalendarMainStore: Reducer {
                 return .send(.refreshCalendar(state.selectedDate, trades))
                 
             case let .refreshCalendar(date, trades):
-                let prevDate = date.add(byAdding: .month, value: -1)
-                let nextDate = date.add(byAdding: .month, value: 1)
-                state.calendars = [
-                    .init(
-                        offset: -1,
-                        calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
-                        selectedDate: prevDate
-                    ),
-                    .init(
-                        offset: 0,
-                        calendars: CalendarEntity.toDomain(date: date, trades: trades),
-                        selectedDate: .now
-                    ),
-                    .init(
-                        offset: 1,
-                        calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
-                        selectedDate: nextDate
-                    )
-                ]
+                if state.calendars.isEmpty {
+                    let prevDate = date.add(byAdding: .month, value: -1)
+                    let nextDate = date.add(byAdding: .month, value: 1)
+                    state.calendars = [
+                        .init(
+                            offset: -1,
+                            calendars: CalendarEntity.toDomain(date: prevDate, trades: trades),
+                            selectedDate: prevDate
+                        ),
+                        .init(
+                            offset: 0,
+                            calendars: CalendarEntity.toDomain(date: date, trades: trades),
+                            selectedDate: .now
+                        ),
+                        .init(
+                            offset: 1,
+                            calendars: CalendarEntity.toDomain(date: nextDate, trades: trades),
+                            selectedDate: nextDate
+                        )
+                    ]
+                } else {
+                    for (index, calendar) in state.calendars.enumerated() {
+                        state.calendars[index].calendars = CalendarEntity.toDomain(date: calendar.selectedDate, trades: state.trades)
+                    }
+                }
+                
                 return .none
+                
+            case let .calendar(id, action):
+                switch action {
+                case .addTrade(.presented(.delegate(.save))):
+                    return .send(.fetch)
+                    
+                case .addTrade(.dismiss):
+                    return .send(.fetch)
+                    
+                case let .delegate(.detail(trade)):
+                    return .send(.delegate(.detail(trade)))
+                    
+                default:
+                    return .none
+                }
                 
             default:
                 return .none
             }
         }
-
+        
         .forEach(\.calendars, action: /Action.calendar(id:action:)) {
             CalendarStore()
         }

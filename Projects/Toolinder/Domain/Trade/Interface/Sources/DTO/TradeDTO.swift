@@ -1,15 +1,14 @@
 //
-//  TradeEntity.swift
+//  TradeDTO.swift
 //  ToolinderDomainTrade
 //
-//  Created by 송영모 on 2023/09/04.
+//  Created by 송영모 on 2023/09/16.
 //
 
 import Foundation
 import SwiftData
 
-@Model
-public class Trade {
+public struct TradeDTO {
     public var side: TradeSide?
     public var price: Double?
     public var volume: Double?
@@ -17,7 +16,7 @@ public class Trade {
     public var note: String?
     public var date: Date = Date()
     
-    @Relationship public var ticker: Ticker?
+    public var ticker: Ticker?
     
     public init(
         side: TradeSide? = nil,

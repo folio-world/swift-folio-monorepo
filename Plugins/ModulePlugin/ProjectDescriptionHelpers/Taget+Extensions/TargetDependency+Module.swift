@@ -115,6 +115,7 @@ public extension [TargetDependency] {
         case .Toolinder:
             return [
                 .external(name: "ComposableArchitecture"),
+                .external(name: "RealmSwift")
             ]
         case .Folio:
             return [

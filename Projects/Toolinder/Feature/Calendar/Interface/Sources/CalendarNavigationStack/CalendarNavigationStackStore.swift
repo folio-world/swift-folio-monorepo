@@ -29,16 +29,16 @@ public struct CalendarNavigationStackStore: Reducer {
     
     public struct Path: Reducer {
         public enum State: Equatable {
-            case detail(GoalDetailStore.State)
+            case detail(TradeDetailStore.State)
         }
         
         public enum Action: Equatable {
-            case detail(GoalDetailStore.Action)
+            case detail(TradeDetailStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
             Scope(state: /State.detail, action: /Action.detail) {
-                GoalDetailStore()
+                TradeDetailStore()
             }
         }
     }
@@ -51,9 +51,12 @@ public struct CalendarNavigationStackStore: Reducer {
             case .onAppear:
                 return .none
                 
-            case let .main(.goToGoalDetail(goalDetailState)):
-                state.path = .init()
-                state.path.append(.detail(goalDetailState))
+            case let .main(.delegate(.detail(trade))):
+                state.path.append(.detail(.init(trade: trade)))
+                return .none
+                
+            case .path(.element(id: _, action: .detail(.delegate(.delete)))):
+                state.path.removeLast()
                 return .none
                 
             default:

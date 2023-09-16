@@ -13,7 +13,7 @@ public struct PortfolioNavigationStackStore: Reducer {
     public struct State: Equatable {
         var path: StackState<Path.State> = .init()
         
-        var main: GoalMainStore.State = .init()
+        var main: PortfolioMainStore.State = .init()
         
         public init() {}
     }
@@ -23,7 +23,7 @@ public struct PortfolioNavigationStackStore: Reducer {
         
         case onAppear
         
-        case main(GoalMainStore.Action)
+        case main(PortfolioMainStore.Action)
         case path(StackAction<Path.State, Path.Action>)
     }
     
@@ -51,22 +51,17 @@ public struct PortfolioNavigationStackStore: Reducer {
             case .onAppear:
                 return .none
                 
-            case let .main(.goToGoalDetail(goalDetailState)):
-                state.path = .init()
-                state.path.append(.detail(goalDetailState))
-                return .none
-                
             default:
                 return .none
             }
         }
         
         Scope(state: \.main, action: /Action.main) {
-            GoalMainStore()._printChanges()
+            PortfolioMainStore()._printChanges()
         }
         
         .forEach(\.path, action: /Action.path) {
-          Path()
+            Path()
         }
     }
 }

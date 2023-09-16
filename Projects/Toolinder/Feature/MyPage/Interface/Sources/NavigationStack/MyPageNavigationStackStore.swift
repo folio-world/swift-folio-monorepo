@@ -13,7 +13,7 @@ public struct MyPageNavigationStackStore: Reducer {
     public struct State: Equatable {
         var path: StackState<Path.State> = .init()
         
-        var main: GoalMainStore.State = .init()
+        var main: MyPageMainStore.State = .init()
         
         public init() {}
     }
@@ -23,22 +23,22 @@ public struct MyPageNavigationStackStore: Reducer {
         
         case onAppear
         
-        case main(GoalMainStore.Action)
+        case main(MyPageMainStore.Action)
         case path(StackAction<Path.State, Path.Action>)
     }
     
     public struct Path: Reducer {
         public enum State: Equatable {
-            case detail(GoalDetailStore.State)
+            case existingUserPolicy(ExistingUserPolicyStore.State)
         }
         
         public enum Action: Equatable {
-            case detail(GoalDetailStore.Action)
+            case existingUserPolicy(ExistingUserPolicyStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
-            Scope(state: /State.detail, action: /Action.detail) {
-                GoalDetailStore()
+            Scope(state: /State.existingUserPolicy, action: /Action.existingUserPolicy) {
+                ExistingUserPolicyStore()
             }
         }
     }
@@ -51,9 +51,8 @@ public struct MyPageNavigationStackStore: Reducer {
             case .onAppear:
                 return .none
                 
-            case let .main(.goToGoalDetail(goalDetailState)):
-                state.path = .init()
-                state.path.append(.detail(goalDetailState))
+            case .main(.delegate(.existingUserPolicy)):
+                state.path.append(.existingUserPolicy(.init()))
                 return .none
                 
             default:
@@ -62,11 +61,11 @@ public struct MyPageNavigationStackStore: Reducer {
         }
         
         Scope(state: \.main, action: /Action.main) {
-            GoalMainStore()._printChanges()
+            MyPageMainStore()._printChanges()
         }
         
         .forEach(\.path, action: /Action.path) {
-          Path()
+            Path()
         }
     }
 }

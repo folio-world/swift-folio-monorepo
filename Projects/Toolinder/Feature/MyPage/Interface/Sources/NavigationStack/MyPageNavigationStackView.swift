@@ -18,25 +18,27 @@ public struct MyPageNavigationStackView: View {
     
     public var body: some View {
         NavigationStackStore(self.store.scope(
-                state: \.path,
-                action: MyPageNavigationStackStore.Action.path)) {
-            WithViewStore(self.store, observe: { $0 }) { viewStore in
-                GoalMainView(
-                    store: self.store.scope(
-                        state: \.main,
-                        action: MyPageNavigationStackStore.Action.main))
-                .onAppear {
-                    viewStore.send(.onAppear)
+            state: \.path,
+            action: MyPageNavigationStackStore.Action.path)) {
+                WithViewStore(self.store, observe: { $0 }) { viewStore in
+                    MyPageMainView(
+                        store: self.store.scope(
+                            state: \.main,
+                            action: MyPageNavigationStackStore.Action.main
+                        )
+                    )
+                    .onAppear {
+                        viewStore.send(.onAppear)
+                    }
+                }
+            } destination: {
+                switch $0 {
+                case .existingUserPolicy:
+                    CaseLet(
+                        /MyPageNavigationStackStore.Path.State.existingUserPolicy,
+                         action: MyPageNavigationStackStore.Path.Action.existingUserPolicy,
+                         then: ExistingUserPolicyView.init(store:))
                 }
             }
-        } destination: {
-            switch $0 {
-            case .detail:
-                CaseLet(
-                    /MyPageNavigationStackStore.Path.State.detail,
-                     action: MyPageNavigationStackStore.Path.Action.detail,
-                     then: GoalDetailView.init(store:))
-            }
-        }
     }
 }

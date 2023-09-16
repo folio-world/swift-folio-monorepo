@@ -38,7 +38,7 @@ public struct CalendarItem: View {
             .padding(.top, 2)
             
             ForEach(trades) { trade in
-                TradePreviewItem()
+                TradePreviewItem(trade: trade)
             }
             
             Spacer()

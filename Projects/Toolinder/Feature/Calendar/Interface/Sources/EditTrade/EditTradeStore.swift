@@ -18,8 +18,6 @@ public struct EditTradeStore: Reducer {
     
     public enum Action: Equatable {
         case onAppear
-        
-        case goToGoalDetail(GoalDetailStore.State)
     }
     
     public func reduce(into state: inout State, action: Action) -> Effect<Action>  {

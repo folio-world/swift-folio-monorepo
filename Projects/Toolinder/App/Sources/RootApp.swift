@@ -19,7 +19,7 @@ struct RootApp: App {
     
     init() {
         do {
-            modelContainer = try ModelContainer(for: Trade.self)
+            modelContainer = try ModelContainer(for: Ticker.self, Trade.self)
         } catch {
             fatalError("Could not initialize ModelContainer \(error)")
         }
@@ -32,6 +32,7 @@ struct RootApp: App {
                         ._printChanges()
                 }
             )
+            .onAppear(perform: UIApplication.shared.hideKeyboard)
         }
         .modelContainer(modelContainer)
     }
