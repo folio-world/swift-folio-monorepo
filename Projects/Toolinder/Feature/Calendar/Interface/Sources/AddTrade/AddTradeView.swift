@@ -16,7 +16,6 @@ import ToolinderShared
 
 public struct AddTradeView: View {
     let store: StoreOf<AddTradeStore>
-    @State var images: [UIImage] = []
     
     public init(store: StoreOf<AddTradeStore>) {
         self.store = store
@@ -24,20 +23,21 @@ public struct AddTradeView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(spacing: 20) {
-                headerView(viewStore: viewStore)
-                    .padding(.top)
-                
-                pickerView(viewStore: viewStore)
-                    .padding(.bottom)
-                
-                inputView(viewStore: viewStore)
-                
-                Spacer()
-                
-                saveButtonView(viewStore: viewStore)
+            ScrollView {
+                VStack(spacing: 20) {
+                    headerView(viewStore: viewStore)
+                        .padding(.top)
+                    
+                    pickerView(viewStore: viewStore)
+                        .padding(.bottom)
+                    
+                    inputView(viewStore: viewStore)
+                    
+                    Spacer()
+                    
+                    saveButtonView(viewStore: viewStore)
+                }
             }
-            .padding()
         }
     }
     

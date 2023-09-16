@@ -19,7 +19,8 @@ public struct ImageItem: View {
             if let uiImage = UIImage(data: imageData) {
                 Image(uiImage: uiImage)
                     .resizable()
-                    .frame(width: 48)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 56, height: 56)
             }
         }
         .background(Color(uiColor: .systemGray6))

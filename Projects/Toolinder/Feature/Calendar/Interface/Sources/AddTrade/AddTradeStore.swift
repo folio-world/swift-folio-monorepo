@@ -39,6 +39,8 @@ public struct AddTradeStore: Reducer {
             self.price = trade.price ?? 0
             self.selectedDate = trade.date
             self.selectedTradeSide = trade.side ?? .buy
+            self.note = trade.note ?? ""
+            self.images = trade.images
         }
     }
     
@@ -117,7 +119,8 @@ public struct AddTradeStore: Reducer {
                 side: state.selectedTradeSide,
                 price: state.price,
                 volume: state.count,
-                images: [], note: "",
+                images: state.images,
+                note: state.note,
                 date: state.selectedDate,
                 ticker: state.ticker
             )
