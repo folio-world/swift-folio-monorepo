@@ -117,9 +117,9 @@ public struct TradeDetailView: View {
             }
             .padding(.bottom, 5)
             
-            ForEach(viewStore.state.trade.ticker?.trades ?? []) { trade in
-                TradeItem(trade: trade, isShowOnlyTime: false, isShowEdit: true)
-            }
+//            ForEach(viewStore.state.trade.ticker?.trades ?? []) { trade in
+//                TradeItem(trade: trade, isShowOnlyTime: false, isShowEdit: true)
+//            }
             
             TradeNewItem()
         }

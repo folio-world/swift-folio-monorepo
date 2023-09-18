@@ -22,6 +22,8 @@ public struct CalendarStore: Reducer {
         public var selectedDate: Date
         public var selectedCalendar: CalendarEntity?
         
+        public var calendarItem: IdentifiedArrayOf<CalendarItemCellStore.State> = []
+        public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
         @PresentationState var addTicker: AddTickerStore.State?
         @PresentationState var addTrade: AddTradeStore.State?
         
@@ -35,6 +37,13 @@ public struct CalendarStore: Reducer {
             self.offset = offset
             self.calendars = calendars
             self.selectedDate = selectedDate
+            
+            self.calendarItem = .init(
+                uniqueElements:
+                    calendars.map {
+                        .init(trades: $0.trades, date: $0.date)
+                    }
+            )
         }
     }
     
@@ -45,6 +54,8 @@ public struct CalendarStore: Reducer {
         case newButtonTapped
         case tradeItemTapped(Trade)
         
+        case calendarItem(id: CalendarItemCellStore.State.ID, action: CalendarItemCellStore.Action)
+        case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
         case addTicker(PresentationAction<AddTickerStore.Action>)
         case addTrade(PresentationAction<AddTradeStore.Action>)
         

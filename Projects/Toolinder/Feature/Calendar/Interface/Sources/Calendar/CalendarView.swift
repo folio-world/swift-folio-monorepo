@@ -106,14 +106,8 @@ public struct CalendarView: View {
                 .font(.title3)
                 .fontWeight(.bold)
             
-            ForEach(viewStore.state.selectedCalendar?.trades ?? []) { trade in
-                TradeItem(
-                    trade: trade,
-                    isShowEdit: false,
-                    action: {
-                        viewStore.send(.tradeItemTapped(trade))
-                    }
-                )
+            ForEachStore(self.store.scope(state: \.tradeItem, action: CalendarStore.Action.tradeItem(id:action:))) {
+                TradeItemCellView(store: $0)
             }
             
             TradeNewItem()
