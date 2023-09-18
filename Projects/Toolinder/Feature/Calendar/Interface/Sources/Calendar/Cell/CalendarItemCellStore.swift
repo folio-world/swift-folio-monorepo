@@ -12,6 +12,7 @@ import ComposableArchitecture
 import ToolinderDomain
 
 public struct CalendarItemCellStore: Reducer {
+    static let PREVIEW_CELL_MAX_LENGTH = 3
     public init() {}
     
     public struct State: Equatable, Identifiable {
@@ -35,9 +36,11 @@ public struct CalendarItemCellStore: Reducer {
             self.isSelected = isSelected
             
             self.tradePreviewItem = .init(
-                uniqueElements: trades.map {
-                    .init(trade: $0)
-                }
+                uniqueElements: 
+                    self.trades.map {
+                        .init(trade: $0)
+                    }
+                    .suffix(PREVIEW_CELL_MAX_LENGTH)
             )
         }
     }
