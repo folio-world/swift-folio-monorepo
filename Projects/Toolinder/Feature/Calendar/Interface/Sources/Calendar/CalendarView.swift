@@ -25,7 +25,7 @@ public struct CalendarView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: .zero) {
                             
-                            calender(viewStore: viewStore, proxy: proxy)
+                            calenderItemListView(viewStore: viewStore, proxy: proxy)
                                 .padding(.horizontal, 10)
                                 .padding(.bottom, 10)
                             
@@ -82,20 +82,12 @@ public struct CalendarView: View {
         }
     }
     
-    private func calender(viewStore: ViewStoreOf<CalendarStore>, proxy: GeometryProxy) -> some View {
+    private func calenderItemListView(viewStore: ViewStoreOf<CalendarStore>, proxy: GeometryProxy) -> some View {
         LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
-            ForEach(viewStore.state.calendars) { calendar in
-                CalendarItem(
-                    date: calendar.date,
-                    trades: calendar.trades,
-                    isSelected: calendar.date.isEqual(date: viewStore.selectedDate)
-                )
-                .frame(height: proxy.size.height * 0.12)
-                .onTapGesture {
-                    viewStore.send(.selectDate(calendar.date))
-                }
+            ForEachStore(self.store.scope(state: \.calendarItem, action: CalendarStore.Action.calendarItem(id:action:))) {
+                CalendarItemCellView(store: $0)
+                    .frame(height: proxy.size.height * 0.12)
             }
-            
             Spacer()
         }
     }

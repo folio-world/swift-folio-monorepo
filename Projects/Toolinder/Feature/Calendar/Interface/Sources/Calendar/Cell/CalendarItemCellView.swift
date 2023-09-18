@@ -47,6 +47,9 @@ public struct CalendarItemCellView: View {
                     style: .continuous
                 )
             )
+            .onTapGesture {
+                viewStore.send(.tapped)
+            }
         }
     }
 }

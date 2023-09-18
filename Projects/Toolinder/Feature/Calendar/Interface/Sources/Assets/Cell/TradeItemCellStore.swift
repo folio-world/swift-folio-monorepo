@@ -34,7 +34,7 @@ public struct TradeItemCellStore: Reducer {
             viewType: ViewType = .default,
             dateStyle: DateFormatter.Style,
             timeStyle: DateFormatter.Style,
-            isSelected: Bool
+            isSelected: Bool = false
         ) {
             self.id = id
             self.trade = trade
