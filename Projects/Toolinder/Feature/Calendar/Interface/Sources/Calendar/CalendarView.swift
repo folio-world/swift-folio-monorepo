@@ -76,7 +76,7 @@ public struct CalendarView: View {
                 Spacer()
             }
             .padding(.horizontal, 10)
-            .background(.white.opacity(0.7))
+            .background(Color(uiColor: .systemBackground).opacity(0.7))
             
             Spacer()
         }
