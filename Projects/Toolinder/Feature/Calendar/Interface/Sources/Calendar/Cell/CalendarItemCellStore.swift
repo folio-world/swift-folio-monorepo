@@ -20,7 +20,13 @@ public struct CalendarItemCellStore: Reducer {
         
         public let trades: [Trade]
         public let date: Date
-        public var isSelected: Bool
+        public var isSelected: Bool {
+            didSet {
+                self.tradePreviewItem.ids.forEach { id in
+                    self.tradePreviewItem[id: id]?.isSelected = isSelected
+                }
+            }
+        }
         
         public var tradePreviewItem: IdentifiedArrayOf<TradePreviewItemCellStore.State> = []
         
@@ -38,7 +44,7 @@ public struct CalendarItemCellStore: Reducer {
             self.tradePreviewItem = .init(
                 uniqueElements: 
                     self.trades.map {
-                        .init(trade: $0)
+                        .init(trade: $0, isSelected: isSelected)
                     }
                     .suffix(PREVIEW_CELL_MAX_LENGTH)
             )

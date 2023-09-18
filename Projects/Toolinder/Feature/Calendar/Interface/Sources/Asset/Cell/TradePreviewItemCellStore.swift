@@ -18,13 +18,16 @@ public struct TradePreviewItemCellStore: Reducer {
         public let id: UUID
         
         public let trade: Trade
+        public var isSelected: Bool
         
         public init(
             id: UUID = .init(),
-            trade: Trade
+            trade: Trade,
+            isSelected: Bool = false
         ) {
             self.id = id
             self.trade = trade
+            self.isSelected = isSelected
         }
     }
     
