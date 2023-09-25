@@ -21,10 +21,16 @@ public struct TickerDetailView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
-                VStack {
-                    
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack {
+                        TradeDateChartView(tradeDateChartDataEntity: viewStore.state.tradeDateChartDataEntity)
+                            .padding()
+                    }
                 }
+            }
+            .onAppear {
+                viewStore.send(.onAppear, animation: .default)
             }
             .sheet(
                 store: self.store.scope(

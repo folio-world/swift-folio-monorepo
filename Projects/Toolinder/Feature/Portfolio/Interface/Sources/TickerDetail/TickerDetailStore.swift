@@ -17,6 +17,8 @@ public struct TickerDetailStore: Reducer {
     public struct State: Equatable {
         public let ticker: Ticker
         
+        public var tradeDateChartDataEntity: TradeDateChartDataEntity = .init()
+        
         @PresentationState var editTicker: EditTickerStore.State?
         
         public init(
@@ -29,7 +31,8 @@ public struct TickerDetailStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case tapped
+        case tickerTypeChartDataEntityRequest
+        case tickerTypeChartDataEntityResponse(TradeDateChartDataEntity)
         
         case editTicker(PresentationAction<EditTickerStore.Action>)
         
@@ -44,10 +47,23 @@ public struct TickerDetailStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .none
+                return .concatenate([
+                    .send(.tickerTypeChartDataEntityRequest)
+                ])
                 
-            case .tapped:
-                return .send(.delegate(.tapped))
+            case .tickerTypeChartDataEntityRequest:
+                return .send(
+                    .tickerTypeChartDataEntityResponse(
+                        state.ticker.trades?.toDomain(
+                            from: .now.add(byAdding: .month, value: -1),
+                            to: .now.add(byAdding: .month, value: 1))
+                        ?? []
+                    )
+                )
+                
+            case let .tickerTypeChartDataEntityResponse(entity):
+                state.tradeDateChartDataEntity = entity
+                return .none
                 
             default:
                 return .none
