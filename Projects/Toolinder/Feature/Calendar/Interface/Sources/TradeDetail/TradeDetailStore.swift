@@ -18,6 +18,7 @@ public struct TradeDetailStore: Reducer {
         public var trade: Trade
         
         @PresentationState var addTrade: AddTradeStore.State?
+        public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
         
         public init(trade: Trade) {
             self.trade = trade
@@ -30,6 +31,7 @@ public struct TradeDetailStore: Reducer {
         case editButtonTapped
         
         case addTrade(PresentationAction<AddTradeStore.Action>)
+        case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
         
         case delegate(Delegate)
         
@@ -44,6 +46,11 @@ public struct TradeDetailStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.tradeItem = .init(
+                    uniqueElements: state.trade.ticker?.trades?.compactMap { trade in
+                        return .init(trade: trade, dateStyle: .short, timeStyle: .none)
+                    } ?? []
+                )
                 return .none
                 
             case .editButtonTapped:

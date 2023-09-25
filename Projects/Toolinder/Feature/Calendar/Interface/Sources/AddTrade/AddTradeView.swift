@@ -23,19 +23,22 @@ public struct AddTradeView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
-                VStack(spacing: 20) {
-                    headerView(viewStore: viewStore)
-                        .padding(.top)
-                    
-                    pickerView(viewStore: viewStore)
-                        .padding(.bottom)
-                    
-                    inputView(viewStore: viewStore)
-                    
-                    Spacer()
-                    
-                    saveButtonView(viewStore: viewStore)
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(spacing: 20) {
+                        headerView(viewStore: viewStore)
+                        
+                        pickerView(viewStore: viewStore)
+                            .padding(.bottom)
+                        
+                        inputView(viewStore: viewStore)
+                        
+                        Spacer()
+                        
+                        saveButtonView(viewStore: viewStore)
+                    }
+                    .frame(height: proxy.size.height)
+                    .padding()
                 }
             }
         }
@@ -112,6 +115,8 @@ public struct AddTradeView: View {
             
             ScrollView(.horizontal) {
                 HStack {
+                    Image(systemName: "photo")
+                    
                     ForEach(viewStore.state.images, id: \.self) { imageData in
                         ImageItem(imageData: imageData)
                     }
@@ -121,12 +126,6 @@ public struct AddTradeView: View {
                         ImageNewItem()
                     }
                 }
-            }
-            
-            VStack(alignment: .leading) {
-                Image(systemName: "note.text")
-                
-                TextEditor(text: viewStore.binding(get: \.note, send: AddTradeStore.Action.setNote))
             }
         }
     }

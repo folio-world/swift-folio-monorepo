@@ -60,7 +60,7 @@ public struct CalendarView: View {
                 )
             ) {
                 AddTradeView(store: $0)
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.large])
                     .interactiveDismissDisabled()
             }
             .tag(viewStore.offset)
