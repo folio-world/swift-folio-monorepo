@@ -1,5 +1,5 @@
 //
-//  TickerDetailStore.swift
+//  EditTickerStore.swift
 //  ToolinderFeaturePortfolioDemo
 //
 //  Created by 송영모 on 2023/09/25.
@@ -11,13 +11,11 @@ import ComposableArchitecture
 
 import ToolinderDomain
 
-public struct TickerDetailStore: Reducer {
+public struct EditTickerStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
         public let ticker: Ticker
-        
-        @PresentationState var editTicker: EditTickerStore.State?
         
         public init(
             ticker: Ticker
@@ -30,8 +28,6 @@ public struct TickerDetailStore: Reducer {
         case onAppear
         
         case tapped
-        
-        case editTicker(PresentationAction<EditTickerStore.Action>)
         
         case delegate(Delegate)
         

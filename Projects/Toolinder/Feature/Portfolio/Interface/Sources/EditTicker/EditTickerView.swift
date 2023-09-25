@@ -1,5 +1,5 @@
 //
-//  TickerDetailView.swift
+//  EditTickerView.swift
 //  ToolinderFeaturePortfolioDemo
 //
 //  Created by 송영모 on 2023/09/25.
@@ -12,10 +12,10 @@ import ComposableArchitecture
 import ToolinderDomain
 import ToolinderShared
 
-public struct TickerDetailView: View {
-    private let store: StoreOf<TickerDetailStore>
+public struct EditTickerView: View {
+    private let store: StoreOf<EditTickerStore>
     
-    public init(store: StoreOf<TickerDetailStore>) {
+    public init(store: StoreOf<EditTickerStore>) {
         self.store = store
     }
     
@@ -25,15 +25,6 @@ public struct TickerDetailView: View {
                 VStack {
                     
                 }
-            }
-            .sheet(
-                store: self.store.scope(
-                    state: \.$editTicker,
-                    action: { .editTicker($0) }
-                )
-            ) {
-                EditTickerView(store: $0)
-                    .presentationDetents([.medium])
             }
             .navigationTitle(viewStore.state.ticker.name ?? "")
         }

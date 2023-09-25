@@ -28,7 +28,6 @@ public struct TickerTypeChartView: View {
                     if !element.hold.isZero {
                         Text("\(element.hold, format: .number.precision(.fractionLength(0)))")
                             .font(.caption2)
-                            .foregroundColor(.white)
                     }
                 }
             }
