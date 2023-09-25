@@ -25,7 +25,7 @@ public struct CalendarView: View {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: .zero) {
                             
-                            calender(viewStore: viewStore, proxy: proxy)
+                            calenderItemListView(viewStore: viewStore, proxy: proxy)
                                 .padding(.horizontal, 10)
                                 .padding(.bottom, 10)
                             
@@ -60,7 +60,7 @@ public struct CalendarView: View {
                 )
             ) {
                 AddTradeView(store: $0)
-                    .presentationDetents([.medium, .large])
+                    .presentationDetents([.large])
                     .interactiveDismissDisabled()
             }
             .tag(viewStore.offset)
@@ -76,26 +76,18 @@ public struct CalendarView: View {
                 Spacer()
             }
             .padding(.horizontal, 10)
-            .background(.white.opacity(0.7))
+            .background(Color(uiColor: .systemBackground).opacity(0.7))
             
             Spacer()
         }
     }
     
-    private func calender(viewStore: ViewStoreOf<CalendarStore>, proxy: GeometryProxy) -> some View {
+    private func calenderItemListView(viewStore: ViewStoreOf<CalendarStore>, proxy: GeometryProxy) -> some View {
         LazyVGrid(columns: Array(repeating: .init(.flexible(), spacing: .zero), count: 7), spacing: .zero) {
-            ForEach(viewStore.state.calendars) { calendar in
-                CalendarItem(
-                    date: calendar.date,
-                    trades: calendar.trades,
-                    isSelected: calendar.date.isEqual(date: viewStore.selectedDate)
-                )
-                .frame(height: proxy.size.height * 0.12)
-                .onTapGesture {
-                    viewStore.send(.selectDate(calendar.date))
-                }
+            ForEachStore(self.store.scope(state: \.calendarItem, action: CalendarStore.Action.calendarItem(id:action:))) {
+                CalendarItemCellView(store: $0)
+                    .frame(height: proxy.size.height * 0.12)
             }
-            
             Spacer()
         }
     }
@@ -106,14 +98,8 @@ public struct CalendarView: View {
                 .font(.title3)
                 .fontWeight(.bold)
             
-            ForEach(viewStore.state.selectedCalendar?.trades ?? []) { trade in
-                TradeItem(
-                    trade: trade,
-                    isShowEdit: false,
-                    action: {
-                        viewStore.send(.tradeItemTapped(trade))
-                    }
-                )
+            ForEachStore(self.store.scope(state: \.tradeItem, action: CalendarStore.Action.tradeItem(id:action:))) {
+                TradeItemCellView(store: $0)
             }
             
             TradeNewItem()

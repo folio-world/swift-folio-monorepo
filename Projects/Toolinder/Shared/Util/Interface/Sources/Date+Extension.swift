@@ -22,20 +22,37 @@ public extension Date {
     
     func allDatesInMonth() -> [Date] {
         let calendar = Calendar.current
-        let components = calendar.dateComponents([.year, .month], from: self)
-        guard let startDate = calendar.date(from: components) else {
-            return []
+        
+        let startOfMonth = self.startOfMonth
+        var prevDates: [Date] = []
+        var prevDate = calendar.date(byAdding: .day, value: -1, to: startOfMonth) ?? .now
+        
+        while calendar.dateComponents([.weekday], from: prevDate).weekday != 7 {
+            prevDates.append(prevDate)
+            guard let date = calendar.date(byAdding: .day, value: -1, to: prevDate) else { return [] }
+            prevDate = date
         }
         
-        var currentDate = startDate
-        var allDates: [Date] = []
+        let endOfMonth: Date = self.endOfMonth
+        var nextDates: [Date] = []
+        var nextDate: Date = calendar.date(byAdding: .day, value: 1, to: endOfMonth) ?? .now
         
-        while calendar.isDate(currentDate, equalTo: startDate, toGranularity: .month) {
-            allDates.append(currentDate)
-            currentDate = calendar.date(byAdding: .day, value: 1, to: currentDate) ?? Date()
+        while calendar.dateComponents([.weekday], from: nextDate).weekday != 1 {
+            nextDates.append(nextDate)
+            guard let date = calendar.date(byAdding: .day, value: 1, to: nextDate) else { return [] }
+            nextDate =  date
         }
         
-        return allDates
+        var currentDates: [Date] = []
+        var currentDate: Date = startOfMonth
+        
+        while !currentDate.isEqual(date: endOfMonth.add(byAdding: .day, value: 1)) {
+            currentDates.append(currentDate)
+            guard let date = calendar.date(byAdding: .day, value: 1, to: currentDate) else { return [] }
+            currentDate =  date
+        }
+        
+        return prevDates.reversed() + currentDates + nextDates
     }
     
     func add(byAdding: Calendar.Component, value: Int) -> Date {
@@ -46,5 +63,30 @@ public extension Date {
     func isEqual(date: Date) -> Bool {
         let calendar = Calendar.current
         return calendar.isDate(self, inSameDayAs: date)
+    }
+    
+    var startOfDay: Date {
+        return Calendar.current.startOfDay(for: self)
+    }
+
+    var startOfMonth: Date {
+        let calendar = Calendar(identifier: .gregorian)
+        let components = calendar.dateComponents([.year, .month], from: self)
+
+        return  calendar.date(from: components)!
+    }
+
+    var endOfDay: Date {
+        var components = DateComponents()
+        components.day = 1
+        components.second = -1
+        return Calendar.current.date(byAdding: components, to: startOfDay)!
+    }
+
+    var endOfMonth: Date {
+        var components = DateComponents()
+        components.month = 1
+        components.second = -1
+        return Calendar(identifier: .gregorian).date(byAdding: components, to: startOfMonth)!
     }
 }
