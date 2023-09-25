@@ -25,6 +25,8 @@ public struct PortfolioMainView: View {
                         headerView(viewStore: viewStore)
                         
                         summaryChartTabView(viewStore: viewStore, proxy: proxy)
+                        
+                        tradeChartTabView(viewStore: viewStore)
                     }
                 }
             }
@@ -72,7 +74,7 @@ public struct PortfolioMainView: View {
     
     private func tradeChartTabView(viewStore: ViewStoreOf<PortfolioMainStore>) -> some View {
         VStack {
-            
+            TradeDateChartView(tradeDateChartDataEntity: viewStore.state.tradeDateChartDataEntity)
         }
     }
     

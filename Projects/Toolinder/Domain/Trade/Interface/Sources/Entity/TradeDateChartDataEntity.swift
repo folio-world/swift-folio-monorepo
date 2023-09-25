@@ -7,9 +7,10 @@
 
 import Foundation
 
-public struct TradeDateChartData: Equatable {
+public struct TradeDateChartData: Equatable, Hashable {
     public let date: Date
-    public let count: Int
+    public let buyCount: Int
+    public let sellCount: Int
     public let trades: [Trade]
 }
 

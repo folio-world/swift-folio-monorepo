@@ -66,7 +66,8 @@ public extension [Trade] {
             
             return .init(
                 date: date,
-                count: trades.count,
+                buyCount: trades.filter { $0.side == .buy }.count,
+                sellCount: trades.filter { $0.side == .sell }.count,
                 trades: trades
             )
         }
