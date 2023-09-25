@@ -119,10 +119,10 @@ public struct CalendarMainStore: Reducer {
                 
             case let .calendar(id, action):
                 switch action {
-                case .addTrade(.presented(.delegate(.save))):
+                case .editTrade(.presented(.delegate(.save))):
                     return .send(.fetch)
                     
-                case .addTrade(.dismiss):
+                case .editTrade(.dismiss):
                     return .send(.fetch)
                     
                 case let .delegate(.detail(trade)):

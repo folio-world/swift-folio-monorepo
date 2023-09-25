@@ -9,6 +9,7 @@ import Foundation
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
 import ToolinderDomain
 
 public struct TradeDetailStore: Reducer {
@@ -17,7 +18,7 @@ public struct TradeDetailStore: Reducer {
     public struct State: Equatable {
         public var trade: Trade
         
-        @PresentationState var addTrade: AddTradeStore.State?
+        @PresentationState var editTrade: EditTradeStore.State?
         public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
         
         public init(trade: Trade) {
@@ -30,7 +31,7 @@ public struct TradeDetailStore: Reducer {
         
         case editButtonTapped
         
-        case addTrade(PresentationAction<AddTradeStore.Action>)
+        case editTrade(PresentationAction<EditTradeStore.Action>)
         case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
         
         case delegate(Delegate)
@@ -55,21 +56,21 @@ public struct TradeDetailStore: Reducer {
                 
             case .editButtonTapped:
                 if let ticker = state.trade.ticker {
-                    state.addTrade = .init(trade: state.trade, ticker: ticker)
+                    state.editTrade = .init(trade: state.trade, ticker: ticker)
                 }
                 return .none
                 
-            case let .addTrade(.presented(.delegate(.save(trade)))):
+            case let .editTrade(.presented(.delegate(.save(trade)))):
                 state.trade = trade
-                state.addTrade = nil
+                state.editTrade = nil
                 return .none
                 
-            case let .addTrade(.presented(.delegate(.delete(trade)))):
-                state.addTrade = nil
+            case let .editTrade(.presented(.delegate(.delete(trade)))):
+                state.editTrade = nil
                 return .send(.delegate(.delete(trade)))
 
-            case .addTrade(.dismiss), .addTrade(.presented(.delegate(.cancel))), .addTrade(.presented(.delegate(.dismiss))):
-                state.addTrade = nil
+            case .editTrade(.dismiss), .editTrade(.presented(.delegate(.cancel))), .editTrade(.presented(.delegate(.dismiss))):
+                state.editTrade = nil
                 return .none
                 
             default:
@@ -77,8 +78,8 @@ public struct TradeDetailStore: Reducer {
             }
         }
         
-        .ifLet(\.$addTrade, action: /Action.addTrade) {
-            AddTradeStore()
+        .ifLet(\.$editTrade, action: /Action.editTrade) {
+            EditTradeStore()
         }
     }
 }
