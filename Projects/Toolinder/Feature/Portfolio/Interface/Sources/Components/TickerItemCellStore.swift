@@ -16,11 +16,14 @@ public struct TickerItemCellStore: Reducer {
     
     public struct State: Equatable, Identifiable {
         public let id: UUID
+        public let ticker: Ticker
         
         public init(
-            id: UUID = .init()
+            id: UUID = .init(),
+            ticker: Ticker
         ) {
             self.id = id
+            self.ticker = ticker
         }
     }
     

@@ -27,11 +27,13 @@ public struct PortfolioMainView: View {
                         summaryChartTabView(viewStore: viewStore, proxy: proxy)
                         
                         tradeChartTabView(viewStore: viewStore, proxy: proxy)
+                        
+                        tickerListView(viewStore: viewStore)
                     }
                 }
             }
             .onAppear {
-                viewStore.send(.onAppear)
+                viewStore.send(.onAppear, animation: .default)
             }
             .navigationTitle("Portfolio")
         }
@@ -101,7 +103,18 @@ public struct PortfolioMainView: View {
     
     private func tickerListView(viewStore: ViewStoreOf<PortfolioMainStore>) -> some View {
         VStack {
+            HStack {
+                Text("Ticker")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+            .padding(.horizontal)
             
+            ForEachStore(self.store.scope(state: \.tickerItem, action: PortfolioMainStore.Action.tickerItem(id:action:))) {
+                TickerItemCellView(store: $0)
+            }
+            .padding(.horizontal)
         }
     }
 }

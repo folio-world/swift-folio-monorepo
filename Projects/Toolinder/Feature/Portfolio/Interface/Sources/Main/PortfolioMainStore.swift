@@ -28,6 +28,8 @@ public struct PortfolioMainStore: Reducer {
         public var tickerTypeChartDataEntity: TickerTypeChartDataEntity = .init()
         public var tradeDateChartDataEntity: TradeDateChartDataEntity = .init()
         
+        public var tickerItem: IdentifiedArrayOf<TickerItemCellStore.State> = []
+        
         public init() { }
     }
     
@@ -36,12 +38,16 @@ public struct PortfolioMainStore: Reducer {
         
         case selectPeriod(Period)
         
+        case tickerItemRequest
         case tradeRequest
         case tickerTypeChartDataEntityRequest
         case tradeDateChartDataEntityRequest(from: Date, to: Date)
+        case tickerItemResponse(IdentifiedArrayOf<TickerItemCellStore.State>)
         case tradesResponse([Trade])
         case tickerTypeChartDataEntityResponse(TickerTypeChartDataEntity)
         case tradeDateChartDataEntityResponse(TradeDateChartDataEntity)
+        
+        case tickerItem(id: TickerItemCellStore.State.ID, action: TickerItemCellStore.Action)
     }
     
     @Dependency(\.tradeClient) var tradeClient
@@ -50,10 +56,26 @@ public struct PortfolioMainStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .send(.tradeRequest)
+                return .concatenate([
+                    .send(.tradeRequest),
+                    .send(.tickerItemRequest)
+                ])
                 
             case let .selectPeriod(period):
                 state.selectedPeriod = period
+                return .none
+                
+            case .tickerItemRequest:
+                if let tickers = try? tradeClient.fetchTickers().get() {
+                    return .send(
+                        .tickerItemResponse(
+                            .init(
+                                uniqueElements: tickers.map { .init(ticker: $0) }
+                            )
+                        )
+                    )
+                }
+                
                 return .none
                 
             case .tradeRequest:
@@ -67,6 +89,10 @@ public struct PortfolioMainStore: Reducer {
                 
             case let .tradeDateChartDataEntityRequest(from, to):
                 return .send(.tradeDateChartDataEntityResponse(state.trades.toDomain(from: from, to: to)))
+                
+            case let .tickerItemResponse(items):
+                state.tickerItem = items
+                return .none
                 
             case let .tradesResponse(respnse):
                 state.trades = respnse
@@ -90,6 +116,10 @@ public struct PortfolioMainStore: Reducer {
             default:
                 return .none
             }
+        }
+        
+        .forEach(\.tickerItem, action: /Action.tickerItem(id:action:)) {
+            TickerItemCellStore()
         }
     }
 }
