@@ -26,7 +26,7 @@ public struct PortfolioMainView: View {
                         
                         summaryChartTabView(viewStore: viewStore, proxy: proxy)
                         
-                        tradeChartTabView(viewStore: viewStore)
+                        tradeChartTabView(viewStore: viewStore, proxy: proxy)
                     }
                 }
             }
@@ -54,13 +54,15 @@ public struct PortfolioMainView: View {
         proxy: GeometryProxy
     ) -> some View {
         VStack {
+            HStack {
+                Text("Summary")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+            .padding(.horizontal)
+            
             TabView {
-                TickerTypeChartView(
-                    tickerTypeChartDataEntity: viewStore.state.tickerTypeChartDataEntity
-                )
-                .padding()
-                .frame(width: proxy.size.width)
-                
                 TickerTypeChartView(
                     tickerTypeChartDataEntity: viewStore.state.tickerTypeChartDataEntity
                 )
@@ -72,9 +74,28 @@ public struct PortfolioMainView: View {
         }
     }
     
-    private func tradeChartTabView(viewStore: ViewStoreOf<PortfolioMainStore>) -> some View {
+    private func tradeChartTabView(
+        viewStore: ViewStoreOf<PortfolioMainStore>,
+        proxy: GeometryProxy
+    ) -> some View {
         VStack {
-            TradeDateChartView(tradeDateChartDataEntity: viewStore.state.tradeDateChartDataEntity)
+            HStack {
+                Text("Trade")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                Spacer()
+            }
+            .padding(.horizontal)
+            
+            TabView {
+                TradeDateChartView(
+                    tradeDateChartDataEntity: viewStore.state.tradeDateChartDataEntity
+                )
+                .padding()
+                .frame(width: proxy.size.width)
+            }
+            .frame(width: proxy.size.width, height: 200)
+            .tabViewStyle(.page(indexDisplayMode: .never))
         }
     }
     
@@ -83,4 +104,10 @@ public struct PortfolioMainView: View {
             
         }
     }
+}
+
+#Preview {
+    PortfolioMainView(store: .init(initialState: .init()) {
+        PortfolioMainStore()._printChanges()
+    })
 }

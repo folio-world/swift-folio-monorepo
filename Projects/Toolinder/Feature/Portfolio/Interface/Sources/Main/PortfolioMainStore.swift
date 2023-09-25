@@ -75,7 +75,7 @@ public struct PortfolioMainStore: Reducer {
                     .send(
                         .tradeDateChartDataEntityRequest(
                             from: .now.add(byAdding: .month, value: -1),
-                            to: .now)
+                            to: .now.add(byAdding: .month, value: 1))
                     )
                 ])
                 
