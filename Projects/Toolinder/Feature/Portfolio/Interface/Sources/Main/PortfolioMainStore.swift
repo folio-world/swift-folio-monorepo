@@ -48,6 +48,12 @@ public struct PortfolioMainStore: Reducer {
         case tradeDateChartDataEntityResponse(TradeDateChartDataEntity)
         
         case tickerItem(id: TickerItemCellStore.State.ID, action: TickerItemCellStore.Action)
+        
+        case delegate(Delegate)
+        
+        public enum Delegate: Equatable {
+            case tickerDetail(Ticker)
+        }
     }
     
     @Dependency(\.tradeClient) var tradeClient
@@ -111,6 +117,13 @@ public struct PortfolioMainStore: Reducer {
                 
             case let .tradeDateChartDataEntityResponse(response):
                 state.tradeDateChartDataEntity = response
+                return .none
+                
+            case let .tickerItem(id, action: .tapped):
+                if let ticker = state.tickerItem[id: id]?.ticker {
+                    return .send(.delegate(.tickerDetail(ticker)))
+                }
+                
                 return .none
                 
             default:

@@ -33,11 +33,11 @@ public struct PortfolioNavigationStackView: View {
             }
         } destination: {
             switch $0 {
-            case .detail:
+            case .tickerDetail:
                 CaseLet(
-                    /PortfolioNavigationStackStore.Path.State.detail,
-                     action: PortfolioNavigationStackStore.Path.Action.detail,
-                     then: GoalDetailView.init(store:))
+                    /PortfolioNavigationStackStore.Path.State.tickerDetail,
+                     action: PortfolioNavigationStackStore.Path.Action.tickerDetail,
+                     then: TickerDetailView.init(store:))
             }
         }
     }
