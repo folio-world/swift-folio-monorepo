@@ -19,7 +19,7 @@ public struct TickerDetailStore: Reducer {
         
         public var tradeDateChartDataEntity: TradeDateChartDataEntity = .init()
         
-        @PresentationState var editTicker: EditTickerStore.State?
+        @PresentationState var tickerEdit: TickerEditStore.State?
         
         public init(
             ticker: Ticker
@@ -36,7 +36,7 @@ public struct TickerDetailStore: Reducer {
         case tickerTypeChartDataEntityRequest
         case tickerTypeChartDataEntityResponse(TradeDateChartDataEntity)
         
-        case editTicker(PresentationAction<EditTickerStore.Action>)
+        case tickerEdit(PresentationAction<TickerEditStore.Action>)
         
         case delegate(Delegate)
         
@@ -54,7 +54,7 @@ public struct TickerDetailStore: Reducer {
                 ])
                 
             case .editButtonTapped:
-                state.editTicker = .init(ticker: state.ticker)
+                state.tickerEdit = .init(selectedTicker: state.ticker)
                 return .none
                 
             case .tickerTypeChartDataEntityRequest:
@@ -71,8 +71,8 @@ public struct TickerDetailStore: Reducer {
                 state.tradeDateChartDataEntity = entity
                 return .none
                 
-            case .editTicker(.dismiss):
-                state.editTicker = nil
+            case .tickerEdit(.dismiss):
+                state.tickerEdit = nil
                 return .none
                 
             default:
@@ -80,8 +80,8 @@ public struct TickerDetailStore: Reducer {
             }
         }
         
-        .ifLet(\.$editTicker, action: /Action.editTicker) {
-            EditTickerStore()
+        .ifLet(\.$tickerEdit, action: /Action.tickerEdit) {
+            TickerEditStore()
         }
     }
 }

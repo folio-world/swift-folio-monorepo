@@ -13,10 +13,10 @@ import ComposableArchitecture
 import ToolinderDomainTradeInterface
 import ToolinderShared
 
-public struct EditTickerView: View {
-    let store: StoreOf<EditTickerStore>
+public struct TickerEditView: View {
+    let store: StoreOf<TickerEditStore>
     
-    public init(store: StoreOf<EditTickerStore>) {
+    public init(store: StoreOf<TickerEditStore>) {
         self.store = store
     }
     
@@ -32,7 +32,7 @@ public struct EditTickerView: View {
                 Divider()
                     .padding(.horizontal)
                 
-                TextField("Name", text: viewStore.binding(get: \.name, send: EditTickerStore.Action.setName))
+                TextField("Name", text: viewStore.binding(get: \.name, send: TickerEditStore.Action.setName))
                     .padding(.horizontal)
                 
                 tickerTypeView(viewStore: viewStore)
@@ -68,7 +68,7 @@ public struct EditTickerView: View {
         }
     }
     
-    private func headerView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
+    private func headerView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
         HStack {
             Text("Ticker")
                 .font(.title)
@@ -85,7 +85,7 @@ public struct EditTickerView: View {
         }
     }
     
-    private func tickerTypeView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
+    private func tickerTypeView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
         HStack {
             Label(viewStore.tickerType?.rawValue ?? "Ticker Type", systemImage: viewStore.tickerType?.systemImageName ?? "questionmark.circle.fill")
             
@@ -97,7 +97,7 @@ public struct EditTickerView: View {
         }
     }
     
-    private func currencyView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
+    private func currencyView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
         HStack {
             Label(viewStore.currency?.rawValue ?? "Currency", systemImage: viewStore.currency?.systemImageName ?? "questionmark.circle.fill")
             
@@ -109,7 +109,7 @@ public struct EditTickerView: View {
         }
     }
     
-    private func tickersView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
+    private func tickersView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
         ScrollView(.horizontal) {
             HStack {
                 ForEach(viewStore.state.tickers) { ticker in
@@ -125,7 +125,7 @@ public struct EditTickerView: View {
         }
     }
     
-    private func nextButtonView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
+    private func nextButtonView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
         Button(action: {
             viewStore.send(.nextButtonTapped)
         }, label: {

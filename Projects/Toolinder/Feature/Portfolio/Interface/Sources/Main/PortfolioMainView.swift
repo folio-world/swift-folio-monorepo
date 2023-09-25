@@ -10,6 +10,8 @@ import Charts
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
+
 public struct PortfolioMainView: View {
     public let store: StoreOf<PortfolioMainStore>
     

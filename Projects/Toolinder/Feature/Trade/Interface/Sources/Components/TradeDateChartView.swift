@@ -14,6 +14,10 @@ import Charts
 public struct TradeDateChartView: View {
     public let tradeDateChartDataEntity: TradeDateChartDataEntity
     
+    public init(tradeDateChartDataEntity: TradeDateChartDataEntity) {
+        self.tradeDateChartDataEntity = tradeDateChartDataEntity
+    }
+    
     public var body: some View {
         Chart(tradeDateChartDataEntity, id: \.self) { element in
             BarMark(x: .value("Date", element.date), y: .value("Count", element.buyCount))

@@ -14,10 +14,10 @@ import ComposableArchitecture
 import ToolinderDomain
 import ToolinderShared
 
-public struct EditTradeView: View {
-    let store: StoreOf<EditTradeStore>
+public struct TradeEditView: View {
+    let store: StoreOf<TradeEditStore>
     
-    public init(store: StoreOf<EditTradeStore>) {
+    public init(store: StoreOf<TradeEditStore>) {
         self.store = store
     }
     
@@ -44,7 +44,7 @@ public struct EditTradeView: View {
         }
     }
     
-    private func headerView(viewStore: ViewStoreOf<EditTradeStore>) -> some View {
+    private func headerView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         HStack {
             if viewStore.state.trade == nil {
                 Button(action: {
@@ -73,9 +73,9 @@ public struct EditTradeView: View {
         }
     }
     
-    private func pickerView(viewStore: ViewStoreOf<EditTradeStore>) -> some View {
+    private func pickerView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         HStack {
-            Picker("", selection: viewStore.binding(get: \.selectedTradeSide, send: EditTradeStore.Action.selectTradeSide)) {
+            Picker("", selection: viewStore.binding(get: \.selectedTradeSide, send: TradeEditStore.Action.selectTradeSide)) {
                 ForEach(TradeSide.allCases, id: \.self) { tradeSide in
                     Text(tradeSide.rawValue)
                         .tag(tradeSide)
@@ -83,16 +83,16 @@ public struct EditTradeView: View {
             }
             .pickerStyle(.segmented)
             
-            DatePicker("", selection: viewStore.binding(get: \.selectedDate, send: EditTradeStore.Action.selectDate))
+            DatePicker("", selection: viewStore.binding(get: \.selectedDate, send: TradeEditStore.Action.selectDate))
         }
     }
     
-    private func inputView(viewStore: ViewStoreOf<EditTradeStore>) -> some View {
+    private func inputView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         VStack(spacing: 20) {
             HStack {
                 Image(systemName: "cart.circle.fill")
                 
-                TextField("Count", value: viewStore.binding(get: \.count, send: EditTradeStore.Action.setCount), format: .number)
+                TextField("Count", value: viewStore.binding(get: \.count, send: TradeEditStore.Action.setCount), format: .number)
                     .keyboardType(.numberPad)
                 
                 Spacer()
@@ -101,7 +101,7 @@ public struct EditTradeView: View {
             HStack {
                 viewStore.state.ticker.currency?.image
                 
-                TextField("Count", value: viewStore.binding(get: \.price, send: EditTradeStore.Action.setPrice), format: .number)
+                TextField("Count", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
                     .keyboardType(.numberPad)
                 
                 Spacer()
@@ -110,7 +110,7 @@ public struct EditTradeView: View {
             VStack(alignment: .leading) {
                 Image(systemName: "note.text")
                 
-                TextEditor(text: viewStore.binding(get: \.note, send: EditTradeStore.Action.setNote))
+                TextEditor(text: viewStore.binding(get: \.note, send: TradeEditStore.Action.setNote))
             }
             
             ScrollView(.horizontal) {
@@ -121,7 +121,7 @@ public struct EditTradeView: View {
                         ImageItem(imageData: imageData)
                     }
                     
-                    PhotosPicker(selection: viewStore.binding(get: \.selectedPhotosPickerItems, send: EditTradeStore.Action.setPhotoPickerItems),
+                    PhotosPicker(selection: viewStore.binding(get: \.selectedPhotosPickerItems, send: TradeEditStore.Action.setPhotoPickerItems),
                                  matching: .images) {
                         ImageNewItem()
                     }
@@ -130,7 +130,7 @@ public struct EditTradeView: View {
         }
     }
     
-    private func saveButtonView(viewStore: ViewStoreOf<EditTradeStore>) -> some View {
+    private func saveButtonView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         HStack(spacing: 10) {
             if viewStore.state.trade != nil {
                 Button(action: {

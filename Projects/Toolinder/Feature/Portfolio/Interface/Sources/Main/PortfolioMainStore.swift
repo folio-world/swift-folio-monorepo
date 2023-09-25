@@ -9,6 +9,7 @@ import Foundation
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
 import ToolinderDomain
 
 public struct PortfolioMainStore: Reducer {

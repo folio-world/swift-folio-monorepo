@@ -7,6 +7,8 @@
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
+
 public struct PortfolioNavigationStackStore: Reducer {
     public init() {}
     

@@ -18,7 +18,7 @@ public struct TradeDetailStore: Reducer {
     public struct State: Equatable {
         public var trade: Trade
         
-        @PresentationState var editTrade: EditTradeStore.State?
+        @PresentationState var tradeEdit: TradeEditStore.State?
         public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
         
         public init(trade: Trade) {
@@ -31,7 +31,7 @@ public struct TradeDetailStore: Reducer {
         
         case editButtonTapped
         
-        case editTrade(PresentationAction<EditTradeStore.Action>)
+        case tradeEdit(PresentationAction<TradeEditStore.Action>)
         case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
         
         case delegate(Delegate)
@@ -56,21 +56,21 @@ public struct TradeDetailStore: Reducer {
                 
             case .editButtonTapped:
                 if let ticker = state.trade.ticker {
-                    state.editTrade = .init(trade: state.trade, ticker: ticker)
+                    state.tradeEdit = .init(trade: state.trade, ticker: ticker)
                 }
                 return .none
                 
-            case let .editTrade(.presented(.delegate(.save(trade)))):
+            case let .tradeEdit(.presented(.delegate(.save(trade)))):
                 state.trade = trade
-                state.editTrade = nil
+                state.tradeEdit = nil
                 return .none
                 
-            case let .editTrade(.presented(.delegate(.delete(trade)))):
-                state.editTrade = nil
+            case let .tradeEdit(.presented(.delegate(.delete(trade)))):
+                state.tradeEdit = nil
                 return .send(.delegate(.delete(trade)))
 
-            case .editTrade(.dismiss), .editTrade(.presented(.delegate(.cancel))), .editTrade(.presented(.delegate(.dismiss))):
-                state.editTrade = nil
+            case .tradeEdit(.dismiss), .tradeEdit(.presented(.delegate(.cancel))), .tradeEdit(.presented(.delegate(.dismiss))):
+                state.tradeEdit = nil
                 return .none
                 
             default:
@@ -78,8 +78,8 @@ public struct TradeDetailStore: Reducer {
             }
         }
         
-        .ifLet(\.$editTrade, action: /Action.editTrade) {
-            EditTradeStore()
+        .ifLet(\.$tradeEdit, action: /Action.tradeEdit) {
+            TradeEditStore()
         }
     }
 }

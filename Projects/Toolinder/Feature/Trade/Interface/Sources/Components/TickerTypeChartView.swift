@@ -14,6 +14,10 @@ import ToolinderDomain
 public struct TickerTypeChartView: View {
     public let tickerTypeChartDataEntity: TickerTypeChartDataEntity
     
+    public init(tickerTypeChartDataEntity: TickerTypeChartDataEntity) {
+        self.tickerTypeChartDataEntity = tickerTypeChartDataEntity
+    }
+    
     public var body: some View {
         HStack {
             Chart(tickerTypeChartDataEntity, id: \.self) { element in

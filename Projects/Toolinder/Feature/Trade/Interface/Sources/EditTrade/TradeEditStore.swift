@@ -12,7 +12,7 @@ import ComposableArchitecture
 
 import ToolinderDomain
 
-public struct EditTradeStore: Reducer {
+public struct TradeEditStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
@@ -149,7 +149,7 @@ public struct EditTradeStore: Reducer {
         note: String,
         date: Date,
         ticker: Ticker
-    ) -> Effect<EditTradeStore.Action> {
+    ) -> Effect<TradeEditStore.Action> {
         guard !price.isZero else { return .none }
         guard !volume.isZero else { return .none }
         

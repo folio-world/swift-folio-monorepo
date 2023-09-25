@@ -51,11 +51,11 @@ public struct TradeDetailView: View {
             }
             .sheet(
                 store: self.store.scope(
-                    state: \.$editTrade,
-                    action: { .editTrade($0) }
+                    state: \.$tradeEdit,
+                    action: { .tradeEdit($0) }
                 )
             ) {
-                EditTradeView(store: $0)
+                TradeEditView(store: $0)
                     .presentationDetents([.large])
             }
             .navigationTitle(viewStore.state.trade.ticker?.name ?? "")

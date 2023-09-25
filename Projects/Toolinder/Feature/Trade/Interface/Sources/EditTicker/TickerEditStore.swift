@@ -11,7 +11,7 @@ import ComposableArchitecture
 
 import ToolinderDomainTradeInterface
 
-public struct EditTickerStore: Reducer {
+public struct TickerEditStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
@@ -122,7 +122,7 @@ public struct EditTickerStore: Reducer {
         }
     }
     
-    private func validateAndSaveTickerEffect(tickerType: TickerType?, currency: Currency?, name: String) -> Effect<EditTickerStore.Action> {
+    private func validateAndSaveTickerEffect(tickerType: TickerType?, currency: Currency?, name: String) -> Effect<TickerEditStore.Action> {
         guard let tickerType = tickerType else { return .none }
         guard let currency = currency else { return .none }
         guard name.isEmpty == false else { return .none }
