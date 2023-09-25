@@ -9,6 +9,7 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
 import ToolinderShared
 
 public struct CalendarView: View {

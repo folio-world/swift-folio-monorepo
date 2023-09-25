@@ -31,6 +31,8 @@ public struct TickerDetailStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
+        case editButtonTapped
+        
         case tickerTypeChartDataEntityRequest
         case tickerTypeChartDataEntityResponse(TradeDateChartDataEntity)
         
@@ -51,6 +53,10 @@ public struct TickerDetailStore: Reducer {
                     .send(.tickerTypeChartDataEntityRequest)
                 ])
                 
+            case .editButtonTapped:
+                state.editTicker = .init(ticker: state.ticker)
+                return .none
+                
             case .tickerTypeChartDataEntityRequest:
                 return .send(
                     .tickerTypeChartDataEntityResponse(
@@ -65,9 +71,17 @@ public struct TickerDetailStore: Reducer {
                 state.tradeDateChartDataEntity = entity
                 return .none
                 
+            case .editTicker(.dismiss):
+                state.editTicker = nil
+                return .none
+                
             default:
                 return .none
             }
+        }
+        
+        .ifLet(\.$editTicker, action: /Action.editTicker) {
+            EditTickerStore()
         }
     }
 }

@@ -1,15 +1,15 @@
 //
 //  Currency+Image.swift
-//  ToolinderFeatureCalendarDemo
+//  ToolinderFeatureTradeDemo
 //
-//  Created by 송영모 on 2023/09/09.
+//  Created by 송영모 on 2023/09/25.
 //
 
 import SwiftUI
 
 import ToolinderDomain
 
-extension Currency {
+public extension Currency {
     var systemImageName: String {
         switch self {
         case .dollar: return "dollarsign.circle.fill"

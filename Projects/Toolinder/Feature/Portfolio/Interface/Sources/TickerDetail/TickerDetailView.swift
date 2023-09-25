@@ -41,6 +41,13 @@ public struct TickerDetailView: View {
                 EditTickerView(store: $0)
                     .presentationDetents([.medium])
             }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button("Edit") {
+                        viewStore.send(.editButtonTapped)
+                    }
+                }
+            }
             .navigationTitle(viewStore.state.ticker.name ?? "")
         }
     }

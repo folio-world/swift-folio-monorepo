@@ -10,6 +10,7 @@ import SwiftData
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
 import ToolinderDomain
 import ToolinderShared
 

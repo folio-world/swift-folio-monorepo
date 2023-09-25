@@ -1,15 +1,15 @@
 //
 //  TickerType+Image.swift
-//  ToolinderFeatureCalendarInterface
+//  ToolinderFeatureTradeDemo
 //
-//  Created by 송영모 on 2023/09/10.
+//  Created by 송영모 on 2023/09/25.
 //
 
 import SwiftUI
 
 import ToolinderDomain
 
-extension TickerType {
+public extension TickerType {
     var systemImageName: String {
         switch self {
         case .stock: return "staroflife.circle.fill"
