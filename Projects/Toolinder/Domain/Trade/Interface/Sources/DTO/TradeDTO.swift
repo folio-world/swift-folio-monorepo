@@ -36,3 +36,4 @@ public struct TradeDTO {
         self.ticker = ticker
     }
 }
+
