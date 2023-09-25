@@ -18,7 +18,24 @@ public struct PortfolioMainView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            Text("Main")
+            ScrollView {
+                VStack {
+                    headerView(viewStore: viewStore)
+                }
+            }
+            .navigationTitle("Portfolio")
+        }
+    }
+    
+    private func headerView(viewStore: ViewStoreOf<PortfolioMainStore>) -> some View {
+        HStack {
+            Spacer()
+            
+            Picker("", selection: viewStore.binding(get: \.selectedPeriod, send: PortfolioMainStore.Action.selectPeriod)) {
+                ForEach(PortfolioMainStore.Period.allCases, id: \.self) {
+                    Text($0.rawValue).tag($0)
+                }
+            }
         }
     }
 }
