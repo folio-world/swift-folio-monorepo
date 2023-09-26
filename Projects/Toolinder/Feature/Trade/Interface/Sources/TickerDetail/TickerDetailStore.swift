@@ -60,7 +60,7 @@ public struct TickerDetailStore: Reducer {
             case .tickerTypeChartDataEntityRequest:
                 return .send(
                     .tickerTypeChartDataEntityResponse(
-                        state.ticker.trades?.toDomain(
+                        state.ticker.trades?.toTradeDateChartDataEntity(
                             from: .now.add(byAdding: .month, value: -1),
                             to: .now.add(byAdding: .month, value: 1))
                         ?? []

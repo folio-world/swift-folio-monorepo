@@ -93,10 +93,10 @@ public struct PortfolioMainStore: Reducer {
                 return .none
                 
             case .tickerTypeChartDataEntityRequest:
-                return .send(.tickerTypeChartDataEntityResponse(state.trades.toDomain()))
+                return .send(.tickerTypeChartDataEntityResponse(state.trades.toTickerTypeChartDataEntity()))
                 
             case let .tradeDateChartDataEntityRequest(from, to):
-                return .send(.tradeDateChartDataEntityResponse(state.trades.toDomain(from: from, to: to)))
+                return .send(.tradeDateChartDataEntityResponse(state.trades.toTradeDateChartDataEntity(from: from, to: to)))
                 
             case let .tickerItemResponse(items):
                 state.tickerItem = items

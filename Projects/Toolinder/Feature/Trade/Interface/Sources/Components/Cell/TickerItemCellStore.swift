@@ -17,6 +17,7 @@ public struct TickerItemCellStore: Reducer {
     public struct State: Equatable, Identifiable {
         public let id: UUID
         public let ticker: Ticker
+        public let tickerSummaryDataEntity: TickerSummaryDataEntity
         
         public init(
             id: UUID = .init(),
@@ -24,6 +25,7 @@ public struct TickerItemCellStore: Reducer {
         ) {
             self.id = id
             self.ticker = ticker
+            self.tickerSummaryDataEntity = ticker.toTickerSummaryDataEntity()
         }
     }
     

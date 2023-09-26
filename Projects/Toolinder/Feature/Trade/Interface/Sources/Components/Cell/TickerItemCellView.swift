@@ -29,14 +29,44 @@ public struct TickerItemCellView: View {
     
     private func tradeView(viewStore: ViewStoreOf<TickerItemCellStore>) -> some View {
         HStack(spacing: 10) {
-            viewStore.state.ticker.type?.image
-                .font(.title3)
+            VStack {
+                viewStore.state.ticker.type?.image
+                    .font(.title3)
+                
+                Text("\(viewStore.state.ticker.type?.rawValue ?? "")")
+                    .font(.caption2)
+            }
             
             Text(viewStore.state.ticker.name ?? "")
                 .font(.body)
                 .fontWeight(.semibold)
             
             Spacer()
+            
+            VStack {
+                HStack {
+                    Spacer()
+                    
+                    Text("\(Int(viewStore.tickerSummaryDataEntity.profit)) \(viewStore.state.ticker.currency?.rawValue ?? "") (\(Int(viewStore.tickerSummaryDataEntity.yield))%)")
+                        .font(.caption)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Int(viewStore.tickerSummaryDataEntity.yield) > 0 ? .pink : .mint)
+                }
+                
+                HStack(spacing: .zero) {
+                    Spacer()
+                    
+                    Text("\(Int(viewStore.tickerSummaryDataEntity.avgPrice)) \(viewStore.state.ticker.currency?.rawValue ?? "")")
+                        .font(.caption2)
+                }
+                
+                HStack(spacing: .zero) {
+                    Spacer()
+
+                    Text("\(Int(viewStore.tickerSummaryDataEntity.currentVolume)) vol")
+                        .font(.caption2)
+                }
+            }
         }
         .frame(height: 35)
         .padding(10)
