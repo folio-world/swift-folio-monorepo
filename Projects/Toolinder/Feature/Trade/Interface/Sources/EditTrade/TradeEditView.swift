@@ -23,30 +23,26 @@ public struct TradeEditView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            GeometryReader { proxy in
-                ScrollView {
-                    VStack(spacing: 20) {
-                        headerView(viewStore: viewStore)
-                        
-                        pickerView(viewStore: viewStore)
-                            .padding(.bottom)
-                        
-                        inputView(viewStore: viewStore)
-                        
-                        Spacer()
-                        
-                        saveButtonView(viewStore: viewStore)
-                    }
-                    .frame(height: proxy.size.height)
-                    .padding()
+            VStack(alignment: .leading, spacing: 20) {
+                headerView(viewStore: viewStore)
+                
+                pickerView(viewStore: viewStore)
+                
+                inputView(viewStore: viewStore)
+                
+                Spacer()
+                
+                MinimalButton(title: "Save") {
+                    viewStore.send(.saveButtonTapped)
                 }
             }
+            .padding()
         }
     }
     
     private func headerView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         HStack {
-            if viewStore.state.selectedTrade == nil {
+            if viewStore.state.mode == .add {
                 Button(action: {
                     viewStore.send(.dismissButtonTapped)
                 }, label: {
@@ -61,13 +57,12 @@ public struct TradeEditView: View {
             
             Spacer()
             
-            if viewStore.state.selectedTrade == nil {
+            if viewStore.state.mode == .edit {
                 Button(action: {
-                    viewStore.send(.cancleButtonTapped)
+                    viewStore.send(.deleteButtonTapped)
                 }, label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.black)
-                        .font(.title)
+                    Image(systemName: "trash.circle.fill")
+                        .foregroundStyle(.foreground)
                 })
             }
         }
@@ -127,52 +122,6 @@ public struct TradeEditView: View {
                     }
                 }
             }
-        }
-    }
-    
-    private func saveButtonView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
-        HStack(spacing: 10) {
-            if viewStore.state.selectedTrade != nil {
-                Button(action: {
-                    viewStore.send(.deleteButtonTapped)
-                }, label: {
-                    Text("Del")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
-                        .padding(10)
-                })
-                .background(.black)
-                .clipShape(
-                    RoundedRectangle(
-                        cornerRadius: 8,
-                        style: .continuous
-                    )
-                )
-            }
-            
-            Button(action: {
-                viewStore.send(.saveButtonTapped)
-            }, label: {
-                HStack {
-                    Spacer()
-                    
-                    Text("Save")
-                        .font(.title3)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(.white)
-                    
-                    Spacer()
-                }
-                .padding(.vertical, 10)
-            })
-            .background(.black)
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: 8,
-                    style: .continuous
-                )
-            )
         }
     }
 }

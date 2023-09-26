@@ -26,11 +26,8 @@ public struct TickerEditView: View {
                 headerView(viewStore: viewStore)
                     .padding([.top, .horizontal])
                 
-                switch viewStore.state.mode {
-                case .add:
+                if viewStore.state.mode == .add {
                     tickersView(viewStore: viewStore)
-                case .edit:
-                    EmptyView()
                 }
                 
                 Divider()

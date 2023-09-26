@@ -56,7 +56,6 @@ public struct TradeEditStore: Reducer {
         case setNote(String)
         case setPhotoPickerItems([PhotosPickerItem])
         case dismissButtonTapped
-        case cancleButtonTapped
         case saveButtonTapped
         case deleteButtonTapped
         
@@ -65,7 +64,6 @@ public struct TradeEditStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case dismiss
             case cancel(Ticker)
             case save(Trade)
             case delete(Trade)
@@ -111,9 +109,6 @@ public struct TradeEditStore: Reducer {
             
         case .dismissButtonTapped:
             return .send(.delegate(.cancel(state.selectedTicker)))
-            
-        case .cancleButtonTapped:
-            return .send(.delegate(.dismiss))
             
         case .saveButtonTapped:
             return validateAndSaveTradeEffect(

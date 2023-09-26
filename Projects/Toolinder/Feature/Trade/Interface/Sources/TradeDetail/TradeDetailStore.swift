@@ -68,7 +68,7 @@ public struct TradeDetailStore: Reducer {
                 state.tradeEdit = nil
                 return .send(.delegate(.delete(trade)))
 
-            case .tradeEdit(.dismiss), .tradeEdit(.presented(.delegate(.cancel))), .tradeEdit(.presented(.delegate(.dismiss))):
+            case .tradeEdit(.dismiss), .tradeEdit(.presented(.delegate(.cancel))):
                 state.tradeEdit = nil
                 return .none
                 
