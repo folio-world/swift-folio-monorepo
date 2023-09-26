@@ -9,19 +9,10 @@ import Foundation
 import SwiftData
 
 public protocol TradeRepositoryInterface {
-    func fetchTickers(descriptor: FetchDescriptor<Ticker>) -> Result<[Ticker], TradeError>
-    func saveTicker(ticker: Ticker) -> Result<Ticker, TradeError>
-    func updateTicker(model: Ticker, dto: TickerDTO) -> Result<Ticker, TradeError>
-    func deleteTicker(ticker: Ticker) -> Result<Ticker, TradeError>
-    
     func fetchTrades(descriptor: FetchDescriptor<Trade>) -> Result<[Trade], TradeError>
     func saveTrade(trade: Trade) -> Result<Trade, TradeError>
     func updateTrade(model: Trade, dto: TradeDTO) -> Result<Trade, TradeError>
     func deleteTrade(trade: Trade) -> Result<Trade, TradeError>
-    
-    func isValidatedSaveTicker(new: Ticker) -> Bool
-    func isValidatedUpdateTicker(origin: Ticker, new: TickerDTO) -> Bool
-    func isValidatedDeleteTicker(origin: Ticker) -> Bool
     
     func isValidatedSaveTrade(trade: Trade) -> Bool
     func isValidatedUpdateTrade(origin: Trade, new: TradeDTO) -> Bool
@@ -29,12 +20,10 @@ public protocol TradeRepositoryInterface {
 }
 
 public class TradeRepository: TradeRepositoryInterface {
-    public static var shared: TradeRepositoryInterface = TradeRepository()
-    
     private var container: ModelContainer?
     private var context: ModelContext?
     
-    private init() {
+    public init() {
         do {
             container = try ModelContainer(for: Ticker.self, Trade.self)
             

@@ -73,11 +73,12 @@ public struct TickerEditStore: Reducer {
         public enum Delegate: Equatable {
             case cancel
             case next(Ticker)
+            case save(Ticker)
             case delete(Ticker)
         }
     }
     
-    @Dependency(\.tradeClient) var tradeClient
+    @Dependency(\.tickerClient) var tickerClient
     
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
@@ -119,18 +120,20 @@ public struct TickerEditStore: Reducer {
                 return .none
                 
             case .nextButtonTapped:
-                if let ticker = state.selectedTicker {
+                if let ticker = state.selectedTicker, state.mode == .add {
                     return .send(.delegate(.next(ticker)))
                 }
                 
                 return validateAndSaveTickerEffect(
+                    mode: state.mode,
+                    ticker: state.selectedTicker,
                     tickerType: state.tickerType,
                     currency: state.currency,
                     name: state.name
                 )
                 
             case .fetchTickersRequest:
-                let tickers = (try? tradeClient.fetchTickers().get()) ?? []
+                let tickers = (try? tickerClient.fetchTickers().get()) ?? []
                 return .send(.fetchTickersResponse(tickers))
                 
             case let .fetchTickersResponse(tickers):
@@ -157,7 +160,7 @@ public struct TickerEditStore: Reducer {
                 
             case .alert(.presented(.confirmDeletion)):
                 if let ticker = state.selectedTicker {
-                    let _ = tradeClient.deleteTicker(ticker)
+                    let _ = tickerClient.deleteTicker(ticker)
                     return .send(.delegate(.delete(ticker)))
                 }
                 return .none
@@ -169,15 +172,32 @@ public struct TickerEditStore: Reducer {
         .ifLet(\.$alert, action: /Action.alert)
     }
     
-    private func validateAndSaveTickerEffect(tickerType: TickerType?, currency: Currency?, name: String) -> Effect<TickerEditStore.Action> {
+    private func validateAndSaveTickerEffect(
+        mode: Mode,
+        ticker: Ticker?,
+        tickerType: TickerType?,
+        currency: Currency?,
+        name: String
+    ) -> Effect<TickerEditStore.Action> {
         guard let tickerType = tickerType else { return .none }
         guard let currency = currency else { return .none }
         guard name.isEmpty == false else { return .none }
         
-        if let ticker = try? tradeClient.saveTicker(.init(type: tickerType, currency: currency, name: name)).get() {
-            return .send(.delegate(.next(ticker)))
-        } else {
-            return .none
+        switch mode {
+        case .add:
+            if let ticker = try? tickerClient.saveTicker(.init(type: tickerType, currency: currency, name: name)).get() {
+                return .send(.delegate(.next(ticker)))
+            } else {
+                return .none
+            }
+        case .edit:
+            guard let ticker = ticker else { return .none }
+            
+            if let ticker = try? tickerClient.updateTicker(ticker, .init(type: tickerType, currency: currency, name: name)).get() {
+                return .send(.delegate(.save(ticker)))
+            } else {
+                return .none
+            }
         }
     }
 }
