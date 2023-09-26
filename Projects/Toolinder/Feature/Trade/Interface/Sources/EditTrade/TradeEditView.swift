@@ -46,7 +46,7 @@ public struct TradeEditView: View {
     
     private func headerView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         HStack {
-            if viewStore.state.trade == nil {
+            if viewStore.state.selectedTrade == nil {
                 Button(action: {
                     viewStore.send(.dismissButtonTapped)
                 }, label: {
@@ -56,12 +56,12 @@ public struct TradeEditView: View {
                 })
             }
             
-            Text(viewStore.state.ticker.name ?? "")
+            Text(viewStore.state.selectedTicker.name ?? "")
                 .font(.title)
             
             Spacer()
             
-            if viewStore.state.trade == nil {
+            if viewStore.state.selectedTrade == nil {
                 Button(action: {
                     viewStore.send(.cancleButtonTapped)
                 }, label: {
@@ -92,16 +92,16 @@ public struct TradeEditView: View {
             HStack {
                 Image(systemName: "cart.circle.fill")
                 
-                TextField("Count", value: viewStore.binding(get: \.count, send: TradeEditStore.Action.setCount), format: .number)
+                TextField("Volume", value: viewStore.binding(get: \.volume, send: TradeEditStore.Action.setVolume), format: .number)
                     .keyboardType(.numberPad)
                 
                 Spacer()
             }
             
             HStack {
-                viewStore.state.ticker.currency?.image
+                viewStore.state.selectedTicker.currency?.image
                 
-                TextField("Count", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
+                TextField("Price", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
                     .keyboardType(.numberPad)
                 
                 Spacer()
@@ -132,7 +132,7 @@ public struct TradeEditView: View {
     
     private func saveButtonView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         HStack(spacing: 10) {
-            if viewStore.state.trade != nil {
+            if viewStore.state.selectedTrade != nil {
                 Button(action: {
                     viewStore.send(.deleteButtonTapped)
                 }, label: {

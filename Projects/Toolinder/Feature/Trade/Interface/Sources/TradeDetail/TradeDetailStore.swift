@@ -9,7 +9,6 @@ import Foundation
 
 import ComposableArchitecture
 
-import ToolinderFeatureTradeInterface
 import ToolinderDomain
 
 public struct TradeDetailStore: Reducer {
@@ -56,7 +55,7 @@ public struct TradeDetailStore: Reducer {
                 
             case .editButtonTapped:
                 if let ticker = state.trade.ticker {
-                    state.tradeEdit = .init(trade: state.trade, ticker: ticker)
+                    state.tradeEdit = .init(selectedTicker: ticker, selectedTrade: state.trade)
                 }
                 return .none
                 

@@ -15,12 +15,18 @@ import ToolinderDomain
 public struct TradeEditStore: Reducer {
     public init() {}
     
+    public enum Mode {
+        case add
+        case edit
+    }
+    
     public struct State: Equatable {
-        public var trade: Trade?
-        public var ticker: Ticker
+        public let mode: Mode
+        public var selectedTicker: Ticker
+        public var selectedTrade: Trade?
         
-        public var count: Double = .zero
-        public var price: Double = .zero
+        public var volume: Double
+        public var price: Double
         public var selectedDate: Date = .now
         public var selectedTradeSide: TradeSide = .buy
         public var note: String = ""
@@ -28,26 +34,22 @@ public struct TradeEditStore: Reducer {
         
         public var selectedPhotosPickerItems: [PhotosPickerItem] = []
         
-        public init(ticker: Ticker) {
-            self.ticker = ticker
-        }
-        
-        public init(trade: Trade, ticker: Ticker) {
-            self.trade = trade
-            self.ticker = ticker
-            self.count = trade.volume ?? 0
-            self.price = trade.price ?? 0
-            self.selectedDate = trade.date
-            self.selectedTradeSide = trade.side ?? .buy
-            self.note = trade.note ?? ""
-            self.images = trade.images
+        public init(selectedTicker: Ticker, selectedTrade: Trade? = nil, selectedDate: Date = .now) {
+            self.mode = selectedTrade == nil ? .add : .edit
+            self.selectedTicker = selectedTicker
+            self.selectedTrade = selectedTrade
+            self.volume = selectedTrade?.volume ?? 0
+            self.price = selectedTrade?.price ?? 0
+            self.selectedDate = selectedTrade?.date ?? selectedDate
+            self.note = selectedTrade?.note ?? ""
+            self.images = selectedTrade?.images ?? []
         }
     }
     
     public enum Action: Equatable {
         case onAppear
         
-        case setCount(Double)
+        case setVolume(Double)
         case setPrice(Double)
         case selectDate(Date)
         case selectTradeSide(TradeSide)
@@ -78,8 +80,8 @@ public struct TradeEditStore: Reducer {
         case .onAppear:
             return .none
             
-        case let .setCount(count):
-            state.count = count
+        case let .setVolume(volume):
+            state.volume = volume
             return .none
             
         case let .setPrice(price):
@@ -108,25 +110,25 @@ public struct TradeEditStore: Reducer {
             }
             
         case .dismissButtonTapped:
-            return .send(.delegate(.cancel(state.ticker)))
+            return .send(.delegate(.cancel(state.selectedTicker)))
             
         case .cancleButtonTapped:
             return .send(.delegate(.dismiss))
             
         case .saveButtonTapped:
             return validateAndSaveTradeEffect(
-                trade: state.trade,
+                trade: state.selectedTrade,
                 side: state.selectedTradeSide,
                 price: state.price,
-                volume: state.count,
+                volume: state.volume,
                 images: state.images,
                 note: state.note,
                 date: state.selectedDate,
-                ticker: state.ticker
+                ticker: state.selectedTicker
             )
             
         case .deleteButtonTapped:
-            if let trade = state.trade, let _ = try? tradeClient.deleteTrade(trade).get() {
+            if let trade = state.selectedTrade, let _ = try? tradeClient.deleteTrade(trade).get() {
                 return .send(.delegate(.delete(trade)))
             }
             return .none
