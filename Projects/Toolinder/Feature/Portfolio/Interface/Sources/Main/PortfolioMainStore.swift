@@ -57,6 +57,7 @@ public struct PortfolioMainStore: Reducer {
         }
     }
     
+    @Dependency(\.tickerClient) var tickerClient
     @Dependency(\.tradeClient) var tradeClient
     
     public var body: some ReducerOf<Self> {
@@ -73,7 +74,7 @@ public struct PortfolioMainStore: Reducer {
                 return .none
                 
             case .tickerItemRequest:
-                if let tickers = try? tradeClient.fetchTickers().get() {
+                if let tickers = try? tickerClient.fetchTickers().get() {
                     return .send(
                         .tickerItemResponse(
                             .init(

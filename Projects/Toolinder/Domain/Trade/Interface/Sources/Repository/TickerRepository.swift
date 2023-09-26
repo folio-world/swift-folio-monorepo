@@ -20,20 +20,9 @@ public protocol TickerRepositoryInterface {
 }
 
 public class TickerRepository: TickerRepositoryInterface {
-    private var container: ModelContainer?
-    private var context: ModelContext?
+    private var context: ModelContext? = StorageContainer.shared.context
     
-    public init() {
-        do {
-            container = try ModelContainer(for: Ticker.self, Trade.self)
-            
-            if let container {
-                context = ModelContext(container)
-            }
-        } catch {
-            print(error)
-        }
-    }
+    public init() { }
     
     public func fetchTickers(descriptor: FetchDescriptor<Ticker>) -> Result<[Ticker], TickerError> {
         if let tickers = try? context?.fetch(descriptor) {

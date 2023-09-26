@@ -86,18 +86,14 @@ public struct TradeEditView: View {
     private func inputView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         VStack(spacing: 20) {
             HStack {
-                Image(systemName: "cart.circle.fill")
-                
-                TextField("Volume", value: viewStore.binding(get: \.volume, send: TradeEditStore.Action.setVolume), format: .number)
-                    .keyboardType(.numberPad)
-                
-                Spacer()
-            }
-            
-            HStack {
-                viewStore.state.selectedTicker.currency?.image
+                Label(viewStore.state.selectedTicker.currency?.rawValue ?? "", systemImage: viewStore.state.selectedTicker.currency?.systemImageName ?? "")
                 
                 TextField("Price", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
+                    .keyboardType(.numberPad)
+                
+                Label("Vol", systemImage: "cart.circle.fill")
+                
+                TextField("Volume", value: viewStore.binding(get: \.volume, send: TradeEditStore.Action.setVolume), format: .number)
                     .keyboardType(.numberPad)
                 
                 Spacer()
