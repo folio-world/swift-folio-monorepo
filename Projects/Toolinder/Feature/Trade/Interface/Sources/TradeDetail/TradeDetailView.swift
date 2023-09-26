@@ -32,14 +32,6 @@ public struct TradeDetailView: View {
                     
                     photoView(viewStore: viewStore)
                     
-                    HStack {
-                        if let ticker = viewStore.state.trade.ticker {
-                            TickerItem(ticker: ticker, isSelected: false)
-                        }
-                        
-                        Spacer()
-                    }
-                    
                     tradeListView(viewStore: viewStore)
                 }
                 .padding()
@@ -73,22 +65,22 @@ public struct TradeDetailView: View {
             HStack(alignment: .bottom, spacing: .zero) {
                 Spacer()
                 
-                Text(scaledString(valueOrNil: viewStore.state.trade.volume))
+                Text(scaledString(valueOrNil: viewStore.state.trade.price))
                     .font(.title)
                     .fontWeight(.semibold)
                 
-                Text("vol")
+                Text("\(viewStore.state.trade.ticker?.currency?.rawValue.lowercased() ?? "")")
                     .fontWeight(.semibold)
             }
             
             HStack(alignment: .bottom, spacing: .zero) {
                 Spacer()
                 
-                Text(scaledString(valueOrNil: viewStore.state.trade.price))
+                Text(scaledString(valueOrNil: viewStore.state.trade.volume))
                     .font(.title)
                     .fontWeight(.semibold)
                 
-                Text("\(viewStore.state.trade.ticker?.currency?.rawValue.lowercased() ?? "")")
+                Text("vol")
                     .fontWeight(.semibold)
             }
         }
@@ -107,7 +99,9 @@ public struct TradeDetailView: View {
                 TradeItemCellView(store: $0)
             }
             
-            TradeNewItem()
+            TradeNewItem() {
+                viewStore.send(.newButtonTapped)
+            }
         }
     }
     

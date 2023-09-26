@@ -101,10 +101,9 @@ public struct CalendarView: View {
                 TradeItemCellView(store: $0)
             }
             
-            TradeNewItem()
-                .onTapGesture {
-                    viewStore.send(.newButtonTapped)
-                }
+            TradeNewItem() {
+                viewStore.send(.newButtonTapped)
+            }
         }
     }
 }

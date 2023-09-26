@@ -29,6 +29,7 @@ public struct TradeDetailStore: Reducer {
         case onAppear
         
         case editButtonTapped
+        case newButtonTapped
         
         case tradeEdit(PresentationAction<TradeEditStore.Action>)
         case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
@@ -56,6 +57,12 @@ public struct TradeDetailStore: Reducer {
             case .editButtonTapped:
                 if let ticker = state.trade.ticker {
                     state.tradeEdit = .init(selectedTicker: ticker, selectedTrade: state.trade)
+                }
+                return .none
+                
+            case .newButtonTapped:
+                if let ticker = state.trade.ticker {
+                    state.tradeEdit = .init(selectedTicker: ticker)
                 }
                 return .none
                 

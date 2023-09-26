@@ -8,7 +8,11 @@
 import SwiftUI
 
 public struct TradeNewItem: View {
-    public init() {}
+    public var action: () -> ()
+    
+    public init(action: @escaping () -> Void) {
+        self.action = action
+    }
     
     public var body: some View {
         HStack(spacing: 10) {
@@ -27,5 +31,8 @@ public struct TradeNewItem: View {
                 cornerRadius: 8
             )
         )
+        .onTapGesture {
+            action()
+        }
     }
 }
