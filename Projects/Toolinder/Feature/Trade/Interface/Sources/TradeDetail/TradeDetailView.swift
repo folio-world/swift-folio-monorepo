@@ -28,9 +28,13 @@ public struct TradeDetailView: View {
                     
                     Divider()
                     
-                    noteView(viewStore: viewStore)
+                    if viewStore.state.trade.note?.isEmpty == false {
+                        noteView(viewStore: viewStore)
+                    }
                     
-                    photoView(viewStore: viewStore)
+                    if viewStore.state.trade.images.isEmpty == false {
+                        photoView(viewStore: viewStore)
+                    }
                     
                     tradeListView(viewStore: viewStore)
                 }
