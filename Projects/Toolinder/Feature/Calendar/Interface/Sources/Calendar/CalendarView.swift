@@ -25,7 +25,6 @@ public struct CalendarView: View {
                 ZStack {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: .zero) {
-                            
                             calenderItemListView(viewStore: viewStore, proxy: proxy)
                                 .padding(.horizontal, 10)
                                 .padding(.bottom, 10)
@@ -36,6 +35,9 @@ public struct CalendarView: View {
                             Spacer()
                         }
                         .padding(.top, 45)
+                    }
+                    .refreshable {
+                        viewStore.send(.refreshScroll)
                     }
                     
                     header(viewStore: viewStore)

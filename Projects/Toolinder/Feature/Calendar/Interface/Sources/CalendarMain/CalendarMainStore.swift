@@ -110,8 +110,9 @@ public struct CalendarMainStore: Reducer {
                         )
                     ]
                 } else {
-                    for (index, calendar) in state.calendars.enumerated() {
-                        state.calendars[index].calendars = CalendarEntity.toDomain(date: calendar.selectedDate, trades: state.trades)
+                    for id in state.calendars.ids {
+                        let date = state.calendars[id: id]?.selectedDate ?? .now
+                        state.calendars[id: id]?.calendars = CalendarEntity.toDomain(date: date, trades: trades)
                     }
                 }
                 
@@ -119,6 +120,9 @@ public struct CalendarMainStore: Reducer {
                 
             case let .calendar(id, action):
                 switch action {
+                case .delegate(.refresh):
+                    return .send(.fetch)
+                    
                 case .tradeEdit(.presented(.delegate(.save))):
                     return .send(.fetch)
                     

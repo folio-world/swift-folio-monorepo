@@ -18,7 +18,23 @@ public struct CalendarStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: UUID
         public var offset: Int
-        public var calendars: [CalendarEntity]
+        public var calendars: [CalendarEntity] {
+            didSet {
+                self.calendarItem = .init(uniqueElements: calendars.map { calendar in
+                    let id = UUID()
+                    let isSelected = calendar.date.isEqual(date: selectedDate)
+                    if isSelected {
+                        self.selectedCalendarItemID = id
+                    }
+                    return .init(
+                        id: id,
+                        trades: calendar.trades,
+                        date: calendar.date,
+                        isSelected: isSelected
+                    )
+                })
+            }
+        }
         
         public var selectedDate: Date
         public var selectedCalendar: CalendarEntity?
@@ -61,6 +77,7 @@ public struct CalendarStore: Reducer {
         
         case newButtonTapped
         case tradeItemTapped(Trade)
+        case refreshScroll
         
         case refreshTradeItem([Trade])
         
@@ -72,6 +89,7 @@ public struct CalendarStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
+            case refresh
             case detail(Trade)
         }
     }
@@ -88,6 +106,9 @@ public struct CalendarStore: Reducer {
                 
             case let .tradeItemTapped(trade):
                 return .send(.delegate(.detail(trade)))
+                
+            case .refreshScroll:
+                return .send(.delegate(.refresh))
                 
             case let .refreshTradeItem(trades):
                 state.tradeItem = .init(
