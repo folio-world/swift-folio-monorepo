@@ -54,7 +54,7 @@ public struct TickerDetailStore: Reducer {
                 ])
                 
             case .editButtonTapped:
-                state.tickerEdit = .init(selectedTicker: state.ticker)
+                state.tickerEdit = .init(mode: .edit, selectedTicker: state.ticker)
                 return .none
                 
             case .tickerTypeChartDataEntityRequest:

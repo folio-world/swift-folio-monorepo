@@ -10,12 +10,10 @@ import SwiftData
 
 import ComposableArchitecture
 
-import ToolinderFeatureTradeInterface
 import ToolinderDomain
 import ToolinderShared
 
 public struct TradeDetailView: View {
-    @Environment(\.modelContext) private var context
     let store: StoreOf<TradeDetailStore>
     
     public init(store: StoreOf<TradeDetailStore>) {
@@ -56,7 +54,7 @@ public struct TradeDetailView: View {
                 )
             ) {
                 TradeEditView(store: $0)
-                    .presentationDetents([.large])
+                    .presentationDetents([.medium])
             }
             .navigationTitle(viewStore.state.trade.ticker?.name ?? "")
             .navigationBarTitleDisplayMode(.large)

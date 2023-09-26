@@ -37,6 +37,12 @@ public struct TickerEditStore: Reducer {
         ) {
             self.mode = mode
             self.selectedTicker = selectedTicker
+            
+            if mode == .edit {
+                self.name = selectedTicker?.name ?? ""
+                self.tickerType = selectedTicker?.type ?? .stock
+                self.currency = selectedTicker?.currency ?? .dollar
+            }
         }
     }
     
@@ -47,6 +53,7 @@ public struct TickerEditStore: Reducer {
         case tickerTapped(Ticker)
         case tickerTypeViewTapped
         case currencyViewTapped
+        case deleteButtonTapped
         case nextButtonTapped
         
         case fetchTickersRequest

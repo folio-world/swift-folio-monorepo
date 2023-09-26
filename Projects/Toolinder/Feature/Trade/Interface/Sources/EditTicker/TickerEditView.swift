@@ -68,14 +68,26 @@ public struct TickerEditView: View {
     }
     
     private func headerView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
-        switch viewStore.state.mode {
-        case .add:
-            Text("Ticker")
-                .font(.title)
+        HStack {
+            if viewStore.state.mode == .add {
+                Text("Ticker")
+                    .font(.title)
+            } else {
+                Text(viewStore.state.selectedTicker?.name ?? "")
+                    .font(.title)
+            }
             
-        case .edit:
-            Text(viewStore.state.selectedTicker?.name ?? "")
-                .font(.title)
+            Spacer()
+            
+            if viewStore.state.mode == .edit {
+                Button(action: {
+                    viewStore.send(.deleteButtonTapped)
+                }, label: {
+                    Image(systemName: "trash.circle.fill")
+                        .foregroundStyle(.foreground)
+                        .font(.title)
+                })
+            }
         }
     }
     

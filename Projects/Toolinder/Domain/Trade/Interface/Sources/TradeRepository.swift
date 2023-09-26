@@ -10,11 +10,18 @@ import SwiftData
 
 public protocol TradeRepositoryInterface {
     func fetchTickers(descriptor: FetchDescriptor<Ticker>) -> Result<[Ticker], TradeError>
-    func fetchTrades(descriptor: FetchDescriptor<Trade>) -> Result<[Trade], TradeError>
     func saveTicker(ticker: Ticker) -> Result<Ticker, TradeError>
+    func updateTicker(model: Ticker, dto: TickerDTO) -> Result<Ticker, TradeError>
+    func deleteTicker(ticker: Ticker) -> Result<Ticker, TradeError>
+    
+    func fetchTrades(descriptor: FetchDescriptor<Trade>) -> Result<[Trade], TradeError>
     func saveTrade(trade: Trade) -> Result<Trade, TradeError>
     func updateTrade(model: Trade, dto: TradeDTO) -> Result<Trade, TradeError>
     func deleteTrade(trade: Trade) -> Result<Trade, TradeError>
+    
+    func isValidatedSaveTicker(new: Ticker) -> Bool
+    func isValidatedUpdateTicker(origin: Ticker, new: TickerDTO) -> Bool
+    func isValidatedDeleteTicker(origin: Ticker) -> Bool
     
     func isValidatedSaveTrade(trade: Trade) -> Bool
     func isValidatedUpdateTrade(origin: Trade, new: TradeDTO) -> Bool
@@ -47,17 +54,42 @@ public class TradeRepository: TradeRepositoryInterface {
         }
     }
     
+    public func saveTicker(ticker: Ticker) -> Result<Ticker, TradeError> {
+        if isValidatedSaveTicker(new: ticker) {
+            context?.insert(ticker)
+            return .success(ticker)
+        } else {
+            return .failure(.unknown)
+        }
+    }
+    
+    public func updateTicker(model: Ticker, dto: TickerDTO) -> Result<Ticker, TradeError> {
+        if isValidatedUpdateTicker(origin: model, new: dto) {
+            let ticker = model
+            ticker.type = dto.type
+            ticker.currency = dto.currency
+            ticker.name = dto.name
+            return .success(ticker)
+        } else {
+            return .failure(.unknown)
+        }
+    }
+    
+    public func deleteTicker(ticker: Ticker) -> Result<Ticker, TradeError> {
+        if isValidatedDeleteTicker(origin: ticker) {
+            context?.delete(ticker)
+            return .success(ticker)
+        } else {
+            return .failure(.unknown)
+        }
+    }
+    
     public func fetchTrades(descriptor: FetchDescriptor<Trade>) -> Result<[Trade], TradeError> {
         if let trades = try? context?.fetch(descriptor) {
             return .success(trades)
         } else {
             return .failure(.unknown)
         }
-    }
-    
-    public func saveTicker(ticker: Ticker) -> Result<Ticker, TradeError> {
-        context?.insert(ticker)
-        return .success(ticker)
     }
     
     public func saveTrade(trade: Trade) -> Result<Trade, TradeError> {
@@ -92,6 +124,21 @@ public class TradeRepository: TradeRepositoryInterface {
         } else {
             return .failure(.unknown)
         }
+    }
+    
+    public func isValidatedSaveTicker(new: Ticker) -> Bool {
+        return true
+    }
+    
+    public func isValidatedUpdateTicker(origin: Ticker, new: TickerDTO) -> Bool {
+        if new.type != nil && new.currency != nil && new.name?.isEmpty == false {
+            return true
+        }
+        return false
+    }
+    
+    public func isValidatedDeleteTicker(origin: Ticker) -> Bool {
+        return true
     }
     
     public func isValidatedSaveTrade(trade: Trade) -> Bool {

@@ -141,7 +141,7 @@ public struct CalendarStore: Reducer {
                 state.tradeEdit = nil
                 return .none
                 
-            case .tradeEdit(.dismiss), .tradeEdit(.presented(.delegate(.dismiss))):
+            case .tradeEdit(.dismiss):
                 state.tradeEdit = nil
                 return .none
                 

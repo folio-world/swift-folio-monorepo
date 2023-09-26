@@ -63,6 +63,7 @@ public struct TradeEditView: View {
                 }, label: {
                     Image(systemName: "trash.circle.fill")
                         .foregroundStyle(.foreground)
+                        .font(.title)
                 })
             }
         }
