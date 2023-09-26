@@ -52,7 +52,6 @@ public struct CalendarView: View {
             ) {
                 TickerEditView(store: $0)
                     .presentationDetents([.medium])
-                    .interactiveDismissDisabled()
             }
             .sheet(
                 store: self.store.scope(
@@ -61,8 +60,7 @@ public struct CalendarView: View {
                 )
             ) {
                 TradeEditView(store: $0)
-                    .presentationDetents([.large])
-                    .interactiveDismissDisabled()
+                    .presentationDetents([.medium])
             }
             .tag(viewStore.offset)
         }

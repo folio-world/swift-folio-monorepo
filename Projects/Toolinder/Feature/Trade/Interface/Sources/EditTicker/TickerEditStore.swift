@@ -14,7 +14,13 @@ import ToolinderDomainTradeInterface
 public struct TickerEditStore: Reducer {
     public init() {}
     
+    public enum Mode {
+        case add
+        case edit
+    }
+    
     public struct State: Equatable {
+        public var mode: Mode
         public var name: String = ""
         public var tickerType: TickerType?
         public var currency: Currency?
@@ -25,7 +31,11 @@ public struct TickerEditStore: Reducer {
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
         @PresentationState var selectCurrency: SelectCurrencyStore.State?
         
-        public init(selectedTicker: Ticker? = nil) {
+        public init(
+            mode: Mode = .add,
+            selectedTicker: Ticker? = nil
+        ) {
+            self.mode = mode
             self.selectedTicker = selectedTicker
         }
     }
@@ -33,13 +43,14 @@ public struct TickerEditStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case fetched([Ticker])
-        
         case setName(String)
         case tickerTapped(Ticker)
         case tickerTypeViewTapped
         case currencyViewTapped
         case nextButtonTapped
+        
+        case fetchTickersRequest
+        case fetchTickersResponse([Ticker])
         
         case selectTickerType(PresentationAction<SelectTickerTypeStore.Action>)
         case selectCurrency(PresentationAction<SelectCurrencyStore.Action>)
@@ -58,13 +69,9 @@ public struct TickerEditStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                let tickers = (try? tradeClient.fetchTickers().get()) ?? []
-                
-                return .send(.fetched(tickers))
-                
-            case let .fetched(tickers):
-                state.tickers = tickers
-                return .none
+                return .concatenate([
+                    .send(.fetchTickersRequest)
+                ])
                 
             case let .setName(name):
                 state.name = name
@@ -97,6 +104,14 @@ public struct TickerEditStore: Reducer {
                     currency: state.currency,
                     name: state.name
                 )
+                
+            case .fetchTickersRequest:
+                let tickers = (try? tradeClient.fetchTickers().get()) ?? []
+                return .send(.fetchTickersResponse(tickers))
+                
+            case let .fetchTickersResponse(tickers):
+                state.tickers = tickers
+                return .none
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):
                 state.selectTickerType = nil

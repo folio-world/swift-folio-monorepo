@@ -22,27 +22,29 @@ public struct TickerEditView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(spacing: 20) {
+            VStack(alignment: .leading, spacing: 20) {
                 headerView(viewStore: viewStore)
-                    .padding(.top)
-                    .padding(.horizontal)
+                    .padding([.top, .horizontal])
                 
-                tickersView(viewStore: viewStore)
+                switch viewStore.state.mode {
+                case .add:
+                    tickersView(viewStore: viewStore)
+                case .edit:
+                    EmptyView()
+                }
                 
                 Divider()
                     .padding(.horizontal)
                 
-                TextField("Name", text: viewStore.binding(get: \.name, send: TickerEditStore.Action.setName))
+                inputView(viewStore: viewStore)
                     .padding(.horizontal)
-                
-                tickerTypeView(viewStore: viewStore)
-                
-                currencyView(viewStore: viewStore)
                 
                 Spacer()
                 
-                nextButtonView(viewStore: viewStore)
-                    .padding()
+                MinimalButton(title: "Next") {
+                    viewStore.send(.nextButtonTapped)
+                }
+                .padding(.horizontal)
             }
             .onAppear {
                 viewStore.send(.onAppear)
@@ -69,43 +71,14 @@ public struct TickerEditView: View {
     }
     
     private func headerView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
-        HStack {
+        switch viewStore.state.mode {
+        case .add:
             Text("Ticker")
                 .font(.title)
             
-            Spacer()
-            
-            Button(action: {
-                viewStore.send(.delegate(.cancel))
-            }, label: {
-                Image(systemName: "xmark.circle.fill")
-                    .foregroundStyle(.black)
-                    .font(.title)
-            })
-        }
-    }
-    
-    private func tickerTypeView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
-        HStack {
-            Label(viewStore.tickerType?.rawValue ?? "Ticker Type", systemImage: viewStore.tickerType?.systemImageName ?? "questionmark.circle.fill")
-            
-            Spacer()
-        }
-        .padding(.horizontal)
-        .onTapGesture {
-            viewStore.send(.tickerTypeViewTapped)
-        }
-    }
-    
-    private func currencyView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
-        HStack {
-            Label(viewStore.currency?.rawValue ?? "Currency", systemImage: viewStore.currency?.systemImageName ?? "questionmark.circle.fill")
-            
-            Spacer()
-        }
-        .padding(.horizontal)
-        .onTapGesture {
-            viewStore.send(.currencyViewTapped)
+        case .edit:
+            Text(viewStore.state.selectedTicker?.name ?? "")
+                .font(.title)
         }
     }
     
@@ -125,28 +98,22 @@ public struct TickerEditView: View {
         }
     }
     
-    private func nextButtonView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
-        Button(action: {
-            viewStore.send(.nextButtonTapped)
-        }, label: {
-            HStack {
-                Spacer()
-                
-                Text("Next")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .foregroundStyle(.white)
-                
-                Spacer()
-            }
-            .padding(.vertical, 10)
-        })
-        .background(.black)
-        .clipShape(
-            RoundedRectangle(
-                cornerRadius: 8,
-                style: .continuous
-            )
-        )
+    private func inputView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
+        VStack(alignment: .leading, spacing: 20) {
+            TextField("Name", text: viewStore.binding(get: \.name, send: TickerEditStore.Action.setName))
+            
+            Button(action: {
+                viewStore.send(.tickerTypeViewTapped)
+            }, label: {
+                Label(viewStore.tickerType?.rawValue ?? "Ticker Type", systemImage: viewStore.tickerType?.systemImageName ?? "questionmark.circle.fill")
+            })
+            
+            Button(action: {
+                viewStore.send(.currencyViewTapped)
+            }, label: {
+                Label(viewStore.currency?.rawValue ?? "Currency", systemImage: viewStore.currency?.systemImageName ?? "questionmark.circle.fill")
+            })
+        }
+        .foregroundStyle(.foreground)
     }
 }
