@@ -57,6 +57,10 @@ public struct PortfolioNavigationStackStore: Reducer {
                 state.path.append(.tickerDetail(.init(ticker: ticker)))
                 return .none
                 
+            case .path(.element(id: _, action: .tickerDetail(.delegate(.deleted)))):
+                state.path.removeLast()
+                return .none
+                
             default:
                 return .none
             }

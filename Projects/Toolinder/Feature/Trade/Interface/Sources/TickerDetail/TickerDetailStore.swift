@@ -41,7 +41,7 @@ public struct TickerDetailStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case tapped
+            case deleted
         }
     }
     
@@ -70,6 +70,10 @@ public struct TickerDetailStore: Reducer {
             case let .tickerTypeChartDataEntityResponse(entity):
                 state.tradeDateChartDataEntity = entity
                 return .none
+                
+            case .tickerEdit(.presented(.delegate(.delete))):
+                state.tickerEdit = nil
+                return .send(.delegate(.deleted))
                 
             case .tickerEdit(.dismiss):
                 state.tickerEdit = nil

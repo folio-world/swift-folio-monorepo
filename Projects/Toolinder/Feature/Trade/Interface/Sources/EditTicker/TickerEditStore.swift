@@ -30,6 +30,7 @@ public struct TickerEditStore: Reducer {
         
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
         @PresentationState var selectCurrency: SelectCurrencyStore.State?
+        @PresentationState var alert: AlertState<Action.Alert>?
         
         public init(
             mode: Mode = .add,
@@ -62,11 +63,17 @@ public struct TickerEditStore: Reducer {
         case selectTickerType(PresentationAction<SelectTickerTypeStore.Action>)
         case selectCurrency(PresentationAction<SelectCurrencyStore.Action>)
         
+        case alert(PresentationAction<Alert>)
         case delegate(Delegate)
+        
+        public enum Alert: Equatable {
+            case confirmDeletion
+        }
         
         public enum Delegate: Equatable {
             case cancel
             case next(Ticker)
+            case delete(Ticker)
         }
     }
     
@@ -99,6 +106,16 @@ public struct TickerEditStore: Reducer {
                 
             case .currencyViewTapped:
                 state.selectCurrency = .init()
+                return .none
+                
+            case .deleteButtonTapped:
+                state.alert = AlertState {
+                    TextState("\(state.selectedTicker?.trades?.count ?? 0) records are also deleted.")
+                } actions: {
+                    ButtonState(role: .destructive, action: .confirmDeletion) {
+                        TextState("Delete")
+                    }
+                }
                 return .none
                 
             case .nextButtonTapped:
@@ -138,10 +155,18 @@ public struct TickerEditStore: Reducer {
                 state.selectCurrency = nil
                 return .none
                 
+            case .alert(.presented(.confirmDeletion)):
+                if let ticker = state.selectedTicker {
+                    let _ = tradeClient.deleteTicker(ticker)
+                    return .send(.delegate(.delete(ticker)))
+                }
+                return .none
+                
             default:
                 return .none
             }
         }
+        .ifLet(\.$alert, action: /Action.alert)
     }
     
     private func validateAndSaveTickerEffect(tickerType: TickerType?, currency: Currency?, name: String) -> Effect<TickerEditStore.Action> {
