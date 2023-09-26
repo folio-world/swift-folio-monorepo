@@ -33,44 +33,48 @@ public struct TickerItemCellView: View {
                 viewStore.state.ticker.type?.image
                     .font(.title3)
                 
-                Text("\(viewStore.state.ticker.type?.rawValue ?? "")")
-                    .font(.caption2)
+                if viewStore.mode == .item {
+                    Text("\(viewStore.state.ticker.type?.rawValue ?? "")")
+                        .font(.caption2)
+                }
             }
             
-            Text(viewStore.state.ticker.name ?? "")
+            Text("\(viewStore.state.ticker.name ?? "") \(viewStore.state.ticker.trades?.count ?? 0)" )
                 .font(.body)
                 .fontWeight(.semibold)
             
-            Spacer()
-            
-            VStack {
-                HStack {
-                    Spacer()
-                    
-                    Text("\(Int(viewStore.tickerSummaryDataEntity.profit)) \(viewStore.state.ticker.currency?.rawValue ?? "") (\(Int(viewStore.tickerSummaryDataEntity.yield))%)")
-                        .font(.caption)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Int(viewStore.tickerSummaryDataEntity.yield) > 0 ? .pink : .mint)
-                }
+            if viewStore.mode == .item {
+                Spacer()
                 
-                HStack(spacing: .zero) {
-                    Spacer()
+                VStack {
+                    HStack {
+                        Spacer()
+                        
+                        Text("\(Int(viewStore.tickerSummaryDataEntity.profit)) \(viewStore.state.ticker.currency?.rawValue ?? "") (\(Int(viewStore.tickerSummaryDataEntity.yield))%)")
+                            .font(.caption)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(Int(viewStore.tickerSummaryDataEntity.yield) > 0 ? .pink : .mint)
+                    }
                     
-                    Text("\(Int(viewStore.tickerSummaryDataEntity.avgPrice)) \(viewStore.state.ticker.currency?.rawValue ?? "")")
-                        .font(.caption2)
-                }
-                
-                HStack(spacing: .zero) {
-                    Spacer()
+                    HStack(spacing: .zero) {
+                        Spacer()
+                        
+                        Text("\(Int(viewStore.tickerSummaryDataEntity.avgPrice)) \(viewStore.state.ticker.currency?.rawValue ?? "")")
+                            .font(.caption2)
+                    }
+                    
+                    HStack(spacing: .zero) {
+                        Spacer()
 
-                    Text("\(Int(viewStore.tickerSummaryDataEntity.currentVolume)) vol")
-                        .font(.caption2)
+                        Text("\(Int(viewStore.tickerSummaryDataEntity.currentVolume)) vol")
+                            .font(.caption2)
+                    }
                 }
             }
         }
         .frame(height: 35)
         .padding(10)
-        .background(Color(uiColor: .systemGray6))
+        .background(viewStore.state.isSelected ? Color(uiColor: .systemGray5) : Color(uiColor: .systemGray6))
         .clipShape(
             RoundedRectangle(
                 cornerRadius: 8

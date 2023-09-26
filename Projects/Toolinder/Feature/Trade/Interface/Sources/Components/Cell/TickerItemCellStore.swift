@@ -14,18 +14,31 @@ import ToolinderDomain
 public struct TickerItemCellStore: Reducer {
     public init() {}
     
+    public enum Mode {
+        case preview
+        case item
+    }
+    
     public struct State: Equatable, Identifiable {
+        public let mode: Mode
         public let id: UUID
         public let ticker: Ticker
         public let tickerSummaryDataEntity: TickerSummaryDataEntity
         
+        public var isSelected: Bool
+        
         public init(
+            mode: Mode = .item,
             id: UUID = .init(),
-            ticker: Ticker
+            ticker: Ticker,
+            isSelected: Bool = false
         ) {
+            self.mode = mode
             self.id = id
             self.ticker = ticker
             self.tickerSummaryDataEntity = ticker.toTickerSummaryDataEntity()
+            
+            self.isSelected = isSelected
         }
     }
     

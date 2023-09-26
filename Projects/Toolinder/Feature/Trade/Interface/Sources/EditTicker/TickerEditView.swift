@@ -100,13 +100,8 @@ public struct TickerEditView: View {
     private func tickersView(viewStore: ViewStoreOf<TickerEditStore>) -> some View {
         ScrollView(.horizontal) {
             HStack {
-                ForEach(viewStore.state.tickers) { ticker in
-                    TickerItem(
-                        ticker: ticker,
-                        isSelected: ticker == viewStore.selectedTicker
-                    ) {
-                        viewStore.send(.tickerTapped(ticker))
-                    }
+                ForEachStore(self.store.scope(state: \.tickerItem, action: TickerEditStore.Action.tickerItem(id:action:))) {
+                    TickerItemCellView(store: $0)
                 }
             }
             .padding(.horizontal)

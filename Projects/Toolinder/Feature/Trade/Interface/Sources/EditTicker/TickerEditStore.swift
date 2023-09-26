@@ -24,10 +24,11 @@ public struct TickerEditStore: Reducer {
         public var name: String = ""
         public var tickerType: TickerType?
         public var currency: Currency?
-        public var tickers: [Ticker] = []
+//        public var tickers: [Ticker] = []
         
         public var selectedTicker: Ticker?
         
+        public var tickerItem: IdentifiedArrayOf<TickerItemCellStore.State> = []
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
         @PresentationState var selectCurrency: SelectCurrencyStore.State?
         @PresentationState var alert: AlertState<Action.Alert>?
@@ -60,6 +61,7 @@ public struct TickerEditStore: Reducer {
         case fetchTickersRequest
         case fetchTickersResponse([Ticker])
         
+        case tickerItem(id: TickerItemCellStore.State.ID, action: TickerItemCellStore.Action)
         case selectTickerType(PresentationAction<SelectTickerTypeStore.Action>)
         case selectCurrency(PresentationAction<SelectCurrencyStore.Action>)
         
@@ -137,7 +139,24 @@ public struct TickerEditStore: Reducer {
                 return .send(.fetchTickersResponse(tickers))
                 
             case let .fetchTickersResponse(tickers):
-                state.tickers = tickers
+                state.tickerItem = .init(uniqueElements: tickers.map { .init(mode: .preview, ticker: $0) })
+                return .none
+                
+            case let .tickerItem(id: id, action: .delegate(.tapped)):
+                let isSelected = state.tickerItem[id: id]?.isSelected ?? false
+                
+                for id in state.tickerItem.ids {
+                    state.tickerItem[id: id]?.isSelected = false
+                }
+                
+                state.tickerItem[id: id]?.isSelected = !isSelected
+                
+                if !isSelected {
+                    state.selectedTicker = state.tickerItem[id: id]?.ticker
+                } else {
+                    state.selectedTicker = nil
+                }
+                
                 return .none
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):
@@ -168,6 +187,9 @@ public struct TickerEditStore: Reducer {
             default:
                 return .none
             }
+        }
+        .forEach(\.tickerItem, action: /Action.tickerItem(id:action:)) {
+            TickerItemCellStore()
         }
         .ifLet(\.$alert, action: /Action.alert)
     }
