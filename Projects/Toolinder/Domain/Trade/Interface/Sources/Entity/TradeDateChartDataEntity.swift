@@ -11,7 +11,6 @@ public struct TradeDateChartData: Equatable, Hashable {
     public let date: Date
     public let buyCount: Int
     public let sellCount: Int
-    public let trades: [Trade]
 }
 
 public typealias TradeDateChartDataEntity = [TradeDateChartData]
@@ -27,8 +26,7 @@ public extension [Trade] {
             return .init(
                 date: date,
                 buyCount: trades.filter { $0.side == .buy }.count,
-                sellCount: trades.filter { $0.side == .sell }.count,
-                trades: trades
+                sellCount: trades.filter { $0.side == .sell }.count
             )
         }
     }

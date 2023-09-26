@@ -10,7 +10,6 @@ import Foundation
 public struct TickerTypeChartData: Equatable, Hashable {
     public let tickerType: TickerType
     public let hold: Double
-    public let trades: [Trade]
 }
 
 public typealias TickerTypeChartDataEntity = [TickerTypeChartData]
@@ -28,8 +27,7 @@ public extension [Trade] {
             
             return .init(
                 tickerType: type,
-                hold: hold,
-                trades: trades
+                hold: hold
             )
         }
     }

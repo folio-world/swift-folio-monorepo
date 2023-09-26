@@ -16,15 +16,12 @@ public struct PortfolioMainStore: Reducer {
     public init() {}
     
     public enum Period: String, CaseIterable {
-        case whole = "Whole"
         case month = "Month"
-        case week = "Week"
-        case day = "Day"
     }
     
     public struct State: Equatable {
         public var trades: [Trade] = []
-        public var selectedPeriod: Period = .whole
+        public var selectedPeriod: Period = .month
         
         public var tickerTypeChartDataEntity: TickerTypeChartDataEntity = .init()
         public var tradeDateChartDataEntity: TradeDateChartDataEntity = .init()
@@ -109,7 +106,7 @@ public struct PortfolioMainStore: Reducer {
                     .send(
                         .tradeDateChartDataEntityRequest(
                             from: .now.add(byAdding: .month, value: -1),
-                            to: .now.add(byAdding: .month, value: 1))
+                            to: .now)
                     )
                 ])
                 

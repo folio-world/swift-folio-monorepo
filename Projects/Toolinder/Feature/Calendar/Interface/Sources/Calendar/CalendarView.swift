@@ -44,7 +44,7 @@ public struct CalendarView: View {
                 }
             }
             .onAppear {
-                viewStore.send(.onAppear)
+                viewStore.send(.onAppear, animation: .default)
             }
             .sheet(
                 store: self.store.scope(
