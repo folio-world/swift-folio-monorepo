@@ -130,6 +130,9 @@ public extension Target {
                 
                 if type == .interface {
                     dependencies += [.domain(product)]
+                    dependencies += module.dependencies(product).map {
+                        .feature(product, module: $0, type: .interface)
+                    }
                 }
                 
                 dependencies += type.dependencies().map {

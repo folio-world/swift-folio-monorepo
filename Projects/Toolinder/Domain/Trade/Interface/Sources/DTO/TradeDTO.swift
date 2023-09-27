@@ -35,4 +35,17 @@ public struct TradeDTO {
         self.date = date
         self.ticker = ticker
     }
+    
+    func toDomain() -> Trade {
+        return .init(
+            side: side,
+            price: price,
+            volume: volume,
+            images: images,
+            note: note,
+            date: date,
+            ticker: ticker
+        )
+    }
 }
+

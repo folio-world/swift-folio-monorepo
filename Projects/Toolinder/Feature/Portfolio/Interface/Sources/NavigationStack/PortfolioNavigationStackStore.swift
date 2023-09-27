@@ -7,6 +7,8 @@
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
+
 public struct PortfolioNavigationStackStore: Reducer {
     public init() {}
     
@@ -29,16 +31,16 @@ public struct PortfolioNavigationStackStore: Reducer {
     
     public struct Path: Reducer {
         public enum State: Equatable {
-            case detail(GoalDetailStore.State)
+            case tickerDetail(TickerDetailStore.State)
         }
         
         public enum Action: Equatable {
-            case detail(GoalDetailStore.Action)
+            case tickerDetail(TickerDetailStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
-            Scope(state: /State.detail, action: /Action.detail) {
-                GoalDetailStore()
+            Scope(state: /State.tickerDetail, action: /Action.tickerDetail) {
+                TickerDetailStore()
             }
         }
     }
@@ -49,6 +51,14 @@ public struct PortfolioNavigationStackStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                return .none
+                
+            case let .main(.delegate(.tickerDetail(ticker))):
+                state.path.append(.tickerDetail(.init(ticker: ticker)))
+                return .none
+                
+            case let .path(.element(id: id, action: .tickerDetail(.delegate(.deleted)))):
+                state.path[id: id] = nil
                 return .none
                 
             default:

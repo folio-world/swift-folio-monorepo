@@ -9,6 +9,7 @@ import SwiftUI
 
 import ComposableArchitecture
 
+import ToolinderFeatureTradeInterface
 import ToolinderShared
 
 public struct CalendarView: View {
@@ -24,7 +25,6 @@ public struct CalendarView: View {
                 ZStack {
                     ScrollView(showsIndicators: false) {
                         VStack(spacing: .zero) {
-                            
                             calenderItemListView(viewStore: viewStore, proxy: proxy)
                                 .padding(.horizontal, 10)
                                 .padding(.bottom, 10)
@@ -36,32 +36,33 @@ public struct CalendarView: View {
                         }
                         .padding(.top, 45)
                     }
+                    .refreshable {
+                        viewStore.send(.refreshScroll)
+                    }
                     
                     header(viewStore: viewStore)
                 }
             }
             .onAppear {
-                viewStore.send(.onAppear)
+                viewStore.send(.onAppear, animation: .default)
             }
             .sheet(
                 store: self.store.scope(
-                    state: \.$addTicker,
-                    action: { .addTicker($0) }
+                    state: \.$tickerEdit,
+                    action: { .tickerEdit($0) }
                 )
             ) {
-                AddTickerView(store: $0)
+                TickerEditView(store: $0)
                     .presentationDetents([.medium])
-                    .interactiveDismissDisabled()
             }
             .sheet(
                 store: self.store.scope(
-                    state: \.$addTrade,
-                    action: { .addTrade($0) }
+                    state: \.$tradeEdit,
+                    action: { .tradeEdit($0) }
                 )
             ) {
-                AddTradeView(store: $0)
-                    .presentationDetents([.large])
-                    .interactiveDismissDisabled()
+                TradeEditView(store: $0)
+                    .presentationDetents([.medium])
             }
             .tag(viewStore.offset)
         }
@@ -102,10 +103,9 @@ public struct CalendarView: View {
                 TradeItemCellView(store: $0)
             }
             
-            TradeNewItem()
-                .onTapGesture {
-                    viewStore.send(.newButtonTapped)
-                }
+            TradeNewItem() {
+                viewStore.send(.newButtonTapped)
+            }
         }
     }
 }

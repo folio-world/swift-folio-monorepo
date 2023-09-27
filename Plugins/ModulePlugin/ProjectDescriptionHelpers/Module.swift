@@ -78,7 +78,8 @@ public extension Module {
             return [
                 (.Toolinder, .Calendar),
                 (.Toolinder, .Portfolio),
-                (.Toolinder, .MyPage)
+                (.Toolinder, .MyPage),
+                (.Toolinder, .Trade),
             ]
         case .Folio: return []
         }
@@ -187,11 +188,22 @@ public extension Module {
         
         case Calendar
         case Portfolio
+        case Trade
         
         public static let name: String = "Feature"
         
         public var microTargetTypes: [MicroTargetType] {
             return MicroTargetType.allCases
+        }
+        
+        func dependencies(_ product: Product) -> [Feature] {
+            if product == .Toolinder && (self == .Calendar || self == .Portfolio) {
+                return [
+                    .Trade
+                ]
+            }
+            
+            return []
         }
     }
 }

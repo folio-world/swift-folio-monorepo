@@ -10,6 +10,7 @@ import Foundation
 import ComposableArchitecture
 
 import ToolinderDomain
+import ToolinderFeatureTradeInterface
 
 public struct CalendarStore: Reducer {
     public init() {}
@@ -17,7 +18,23 @@ public struct CalendarStore: Reducer {
     public struct State: Equatable, Identifiable {
         public var id: UUID
         public var offset: Int
-        public var calendars: [CalendarEntity]
+        public var calendars: [CalendarEntity] {
+            didSet {
+                self.calendarItem = .init(uniqueElements: calendars.map { calendar in
+                    let id = UUID()
+                    let isSelected = calendar.date.isEqual(date: selectedDate)
+                    if isSelected {
+                        self.selectedCalendarItemID = id
+                    }
+                    return .init(
+                        id: id,
+                        trades: calendar.trades,
+                        date: calendar.date,
+                        isSelected: isSelected
+                    )
+                })
+            }
+        }
         
         public var selectedDate: Date
         public var selectedCalendar: CalendarEntity?
@@ -26,8 +43,8 @@ public struct CalendarStore: Reducer {
         
         public var calendarItem: IdentifiedArrayOf<CalendarItemCellStore.State> = []
         public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
-        @PresentationState var addTicker: AddTickerStore.State?
-        @PresentationState var addTrade: AddTradeStore.State?
+        @PresentationState var tickerEdit: TickerEditStore.State?
+        @PresentationState var tradeEdit: TradeEditStore.State?
         
         public init(
             id: UUID = .init(),
@@ -60,17 +77,19 @@ public struct CalendarStore: Reducer {
         
         case newButtonTapped
         case tradeItemTapped(Trade)
+        case refreshScroll
         
         case refreshTradeItem([Trade])
         
         case calendarItem(id: CalendarItemCellStore.State.ID, action: CalendarItemCellStore.Action)
         case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
-        case addTicker(PresentationAction<AddTickerStore.Action>)
-        case addTrade(PresentationAction<AddTradeStore.Action>)
+        case tickerEdit(PresentationAction<TickerEditStore.Action>)
+        case tradeEdit(PresentationAction<TradeEditStore.Action>)
         
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
+            case refresh
             case detail(Trade)
         }
     }
@@ -79,14 +98,20 @@ public struct CalendarStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                if let id = state.selectedCalendarItemID {
+                    return .send(.refreshTradeItem(state.calendarItem[id: id]?.trades ?? []))
+                }
                 return .none
                 
             case .newButtonTapped:
-                state.addTicker = .init()
+                state.tickerEdit = .init()
                 return .none
                 
             case let .tradeItemTapped(trade):
                 return .send(.delegate(.detail(trade)))
+                
+            case .refreshScroll:
+                return .send(.delegate(.refresh))
                 
             case let .refreshTradeItem(trades):
                 state.tradeItem = .init(
@@ -94,7 +119,7 @@ public struct CalendarStore: Reducer {
                         return .init(
                             trade: trade,
                             dateStyle: .short,
-                            timeStyle: .none
+                            timeStyle: .short
                         )
                     }
                 )
@@ -117,31 +142,31 @@ public struct CalendarStore: Reducer {
                     return .none
                 }
                 
-            case .addTicker(.presented(.delegate(.cancel))):
-                state.addTicker = nil
+            case .tickerEdit(.presented(.delegate(.cancel))):
+                state.tickerEdit = nil
                 return .none
                 
-            case let .addTicker(.presented(.delegate(.next(ticker)))):
-                state.addTicker = nil
-                state.addTrade = .init(ticker: ticker)
+            case let .tickerEdit(.presented(.delegate(.next(ticker)))):
+                state.tickerEdit = nil
+                state.tradeEdit = .init(selectedTicker: ticker, selectedDate: state.selectedDate)
                 return .none
                 
-            case .addTicker(.dismiss):
-                state.addTicker = nil
+            case .tickerEdit(.dismiss):
+                state.tickerEdit = nil
                 return .none
                 
-            case .addTrade(.presented(.delegate(.save))):
-                state.addTicker = nil
-                state.addTrade = nil
+            case .tradeEdit(.presented(.delegate(.save))):
+                state.tickerEdit = nil
+                state.tradeEdit = nil
                 return .none
                 
-            case let .addTrade(.presented(.delegate(.cancel(ticker)))):
-                state.addTicker = .init(selectedTicker: ticker)
-                state.addTrade = nil
+            case let .tradeEdit(.presented(.delegate(.cancel(ticker)))):
+                state.tickerEdit = .init(selectedTicker: ticker)
+                state.tradeEdit = nil
                 return .none
                 
-            case .addTrade(.dismiss), .addTrade(.presented(.delegate(.dismiss))):
-                state.addTrade = nil
+            case .tradeEdit(.dismiss):
+                state.tradeEdit = nil
                 return .none
                 
             default:
@@ -154,11 +179,11 @@ public struct CalendarStore: Reducer {
         .forEach(\.tradeItem, action: /Action.tradeItem(id:action:)) {
             TradeItemCellStore()
         }
-        .ifLet(\.$addTicker, action: /Action.addTicker) {
-            AddTickerStore()
+        .ifLet(\.$tickerEdit, action: /Action.tickerEdit) {
+            TickerEditStore()
         }
-        .ifLet(\.$addTrade, action: /Action.addTrade) {
-            AddTradeStore()
+        .ifLet(\.$tradeEdit, action: /Action.tradeEdit) {
+            TradeEditStore()
         }
     }
 }

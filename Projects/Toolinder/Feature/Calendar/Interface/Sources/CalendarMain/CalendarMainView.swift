@@ -34,8 +34,7 @@ public struct CalendarMainView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
             .onAppear {
-                UIScrollView.appearance().isPagingEnabled = true
-                viewStore.send(.onAppear)
+                viewStore.send(.onAppear, animation: .default)
             }
         }
     }

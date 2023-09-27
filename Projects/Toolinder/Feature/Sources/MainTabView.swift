@@ -47,7 +47,7 @@ public struct MainTabView: View {
             .onAppear {
                 viewStore.send(.onAppear)
             }
-            .accentColor(.black)
+            .accentColor(Color.blackOrWhite(true))
         }
     }
 }

@@ -22,6 +22,21 @@ public struct MyPageMainView: View {
                 Section {
                     existingUserPolicyItem(viewStore: viewStore)
                 }
+                
+                Section {
+                    if let url = URL(string: "https://tally.so/r/mJpaR4") {
+                        Link(destination: url, label: {
+                            Label(
+                                title: {
+                                    Text("Usability Questionnaire")
+                                }, icon: {
+                                    Image(systemName: "doc.text.image.fill")
+                                        .foregroundStyle(.blue)
+                                }
+                            )
+                        })
+                    }
+                }
             }
             .navigationTitle("MyPage")
         }
