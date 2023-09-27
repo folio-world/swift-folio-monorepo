@@ -17,9 +17,9 @@ public class Ticker {
     @Relationship(deleteRule: .cascade, inverse: \Trade.ticker) public var trades: [Trade]? = []
 
     public init(
-        type: TickerType,
-        currency: Currency,
-        name: String
+        type: TickerType?,
+        currency: Currency?,
+        name: String?
     ) {
         self.type = type
         self.currency = currency

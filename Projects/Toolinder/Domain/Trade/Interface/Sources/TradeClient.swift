@@ -18,13 +18,13 @@ public struct TradeClient {
     public static let tradeRepository: TradeRepositoryInterface = TradeRepository()
     
     public var fetchTrades: @Sendable () -> Result<[Trade], TradeError>
-    public var saveTrade: @Sendable (Trade) -> Result<Trade, TradeError>
+    public var saveTrade: @Sendable (TradeDTO) -> Result<Trade, TradeError>
     public var updateTrade: @Sendable (Trade, TradeDTO) -> Result<Trade, TradeError>
     public var deleteTrade: @Sendable (Trade) -> Result<Trade, TradeError>
     
     public init(
         fetchTrades: @Sendable @escaping () -> Result<[Trade], TradeError>,
-        saveTrade: @Sendable @escaping (Trade) -> Result<Trade, TradeError>,
+        saveTrade: @Sendable @escaping (TradeDTO) -> Result<Trade, TradeError>,
         updateTrade: @Sendable @escaping (Trade, TradeDTO) -> Result<Trade, TradeError>,
         deleteTrade: @Sendable @escaping (Trade) -> Result<Trade, TradeError>
     ) {
@@ -61,7 +61,7 @@ public extension DependencyValues {
 extension TradeClient: DependencyKey {
     public static var liveValue = TradeClient(
         fetchTrades: { tradeRepository.fetchTrades(descriptor: .init()) },
-        saveTrade: { tradeRepository.saveTrade(trade: $0) },
+        saveTrade: { tradeRepository.saveTrade(dto: $0) },
         updateTrade: { tradeRepository.updateTrade(model:$0, dto: $1) },
         deleteTrade: { tradeRepository.deleteTrade(trade: $0) }
     )

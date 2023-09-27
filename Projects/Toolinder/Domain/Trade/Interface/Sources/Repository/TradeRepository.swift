@@ -10,11 +10,11 @@ import SwiftData
 
 public protocol TradeRepositoryInterface {
     func fetchTrades(descriptor: FetchDescriptor<Trade>) -> Result<[Trade], TradeError>
-    func saveTrade(trade: Trade) -> Result<Trade, TradeError>
+    func saveTrade(dto: TradeDTO) -> Result<Trade, TradeError>
     func updateTrade(model: Trade, dto: TradeDTO) -> Result<Trade, TradeError>
     func deleteTrade(trade: Trade) -> Result<Trade, TradeError>
     
-    func isValidatedSaveTrade(trade: Trade) -> Bool
+    func isValidatedSaveTrade(dto: TradeDTO) -> Bool
     func isValidatedUpdateTrade(origin: Trade, new: TradeDTO) -> Bool
     func isValidatedDeleteTrade(origin: Trade) -> Bool
 }
@@ -70,8 +70,9 @@ public class TradeRepository: TradeRepositoryInterface {
         }
     }
     
-    public func saveTrade(trade: Trade) -> Result<Trade, TradeError> {
-        if isValidatedSaveTrade(trade: trade) {
+    public func saveTrade(dto: TradeDTO) -> Result<Trade, TradeError> {
+        if isValidatedSaveTrade(dto: dto) {
+            let trade = dto.toDomain()
             context?.insert(trade)
             return .success(trade)
         } else {
@@ -119,10 +120,10 @@ public class TradeRepository: TradeRepositoryInterface {
         return true
     }
     
-    public func isValidatedSaveTrade(trade: Trade) -> Bool {
-        if trade.side == .buy { return true }
+    public func isValidatedSaveTrade(dto: TradeDTO) -> Bool {
+        if dto.side == .buy { return true }
         
-        guard let trades = try? fetchTrades(descriptor: .init(sortBy: [.init(\.date)])).get().filter({ $0.ticker == trade.ticker })
+        guard let trades = try? fetchTrades(descriptor: .init(sortBy: [.init(\.date)])).get().filter({ $0.ticker == dto.ticker })
         else { return false }
         
         let currentVolume = trades.reduce(0) { (result, trade) in
@@ -133,7 +134,7 @@ public class TradeRepository: TradeRepositoryInterface {
             }
         }
         
-        return currentVolume - (trade.volume ?? 0) > 0
+        return currentVolume - (dto.volume ?? 0) > 0
     }
     
     public func isValidatedUpdateTrade(origin: Trade, new: TradeDTO) -> Bool {

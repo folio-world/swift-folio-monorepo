@@ -22,4 +22,12 @@ public class TickerDTO {
         self.currency = currency
         self.name = name
     }
+    
+    func toDomain() -> Ticker {
+        return .init(
+            type: type,
+            currency: currency,
+            name: name
+        )
+    }
 }
