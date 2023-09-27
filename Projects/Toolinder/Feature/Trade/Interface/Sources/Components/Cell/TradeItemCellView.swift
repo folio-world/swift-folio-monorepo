@@ -36,14 +36,28 @@ public struct TradeItemCellView: View {
     
     private func tradeView(viewStore: ViewStoreOf<TradeItemCellStore>) -> some View {
         HStack(spacing: 10) {
-            Text(
-                viewStore.trade.date.localizedString(
-                    dateStyle: viewStore.state.dateStyle,
-                    timeStyle: viewStore.state.timeStyle
-                )
-            )
-            .font(.headline)
-            .fontWeight(.semibold)
+            VStack(alignment: .trailing) {
+                if viewStore.state.dateStyle != .none {
+                    Text(
+                        viewStore.trade.date.localizedString(
+                            dateStyle: viewStore.state.dateStyle,
+                            timeStyle: .none
+                        )
+                    )
+                    .font(.headline)
+                    .fontWeight(.semibold)
+                }
+                
+                if viewStore.state.timeStyle != .none {
+                    Text(
+                        viewStore.trade.date.localizedString(
+                            dateStyle: .none,
+                            timeStyle: viewStore.state.timeStyle
+                        )
+                    )
+                    .font(.caption2)
+                }
+            }
             
             viewStore.state.trade.ticker?.type?.image
                 .font(.title3)
@@ -54,6 +68,14 @@ public struct TradeItemCellView: View {
                 .fontWeight(.semibold)
             
             Spacer()
+            
+            VStack(alignment: .trailing, spacing: 1) {
+                Text("\(Int(viewStore.state.trade.price ?? 0)) \(viewStore.state.trade.ticker?.currency?.rawValue ?? "")")
+                    .font(.caption)
+                
+                Text("\(Int(viewStore.state.trade.volume ?? 0)) vol")
+                    .font(.caption)
+            }
         }
         .frame(height: 35)
         .padding(10)

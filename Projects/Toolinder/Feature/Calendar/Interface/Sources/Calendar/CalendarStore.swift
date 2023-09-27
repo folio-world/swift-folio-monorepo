@@ -98,6 +98,9 @@ public struct CalendarStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                if let id = state.selectedCalendarItemID {
+                    return .send(.refreshTradeItem(state.calendarItem[id: id]?.trades ?? []))
+                }
                 return .none
                 
             case .newButtonTapped:
@@ -116,7 +119,7 @@ public struct CalendarStore: Reducer {
                         return .init(
                             trade: trade,
                             dateStyle: .short,
-                            timeStyle: .none
+                            timeStyle: .short
                         )
                     }
                 )

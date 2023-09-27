@@ -49,7 +49,7 @@ public struct TradeDetailStore: Reducer {
             case .onAppear:
                 state.tradeItem = .init(
                     uniqueElements: state.trade.ticker?.trades?.compactMap { trade in
-                        return .init(trade: trade, dateStyle: .short, timeStyle: .none)
+                        return .init(trade: trade, dateStyle: .short, timeStyle: .short)
                     } ?? []
                 )
                 return .none
