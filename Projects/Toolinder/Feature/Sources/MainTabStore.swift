@@ -38,6 +38,8 @@ public struct MainTabStore: Reducer {
         case binding(BindingAction<State>)
         
         case onAppear
+        case refresh
+        
         case selectTab(Tab)
         
         case calendar(CalendarNavigationStackStore.Action)
@@ -52,12 +54,18 @@ public struct MainTabStore: Reducer {
                 return .none
                 
             case .onAppear:
+                return .send(.refresh)
+                
+            case .refresh:
                 state = .init()
                 return .none
                 
             case let .selectTab(tab):
                 state.currentTab = tab
                 return .none
+                
+            case .portfolio(.delegate(.deleted)):
+                return .send(.refresh)
                 
             default:
                 return .none

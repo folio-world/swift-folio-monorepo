@@ -24,6 +24,7 @@ public class Trade {
         side: TradeSide,
         price: Double,
         volume: Double,
+        fee: Double,
         images: [Data],
         note: String,
         date: Date,
@@ -33,6 +34,7 @@ public class Trade {
         self.images = images
         self.price = price
         self.volume = volume
+        self.fee = fee
         self.note = note
         self.date = date
         self.ticker = ticker

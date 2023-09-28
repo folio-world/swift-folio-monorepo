@@ -24,7 +24,6 @@ public struct TickerEditStore: Reducer {
         public var name: String = ""
         public var tickerType: TickerType?
         public var currency: Currency?
-//        public var tickers: [Ticker] = []
         
         public var selectedTicker: Ticker?
         

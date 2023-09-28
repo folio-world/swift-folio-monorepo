@@ -17,6 +17,7 @@ public struct TradeEditStore: Reducer {
     
     public enum Mode {
         case add
+        case bypassAdd
         case edit
     }
     
@@ -25,8 +26,9 @@ public struct TradeEditStore: Reducer {
         public var selectedTicker: Ticker
         public var selectedTrade: Trade?
         
-        public var volume: Double
         public var price: Double
+        public var volume: Double
+        public var fee: Double
         public var selectedDate: Date = .now
         public var selectedTradeSide: TradeSide = .buy
         public var note: String = ""
@@ -34,12 +36,20 @@ public struct TradeEditStore: Reducer {
         
         public var selectedPhotosPickerItems: [PhotosPickerItem] = []
         
-        public init(selectedTicker: Ticker, selectedTrade: Trade? = nil, selectedDate: Date = .now) {
-            self.mode = selectedTrade == nil ? .add : .edit
+        @PresentationState var alert: AlertState<Action.Alert>?
+        
+        public init(
+            mode: Mode = .add,
+            selectedTicker: Ticker,
+            selectedTrade: Trade? = nil,
+            selectedDate: Date = .now
+        ) {
+            self.mode = mode
             self.selectedTicker = selectedTicker
             self.selectedTrade = selectedTrade
-            self.volume = selectedTrade?.volume ?? 0
             self.price = selectedTrade?.price ?? 0
+            self.volume = selectedTrade?.volume ?? 0
+            self.fee = selectedTrade?.fee ?? 0
             self.selectedDate = selectedTrade?.date ?? selectedDate
             self.note = selectedTrade?.note ?? ""
             self.images = selectedTrade?.images ?? []
@@ -49,8 +59,9 @@ public struct TradeEditStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case setVolume(Double)
         case setPrice(Double)
+        case setVolume(Double)
+        case setFee(Double)
         case selectDate(Date)
         case selectTradeSide(TradeSide)
         case setNote(String)
@@ -61,7 +72,12 @@ public struct TradeEditStore: Reducer {
         
         case photoToDataResponse([Data])
         
+        case alert(PresentationAction<Alert>)
         case delegate(Delegate)
+        
+        public enum Alert: Equatable {
+            case confirmDeletion
+        }
         
         public enum Delegate: Equatable {
             case cancel(Ticker)
@@ -78,12 +94,16 @@ public struct TradeEditStore: Reducer {
         case .onAppear:
             return .none
             
+        case let .setPrice(price):
+            state.price = price
+            return .none
+            
         case let .setVolume(volume):
             state.volume = volume
             return .none
             
-        case let .setPrice(price):
-            state.price = price
+        case let .setFee(fee):
+            state.fee = fee
             return .none
             
         case let .selectDate(date):
@@ -116,6 +136,7 @@ public struct TradeEditStore: Reducer {
                 side: state.selectedTradeSide,
                 price: state.price,
                 volume: state.volume,
+                fee: state.fee,
                 images: state.images,
                 note: state.note,
                 date: state.selectedDate,
@@ -123,13 +144,23 @@ public struct TradeEditStore: Reducer {
             )
             
         case .deleteButtonTapped:
-            if let trade = state.selectedTrade, let _ = try? tradeClient.deleteTrade(trade).get() {
-                return .send(.delegate(.delete(trade)))
+            state.alert = AlertState {
+                TextState("Are you sure?")
+            } actions: {
+                ButtonState(role: .destructive, action: .confirmDeletion) {
+                    TextState("Delete")
+                }
             }
             return .none
             
         case let .photoToDataResponse(data):
             state.images = data
+            return .none
+            
+        case .alert(.presented(.confirmDeletion)):
+            if let trade = state.selectedTrade, let _ = try? tradeClient.deleteTrade(trade).get() {
+                return .send(.delegate(.delete(trade)))
+            }
             return .none
             
         default:
@@ -142,6 +173,7 @@ public struct TradeEditStore: Reducer {
         side: TradeSide,
         price: Double,
         volume: Double,
+        fee: Double,
         images: [Data],
         note: String,
         date: Date,
@@ -149,12 +181,14 @@ public struct TradeEditStore: Reducer {
     ) -> Effect<TradeEditStore.Action> {
         guard !price.isZero else { return .none }
         guard !volume.isZero else { return .none }
+        guard fee < 100 else { return .none }
         
         if let unSavedTrade = trade {
             if let trade = try? tradeClient.updateTrade(unSavedTrade, .init(
                 side: side,
                 price: price,
                 volume: volume,
+                fee: fee,
                 images: images,
                 note: note,
                 date: date,
@@ -167,6 +201,7 @@ public struct TradeEditStore: Reducer {
                 side: side,
                 price: price,
                 volume: volume,
+                fee: fee,
                 images: images,
                 note: note,
                 date: date,

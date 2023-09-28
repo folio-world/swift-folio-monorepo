@@ -56,13 +56,13 @@ public struct TradeDetailStore: Reducer {
                 
             case .editButtonTapped:
                 if let ticker = state.trade.ticker {
-                    state.tradeEdit = .init(selectedTicker: ticker, selectedTrade: state.trade)
+                    state.tradeEdit = .init(mode: .edit, selectedTicker: ticker, selectedTrade: state.trade)
                 }
                 return .none
                 
             case .newButtonTapped:
                 if let ticker = state.trade.ticker {
-                    state.tradeEdit = .init(selectedTicker: ticker)
+                    state.tradeEdit = .init(mode: .bypassAdd, selectedTicker: ticker)
                 }
                 return .none
                 
