@@ -59,7 +59,7 @@ public struct TradeItemCellView: View {
                 }
             }
             
-            viewStore.state.trade.ticker?.type?.image
+            viewStore.state.trade.ticker?.type.image
                 .font(.title3)
                 .foregroundStyle(viewStore.state.trade.side == .buy ? .pink : .mint)
             
@@ -70,10 +70,10 @@ public struct TradeItemCellView: View {
             Spacer()
             
             VStack(alignment: .trailing, spacing: 1) {
-                Text("\(Int(viewStore.state.trade.price ?? 0)) \(viewStore.state.trade.ticker?.currency?.rawValue ?? "")")
+                Text("\(Int(viewStore.state.trade.price)) \(viewStore.state.trade.ticker?.currency.rawValue ?? "")")
                     .font(.caption)
                 
-                Text("\(Int(viewStore.state.trade.volume ?? 0)) vol")
+                Text("\(Int(viewStore.state.trade.volume)) vol")
                     .font(.caption)
             }
         }

@@ -9,9 +9,9 @@ import Foundation
 import SwiftData
 
 public class TickerDTO {
-    public var type: TickerType?
-    public var currency: Currency?
-    public var name: String?
+    public var type: TickerType
+    public var currency: Currency
+    public var name: String
     
     public init(
         type: TickerType,
@@ -24,7 +24,7 @@ public class TickerDTO {
     }
     
     func toDomain() -> Ticker {
-        return .init(
+        return Ticker(
             type: type,
             currency: currency,
             name: name

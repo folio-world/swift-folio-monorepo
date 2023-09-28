@@ -113,7 +113,7 @@ public struct TickerEditStore: Reducer {
                 
             case .deleteButtonTapped:
                 state.alert = AlertState {
-                    TextState("\(state.selectedTicker?.trades?.count ?? 0) records are also deleted.")
+                    TextState("\(state.selectedTicker?.trades.count ?? 0) records are also deleted.")
                 } actions: {
                     ButtonState(role: .destructive, action: .confirmDeletion) {
                         TextState("Delete")

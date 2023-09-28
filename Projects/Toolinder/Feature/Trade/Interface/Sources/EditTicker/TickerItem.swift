@@ -28,10 +28,10 @@ public struct TickerItem: View {
     public var body: some View {
         VStack(spacing: .zero) {
             HStack {
-                Image(systemName: ticker.type?.systemImageName ?? "")
+                Image(systemName: ticker.type.systemImageName)
                     .font(.body)
                 
-                Text("\(ticker.name ?? "") \(ticker.trades?.count ?? 0)")
+                Text("\(ticker.name) \(ticker.trades.count)")
                     .font(.body)
                     .fontWeight(.semibold)
                     .padding(.trailing)
@@ -59,7 +59,7 @@ public struct TickerItem: View {
             HStack(spacing: .zero) {
                 Spacer()
                 
-                Text("(avg) 12,000 \(ticker.currency?.rawValue ?? "")")
+                Text("(avg) 12,000 \(ticker.currency.rawValue)")
                     .font(.caption2)
             }
         }

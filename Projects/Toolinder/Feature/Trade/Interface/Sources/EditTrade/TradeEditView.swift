@@ -86,7 +86,7 @@ public struct TradeEditView: View {
     private func inputView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         VStack(spacing: 20) {
             HStack {
-                Label(viewStore.state.selectedTicker.currency?.rawValue ?? "", systemImage: viewStore.state.selectedTicker.currency?.systemImageName ?? "")
+                Label(viewStore.state.selectedTicker.currency.rawValue, systemImage: viewStore.state.selectedTicker.currency.systemImageName)
                 
                 TextField("Price", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
                     .keyboardType(.numberPad)
