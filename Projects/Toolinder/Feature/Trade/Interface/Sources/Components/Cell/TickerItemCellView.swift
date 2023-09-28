@@ -39,7 +39,7 @@ public struct TickerItemCellView: View {
                 }
             }
             
-            Text("\(viewStore.state.ticker.name) \(viewStore.state.ticker.trades.count)" )
+            Text("\(viewStore.state.ticker.name) \(viewStore.state.ticker.trades?.count ?? 0)" )
                 .font(.body)
                 .fontWeight(.semibold)
             

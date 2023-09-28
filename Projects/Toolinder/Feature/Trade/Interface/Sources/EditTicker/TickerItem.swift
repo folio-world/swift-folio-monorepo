@@ -31,7 +31,7 @@ public struct TickerItem: View {
                 Image(systemName: ticker.type.systemImageName)
                     .font(.body)
                 
-                Text("\(ticker.name) \(ticker.trades.count)")
+                Text("\(ticker.name) \(ticker.trades?.count ?? 0)")
                     .font(.body)
                     .fontWeight(.semibold)
                     .padding(.trailing)

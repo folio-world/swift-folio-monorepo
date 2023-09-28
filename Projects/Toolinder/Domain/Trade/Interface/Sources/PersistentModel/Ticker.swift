@@ -14,7 +14,7 @@ public class Ticker {
     public var currency: Currency = Currency.dollar
     public var name: String = ""
     
-    @Relationship(deleteRule: .cascade, inverse: \Trade.ticker) public var trades: [Trade] = []
+    @Relationship(deleteRule: .cascade, inverse: \Trade.ticker) public var trades: [Trade]? = []
 
     public init(
         type: TickerType,
