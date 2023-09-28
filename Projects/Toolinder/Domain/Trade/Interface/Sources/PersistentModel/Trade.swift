@@ -13,6 +13,7 @@ public class Trade {
     public var side: TradeSide = TradeSide.buy
     public var price: Double = 0
     public var volume: Double = 0
+    public var fee: Double = 0
     public var images: [Data] = []
     public var note: String = ""
     public var date: Date = Date.now
