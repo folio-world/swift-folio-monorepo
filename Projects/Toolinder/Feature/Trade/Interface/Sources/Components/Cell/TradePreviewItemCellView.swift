@@ -30,6 +30,8 @@ public struct TradePreviewItemCellView: View {
                     .font(.caption2)
                     .fontWeight(.light)
                     .foregroundStyle(Color.blackOrWhite(!viewStore.state.isSelected))
+                
+                Spacer()
             }
         }
     }

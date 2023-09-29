@@ -95,12 +95,12 @@ public struct TradeEditView: View {
                 viewStore.state.selectedTicker.currency.image
                 
                 TextField("Price", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
-                    .keyboardType(.numberPad)
+                    .keyboardType(.decimalPad)
                 
                 Image(systemName: "plusminus.circle.fill")
                 
                 TextField("Volume", value: viewStore.binding(get: \.volume, send: TradeEditStore.Action.setVolume), format: .number)
-                    .keyboardType(.numberPad)
+                    .keyboardType(.decimalPad)
                 
                 Image(systemName: "building.columns.circle.fill")
                 

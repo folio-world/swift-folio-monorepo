@@ -58,6 +58,7 @@ public struct TradeItemCellView: View {
                     .font(.caption2)
                 }
             }
+            .frame(width: 70)
             
             viewStore.state.trade.ticker?.type.image
                 .font(.title3)

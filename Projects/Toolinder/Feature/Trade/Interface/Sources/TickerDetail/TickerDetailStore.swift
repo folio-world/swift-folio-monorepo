@@ -20,6 +20,7 @@ public struct TickerDetailStore: Reducer {
         public var tradeDateChartDataEntity: TradeDateChartDataEntity = .init()
         
         @PresentationState var tickerEdit: TickerEditStore.State?
+        public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
         
         public init(
             ticker: Ticker
@@ -37,6 +38,7 @@ public struct TickerDetailStore: Reducer {
         case tickerTypeChartDataEntityResponse(TradeDateChartDataEntity)
         
         case tickerEdit(PresentationAction<TickerEditStore.Action>)
+        case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
         
         case delegate(Delegate)
         
@@ -49,6 +51,11 @@ public struct TickerDetailStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.tradeItem = .init(
+                    uniqueElements: state.ticker.trades?.sorted(by: { $0.date < $1.date }).compactMap { trade in
+                        return .init(trade: trade, dateStyle: .short, timeStyle: .short)
+                    } ?? []
+                )
                 return .concatenate([
                     .send(.tickerTypeChartDataEntityRequest)
                 ])

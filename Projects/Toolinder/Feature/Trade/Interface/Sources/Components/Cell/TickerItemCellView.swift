@@ -38,6 +38,7 @@ public struct TickerItemCellView: View {
                         .font(.caption2)
                 }
             }
+            .frame(width: 40)
             
             Text("\(viewStore.state.ticker.name) \(viewStore.state.ticker.trades?.count ?? 0)" )
                 .font(.body)

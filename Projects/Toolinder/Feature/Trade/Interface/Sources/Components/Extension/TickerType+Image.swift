@@ -14,6 +14,8 @@ public extension TickerType {
         switch self {
         case .stock: return "staroflife.circle.fill"
         case .crypto: return "tornado.circle.fill"
+        case .realEstate: return "drop.circle.fill"
+        case .gold: return "moon.circle.fill"
         }
     }
     

@@ -26,6 +26,9 @@ public struct TickerDetailView: View {
                     VStack {
                         TradeDateChartView(tradeDateChartDataEntity: viewStore.state.tradeDateChartDataEntity)
                             .padding()
+                        
+                        tradeListView(viewStore: viewStore)
+                            .padding(.horizontal)
                     }
                 }
             }
@@ -48,13 +51,28 @@ public struct TickerDetailView: View {
                     }
                 }
             }
-            .navigationTitle(viewStore.state.ticker.name ?? "")
+            .navigationTitle(viewStore.state.ticker.name)
         }
     }
     
     private func titleView() -> some View {
         VStack {
             
+        }
+    }
+    
+    private func tradeListView(viewStore: ViewStoreOf<TickerDetailStore>) -> some View {
+        VStack {
+            HStack {
+                Label("History", systemImage: "clock")
+                    .font(.headline)
+                Spacer()
+            }
+            .padding(.bottom, 5)
+            
+            ForEachStore(self.store.scope(state: \.tradeItem, action: TickerDetailStore.Action.tradeItem(id:action:))) {
+                TradeItemCellView(store: $0)
+            }
         }
     }
 }
