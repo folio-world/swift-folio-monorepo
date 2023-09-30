@@ -29,13 +29,16 @@ public extension Ticker {
         var yield = 0.0
         
         for trade in trades {
-            // 평단가 계산
-            if trade.side == .buy {
-                totalAmount += (trade.price ?? 0) * (trade.volume ?? 0)
-                buyVolume += (trade.volume ?? 0)
-            } else {
-                sellVoume += (trade.volume ?? 0)
+            switch trade.side {
+            case .buy:
+                totalAmount += trade.price * trade.volume
+                buyVolume += trade.volume
+                
+            case .sell:
+                totalAmount -= avgPrice * trade.volume
+                sellVoume += trade.volume
             }
+
             totalVolume = buyVolume - sellVoume
             
             if !totalVolume.isZero {
@@ -44,7 +47,7 @@ public extension Ticker {
             
             // 수익 계산
             if trade.side == .sell {
-                profit += ((trade.price ?? 0) - avgPrice) * (trade.volume ?? 0)
+                profit += (trade.price - avgPrice) * trade.volume
             }
         }
         // 수익률 계산

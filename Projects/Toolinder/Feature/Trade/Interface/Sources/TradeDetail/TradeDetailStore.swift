@@ -48,7 +48,7 @@ public struct TradeDetailStore: Reducer {
             switch action {
             case .onAppear:
                 state.tradeItem = .init(
-                    uniqueElements: state.trade.ticker?.trades?.compactMap { trade in
+                    uniqueElements: state.trade.ticker?.trades?.sorted(by: { $0.date < $1.date }).compactMap { trade in
                         return .init(trade: trade, dateStyle: .short, timeStyle: .short)
                     } ?? []
                 )
@@ -56,13 +56,13 @@ public struct TradeDetailStore: Reducer {
                 
             case .editButtonTapped:
                 if let ticker = state.trade.ticker {
-                    state.tradeEdit = .init(selectedTicker: ticker, selectedTrade: state.trade)
+                    state.tradeEdit = .init(mode: .edit, selectedTicker: ticker, selectedTrade: state.trade)
                 }
                 return .none
                 
             case .newButtonTapped:
                 if let ticker = state.trade.ticker {
-                    state.tradeEdit = .init(selectedTicker: ticker)
+                    state.tradeEdit = .init(mode: .bypassAdd, selectedTicker: ticker)
                 }
                 return .none
                 

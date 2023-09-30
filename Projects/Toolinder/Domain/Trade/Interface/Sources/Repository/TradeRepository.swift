@@ -110,7 +110,7 @@ public class TradeRepository: TradeRepositoryInterface {
     }
     
     public func isValidatedUpdateTicker(origin: Ticker, new: TickerDTO) -> Bool {
-        if new.type != nil && new.currency != nil && new.name?.isEmpty == false {
+        if new.type != nil && new.currency != nil && new.name.isEmpty == false {
             return true
         }
         return false

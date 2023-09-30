@@ -17,16 +17,16 @@ public enum TickerError: Error {
 public struct TickerClient {
     public static let tickerRepository: TickerRepositoryInterface = TickerRepository()
     
-    public var fetchTickers: @Sendable () -> Result<[Ticker], TickerError>
-    public var saveTicker: @Sendable (Ticker) -> Result<Ticker, TickerError>
-    public var updateTicker: @Sendable (Ticker, TickerDTO) -> Result<Ticker, TickerError>
-    public var deleteTicker: @Sendable (Ticker) -> Result<Ticker, TickerError>
+    public var fetchTickers: () -> Result<[Ticker], TickerError>
+    public var saveTicker: (Ticker) -> Result<Ticker, TickerError>
+    public var updateTicker: (Ticker, TickerDTO) -> Result<Ticker, TickerError>
+    public var deleteTicker: (Ticker) -> Result<Ticker, TickerError>
     
     public init(
-        fetchTickers: @Sendable @escaping () -> Result<[Ticker], TickerError>,
-        saveTicker: @Sendable @escaping (Ticker) -> Result<Ticker, TickerError>,
-        updateTicker: @Sendable @escaping (Ticker, TickerDTO) -> Result<Ticker, TickerError>,
-        deleteTicker: @Sendable @escaping (Ticker) -> Result<Ticker, TickerError>
+        fetchTickers: @escaping () -> Result<[Ticker], TickerError>,
+        saveTicker: @escaping (Ticker) -> Result<Ticker, TickerError>,
+        updateTicker: @escaping (Ticker, TickerDTO) -> Result<Ticker, TickerError>,
+        deleteTicker: @escaping (Ticker) -> Result<Ticker, TickerError>
     ) {
         self.fetchTickers = fetchTickers
         self.saveTicker = saveTicker
@@ -61,8 +61,8 @@ public extension DependencyValues {
 extension TickerClient: DependencyKey {
     public static var liveValue = TickerClient(
         fetchTickers: { tickerRepository.fetchTickers(descriptor: .init()) },
-        saveTicker: { tickerRepository.saveTicker(ticker: $0) },
-        updateTicker: { tickerRepository.updateTicker(model: $0, dto: $1) },
-        deleteTicker: { tickerRepository.deleteTicker(ticker: $0) }
+        saveTicker: { tickerRepository.saveTicker($0) },
+        updateTicker: { tickerRepository.updateTicker($0, new: $1) },
+        deleteTicker: { tickerRepository.deleteTicker($0) }
     )
 }

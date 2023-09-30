@@ -30,16 +30,17 @@ public struct TickerItemCellView: View {
     private func tradeView(viewStore: ViewStoreOf<TickerItemCellStore>) -> some View {
         HStack(spacing: 10) {
             VStack {
-                viewStore.state.ticker.type?.image
+                viewStore.state.ticker.type.image
                     .font(.title3)
                 
                 if viewStore.mode == .item {
-                    Text("\(viewStore.state.ticker.type?.rawValue ?? "")")
+                    Text("\(viewStore.state.ticker.type.rawValue)")
                         .font(.caption2)
+                        .frame(width: 40)
                 }
             }
             
-            Text("\(viewStore.state.ticker.name ?? "") \(viewStore.state.ticker.trades?.count ?? 0)" )
+            Text("\(viewStore.state.ticker.name) \(viewStore.state.ticker.trades?.count ?? 0)" )
                 .font(.body)
                 .fontWeight(.semibold)
             
@@ -50,7 +51,7 @@ public struct TickerItemCellView: View {
                     HStack {
                         Spacer()
                         
-                        Text("\(Int(viewStore.tickerSummaryDataEntity.profit)) \(viewStore.state.ticker.currency?.rawValue ?? "") (\(Int(viewStore.tickerSummaryDataEntity.yield))%)")
+                        Text("\(Int(viewStore.tickerSummaryDataEntity.profit)) \(viewStore.state.ticker.currency.rawValue) (\(Int(viewStore.tickerSummaryDataEntity.yield))%)")
                             .font(.caption)
                             .fontWeight(.semibold)
                             .foregroundStyle(Int(viewStore.tickerSummaryDataEntity.yield) > 0 ? .pink : .mint)
@@ -59,7 +60,7 @@ public struct TickerItemCellView: View {
                     HStack(spacing: .zero) {
                         Spacer()
                         
-                        Text("\(Int(viewStore.tickerSummaryDataEntity.avgPrice)) \(viewStore.state.ticker.currency?.rawValue ?? "")")
+                        Text("\(Int(viewStore.tickerSummaryDataEntity.avgPrice)) \(viewStore.state.ticker.currency.rawValue)")
                             .font(.caption2)
                     }
                     

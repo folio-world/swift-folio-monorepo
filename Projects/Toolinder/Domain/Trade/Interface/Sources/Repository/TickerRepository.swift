@@ -10,13 +10,13 @@ import SwiftData
 
 public protocol TickerRepositoryInterface {
     func fetchTickers(descriptor: FetchDescriptor<Ticker>) -> Result<[Ticker], TickerError>
-    func saveTicker(ticker: Ticker) -> Result<Ticker, TickerError>
-    func updateTicker(model: Ticker, dto: TickerDTO) -> Result<Ticker, TickerError>
-    func deleteTicker(ticker: Ticker) -> Result<Ticker, TickerError>
+    func saveTicker(_ ticker: Ticker) -> Result<Ticker, TickerError>
+    func updateTicker(_ ticker: Ticker, new newTicker: TickerDTO) -> Result<Ticker, TickerError>
+    func deleteTicker(_ ticker: Ticker) -> Result<Ticker, TickerError>
     
-    func isValidatedSaveTicker(new: Ticker) -> Bool
-    func isValidatedUpdateTicker(origin: Ticker, new: TickerDTO) -> Bool
-    func isValidatedDeleteTicker(origin: Ticker) -> Bool
+    func isValidatedSaveTicker(_ ticker: Ticker) -> Bool
+    func isValidatedUpdateTicker(_ ticker: Ticker, new newTicker: TickerDTO) -> Bool
+    func isValidatedDeleteTicker(_ ticker: Ticker) -> Bool
 }
 
 public class TickerRepository: TickerRepositoryInterface {
@@ -32,8 +32,8 @@ public class TickerRepository: TickerRepositoryInterface {
         }
     }
     
-    public func saveTicker(ticker: Ticker) -> Result<Ticker, TickerError> {
-        if isValidatedSaveTicker(new: ticker) {
+    public func saveTicker(_ ticker: Ticker) -> Result<Ticker, TickerError> {
+        if isValidatedSaveTicker(ticker) {
             context?.insert(ticker)
             return .success(ticker)
         } else {
@@ -41,20 +41,19 @@ public class TickerRepository: TickerRepositoryInterface {
         }
     }
     
-    public func updateTicker(model: Ticker, dto: TickerDTO) -> Result<Ticker, TickerError> {
-        if isValidatedUpdateTicker(origin: model, new: dto) {
-            let ticker = model
-            ticker.type = dto.type
-            ticker.currency = dto.currency
-            ticker.name = dto.name
+    public func updateTicker(_ ticker: Ticker, new newTicker: TickerDTO) -> Result<Ticker, TickerError> {
+        if isValidatedUpdateTicker(ticker, new: newTicker) {
+            ticker.type = newTicker.type
+            ticker.currency = newTicker.currency
+            ticker.name = newTicker.name
             return .success(ticker)
         } else {
             return .failure(.unknown)
         }
     }
     
-    public func deleteTicker(ticker: Ticker) -> Result<Ticker, TickerError> {
-        if isValidatedDeleteTicker(origin: ticker) {
+    public func deleteTicker(_ ticker: Ticker) -> Result<Ticker, TickerError> {
+        if isValidatedDeleteTicker(ticker) {
             context?.delete(ticker)
             return .success(ticker)
         } else {
@@ -62,18 +61,18 @@ public class TickerRepository: TickerRepositoryInterface {
         }
     }
     
-    public func isValidatedSaveTicker(new: Ticker) -> Bool {
+    public func isValidatedSaveTicker(_ ticker: Ticker) -> Bool {
         return true
     }
     
-    public func isValidatedUpdateTicker(origin: Ticker, new: TickerDTO) -> Bool {
-        if new.type != nil && new.currency != nil && new.name?.isEmpty == false {
+    public func isValidatedUpdateTicker(_ ticker: Ticker, new newTicker: TickerDTO) -> Bool {
+        if !newTicker.name.isEmpty {
             return true
         }
         return false
     }
     
-    public func isValidatedDeleteTicker(origin: Ticker) -> Bool {
+    public func isValidatedDeleteTicker(_ ticker: Ticker) -> Bool {
         return true
     }
 }

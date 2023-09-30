@@ -28,7 +28,7 @@ public struct TradeDetailView: View {
                     
                     Divider()
                     
-                    if viewStore.state.trade.note?.isEmpty == false {
+                    if viewStore.state.trade.note.isEmpty == false {
                         noteView(viewStore: viewStore)
                     }
                     
@@ -73,7 +73,7 @@ public struct TradeDetailView: View {
                     .font(.title)
                     .fontWeight(.semibold)
                 
-                Text("\(viewStore.state.trade.ticker?.currency?.rawValue.lowercased() ?? "")")
+                Text("\(viewStore.state.trade.ticker?.currency.rawValue.lowercased() ?? "")")
                     .fontWeight(.semibold)
             }
             
@@ -119,7 +119,7 @@ public struct TradeDetailView: View {
             }
             
             HStack {
-                Text(viewStore.state.trade.note ?? "")
+                Text(viewStore.state.trade.note)
                     .font(.caption)
                 
                 Spacer()

@@ -27,6 +27,12 @@ public struct PortfolioNavigationStackStore: Reducer {
         
         case main(PortfolioMainStore.Action)
         case path(StackAction<Path.State, Path.Action>)
+        
+        case delegate(Delegate)
+        
+        public enum Delegate {
+            case deleted
+        }
     }
     
     public struct Path: Reducer {
@@ -59,7 +65,7 @@ public struct PortfolioNavigationStackStore: Reducer {
                 
             case let .path(.element(id: id, action: .tickerDetail(.delegate(.deleted)))):
                 state.path[id: id] = nil
-                return .none
+                return .send(.delegate(.deleted))
                 
             default:
                 return .none

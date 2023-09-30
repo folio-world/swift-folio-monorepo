@@ -36,6 +36,12 @@ public struct TradeEditView: View {
                     viewStore.send(.saveButtonTapped)
                 }
             }
+            .alert(
+                store: self.store.scope(
+                    state: \.$alert,
+                    action: { .alert($0) }
+                )
+            )
             .padding()
         }
     }
@@ -52,7 +58,7 @@ public struct TradeEditView: View {
                 })
             }
             
-            Text(viewStore.state.selectedTicker.name ?? "")
+            Text(viewStore.state.selectedTicker.name)
                 .font(.title)
             
             Spacer()
@@ -86,15 +92,20 @@ public struct TradeEditView: View {
     private func inputView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
         VStack(spacing: 20) {
             HStack {
-                Label(viewStore.state.selectedTicker.currency?.rawValue ?? "", systemImage: viewStore.state.selectedTicker.currency?.systemImageName ?? "")
+                viewStore.state.selectedTicker.currency.image
                 
                 TextField("Price", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
-                    .keyboardType(.numberPad)
+                    .keyboardType(.decimalPad)
                 
-                Label("Vol", systemImage: "cart.circle.fill")
+                Image(systemName: "plusminus.circle.fill")
                 
                 TextField("Volume", value: viewStore.binding(get: \.volume, send: TradeEditStore.Action.setVolume), format: .number)
-                    .keyboardType(.numberPad)
+                    .keyboardType(.decimalPad)
+                
+                Image(systemName: "building.columns.circle.fill")
+                
+                TextField("Fee %", value: viewStore.binding(get: \.fee, send: TradeEditStore.Action.setFee), format: .number)
+                    .keyboardType(.decimalPad)
                 
                 Spacer()
             }

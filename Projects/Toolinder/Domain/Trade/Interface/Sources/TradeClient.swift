@@ -17,16 +17,16 @@ public enum TradeError: Error {
 public struct TradeClient {
     public static let tradeRepository: TradeRepositoryInterface = TradeRepository()
     
-    public var fetchTrades: @Sendable () -> Result<[Trade], TradeError>
-    public var saveTrade: @Sendable (TradeDTO) -> Result<Trade, TradeError>
-    public var updateTrade: @Sendable (Trade, TradeDTO) -> Result<Trade, TradeError>
-    public var deleteTrade: @Sendable (Trade) -> Result<Trade, TradeError>
+    public var fetchTrades: () -> Result<[Trade], TradeError>
+    public var saveTrade: (TradeDTO) -> Result<Trade, TradeError>
+    public var updateTrade: (Trade, TradeDTO) -> Result<Trade, TradeError>
+    public var deleteTrade: (Trade) -> Result<Trade, TradeError>
     
     public init(
-        fetchTrades: @Sendable @escaping () -> Result<[Trade], TradeError>,
-        saveTrade: @Sendable @escaping (TradeDTO) -> Result<Trade, TradeError>,
-        updateTrade: @Sendable @escaping (Trade, TradeDTO) -> Result<Trade, TradeError>,
-        deleteTrade: @Sendable @escaping (Trade) -> Result<Trade, TradeError>
+        fetchTrades: @escaping () -> Result<[Trade], TradeError>,
+        saveTrade: @escaping (TradeDTO) -> Result<Trade, TradeError>,
+        updateTrade: @escaping (Trade, TradeDTO) -> Result<Trade, TradeError>,
+        deleteTrade: @escaping (Trade) -> Result<Trade, TradeError>
     ) {
         self.fetchTrades = fetchTrades
         self.saveTrade = saveTrade

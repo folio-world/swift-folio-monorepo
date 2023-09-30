@@ -35,18 +35,18 @@ public struct TickerTypeChartView: View {
                     }
                 }
             }
-            
-            VStack {
-                ForEach(tickerTypeChartDataEntity, id: \.self) { data in
-                    HStack {
-                        Label(data.tickerType.rawValue, systemImage: data.tickerType.systemImageName)
-                        
-                        Spacer()
-                    }
-                }
-                
-                Spacer()
-            }
+            //TODO: 포트폴리오 고도화
+//            VStack {
+//                ForEach(tickerTypeChartDataEntity, id: \.self) { data in
+//                    HStack {
+//                        Label(data.tickerType.rawValue, systemImage: data.tickerType.systemImageName)
+//                        
+//                        Spacer()
+//                    }
+//                }
+//                
+//                Spacer()
+//            }
             
             Spacer()
         }

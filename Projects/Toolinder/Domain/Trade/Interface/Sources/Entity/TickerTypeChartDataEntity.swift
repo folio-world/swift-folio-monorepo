@@ -19,7 +19,7 @@ public extension [Trade] {
         return TickerType.allCases.map { type in
             let trades = self.filter({ $0.ticker?.type == type })
             let hold = trades.map { trade in
-                let sum: Double = (trade.price ?? 0.0) * (trade.volume ?? 0.0)
+                let sum: Double = trade.price * trade.volume
                 let sign: Double = trade.side == .buy ? 1.0 : -1.0
                 
                 return sum * sign
