@@ -11,6 +11,7 @@ import Charts
 import ComposableArchitecture
 
 import ToolinderFeatureTradeInterface
+import ToolinderShared
 
 public struct PortfolioMainView: View {
     public let store: StoreOf<PortfolioMainStore>

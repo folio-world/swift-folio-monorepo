@@ -8,6 +8,6 @@
 import Foundation
 
 public enum TradeSide: String, Codable, CaseIterable {
-    case buy
-    case sell
+    case buy = "Buy"
+    case sell = "Sell"
 }
