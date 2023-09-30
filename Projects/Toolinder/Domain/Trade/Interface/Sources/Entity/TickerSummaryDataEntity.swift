@@ -35,16 +35,10 @@ public extension Ticker {
                 buyVolume += trade.volume
                 
             case .sell:
-                totalAmount -= (totalAmount / trade.volume) * trade.price * trade.volume
+                totalAmount -= avgPrice * trade.volume
                 sellVoume += trade.volume
-                
             }
-//            // 평단가 계산
-//            if trade.side == .buy {
-//                
-//            } else {
-//                sellVoume += trade.volume
-//            }
+
             totalVolume = buyVolume - sellVoume
             
             if !totalVolume.isZero {
@@ -60,36 +54,6 @@ public extension Ticker {
         if !totalAmount.isZero {
             yield = (profit / totalAmount) * 100
         }
-//        
-//        var totalCost = 0.0
-//        var totalQuantity = 0.0
-//        
-//        for transaction in transactions {
-//            switch transaction.type {
-//            case .buy:
-//
-//            case .sell:
-//                let sellQuantity = transaction.quantity
-//                if totalQuantity >= sellQuantity {
-//                    
-//                } else {
-//                    // 판매량이 보유량을 초과할 경우 예외 처리
-//                    print("오류: 보유량 부족")
-//                    return 0.0
-//                }
-//            }
-//        }
-//        
-//        guard totalQuantity > 0 else {
-//            // 보유량이 0이면 평단가를 계산할 수 없으므로 예외 처리
-//            print("오류: 보유량이 0입니다.")
-//            return 0.0
-//        }
-//        
-//        // 평단가 계산
-//        let averageCost = totalCost / totalQuantity
-//        
-//        return averageCost
         
         let result = TickerSummaryDataEntity(
             avgPrice: avgPrice,
