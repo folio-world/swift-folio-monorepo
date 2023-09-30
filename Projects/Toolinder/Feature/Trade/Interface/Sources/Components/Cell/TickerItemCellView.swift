@@ -36,9 +36,9 @@ public struct TickerItemCellView: View {
                 if viewStore.mode == .item {
                     Text("\(viewStore.state.ticker.type.rawValue)")
                         .font(.caption2)
+                        .frame(width: 40)
                 }
             }
-            .frame(width: 40)
             
             Text("\(viewStore.state.ticker.name) \(viewStore.state.ticker.trades?.count ?? 0)" )
                 .font(.body)

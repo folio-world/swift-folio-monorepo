@@ -13,7 +13,7 @@ public extension DeploymentTarget {
         switch product {
         case .Minimal: return .iOS(targetVersion: "16.0", devices: [.iphone])
         case .Dying: return .iOS(targetVersion: "16.0", devices: [.iphone])
-        case .Toolinder: return .iOS(targetVersion: "17.0", devices: [.iphone])
+        case .Toolinder: return .iOS(targetVersion: "17.0", devices: [.iphone, .ipad])
         default: return .iOS(targetVersion: "16.0", devices: [.iphone])
         }
     }
@@ -33,6 +33,7 @@ public extension DeploymentTarget {
         case .macOS: return nil
         case .watchOS: return .watchOS(product)
         case .tvOS: return nil
+        case .visionOS: return nil
         @unknown default: return nil
         }
     }
