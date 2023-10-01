@@ -80,7 +80,7 @@ public struct TradeDetailView: View {
             HStack(alignment: .bottom, spacing: .zero) {
                 Spacer()
                 
-                Text(scaledString(valueOrNil: viewStore.state.trade.volume))
+                Text(scaledString(valueOrNil: viewStore.state.trade.quantity))
                     .font(.title)
                     .fontWeight(.semibold)
                 

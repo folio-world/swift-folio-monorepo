@@ -49,7 +49,7 @@ public class TradeRepository: TradeRepositoryInterface {
             trade.date = newTrade.date
             trade.side = newTrade.side
             trade.price = newTrade.price
-            trade.volume = newTrade.volume
+            trade.quantity = newTrade.quantity
             trade.images = newTrade.images
             trade.note = newTrade.note
             return .success(trade)
@@ -74,13 +74,13 @@ public class TradeRepository: TradeRepositoryInterface {
         
         let currentVolume = trades.reduce(0) { (result, trade) in
             if trade.side == .buy {
-                return result + trade.volume
+                return result + trade.quantity
             } else {
-                return result - trade.volume
+                return result - trade.quantity
             }
         }
         
-        return currentVolume - trade.volume >= 0
+        return currentVolume - trade.quantity >= 0
     }
     
     public func isValidatedUpdateTrade(_ trade: Trade, new newTrade: TradeDTO) -> Bool {
@@ -91,9 +91,9 @@ public class TradeRepository: TradeRepositoryInterface {
         var currentVolume = 0.0
         for tmpTrade in trades {
             if trade.side == .buy {
-                currentVolume += tmpTrade == trade ? newTrade.volume : tmpTrade.volume
+                currentVolume += tmpTrade == trade ? newTrade.quantity : tmpTrade.quantity
             } else {
-                currentVolume -= tmpTrade == trade ? newTrade.volume : tmpTrade.volume
+                currentVolume -= tmpTrade == trade ? newTrade.quantity : tmpTrade.quantity
             }
             
             if currentVolume < 0 {
@@ -112,9 +112,9 @@ public class TradeRepository: TradeRepositoryInterface {
         var currentVolume = 0.0
         for tmpTrade in trades {
             if trade.side == .buy {
-                currentVolume += tmpTrade == trade ? 0 : tmpTrade.volume
+                currentVolume += tmpTrade == trade ? 0 : tmpTrade.quantity
             } else {
-                currentVolume -= tmpTrade == trade ? 0 : tmpTrade.volume
+                currentVolume -= tmpTrade == trade ? 0 : tmpTrade.quantity
             }
             
             if currentVolume < 0 {

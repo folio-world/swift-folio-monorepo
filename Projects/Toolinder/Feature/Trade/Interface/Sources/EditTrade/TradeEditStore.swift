@@ -27,7 +27,7 @@ public struct TradeEditStore: Reducer {
         public var selectedTrade: Trade?
         
         public var price: Double
-        public var volume: Double
+        public var quantity: Double
         public var fee: Double
         public var selectedDate: Date = .now
         public var selectedTradeSide: TradeSide = .buy
@@ -48,7 +48,7 @@ public struct TradeEditStore: Reducer {
             self.selectedTicker = selectedTicker
             self.selectedTrade = selectedTrade
             self.price = selectedTrade?.price ?? 0
-            self.volume = selectedTrade?.volume ?? 0
+            self.quantity = selectedTrade?.quantity ?? 0
             self.fee = selectedTrade?.fee ?? 0
             self.selectedDate = selectedTrade?.date ?? selectedDate
             self.note = selectedTrade?.note ?? ""
@@ -60,7 +60,7 @@ public struct TradeEditStore: Reducer {
         case onAppear
         
         case setPrice(Double)
-        case setVolume(Double)
+        case setQuantity(Double)
         case setFee(Double)
         case selectDate(Date)
         case selectTradeSide(TradeSide)
@@ -98,8 +98,8 @@ public struct TradeEditStore: Reducer {
             state.price = price
             return .none
             
-        case let .setVolume(volume):
-            state.volume = volume
+        case let .setQuantity(volume):
+            state.quantity = volume
             return .none
             
         case let .setFee(fee):
@@ -135,7 +135,7 @@ public struct TradeEditStore: Reducer {
                 trade: state.selectedTrade,
                 side: state.selectedTradeSide,
                 price: state.price,
-                volume: state.volume,
+                quantity: state.quantity,
                 fee: state.fee,
                 images: state.images,
                 note: state.note,
@@ -172,7 +172,7 @@ public struct TradeEditStore: Reducer {
         trade: Trade? = nil,
         side: TradeSide,
         price: Double,
-        volume: Double,
+        quantity: Double,
         fee: Double,
         images: [Data],
         note: String,
@@ -180,33 +180,26 @@ public struct TradeEditStore: Reducer {
         ticker: Ticker
     ) -> Effect<TradeEditStore.Action> {
         guard !price.isZero else { return .none }
-        guard !volume.isZero else { return .none }
+        guard !quantity.isZero else { return .none }
         guard fee < 100 else { return .none }
         
+        let tradeDTO = TradeDTO(
+            side: side,
+            price: price,
+            quantity: quantity,
+            fee: fee,
+            images: images,
+            note: note,
+            date: date,
+            ticker: ticker
+        )
+        
         if let unSavedTrade = trade {
-            if let trade = try? tradeClient.updateTrade(unSavedTrade, .init(
-                side: side,
-                price: price,
-                volume: volume,
-                fee: fee,
-                images: images,
-                note: note,
-                date: date,
-                ticker: ticker
-            )).get() {
+            if let trade = try? tradeClient.updateTrade(unSavedTrade, tradeDTO).get() {
                 return .send(.delegate(.save(trade)))
             }
         } else {
-            if let trade = try? tradeClient.saveTrade(.init(
-                side: side,
-                price: price,
-                volume: volume,
-                fee: fee,
-                images: images,
-                note: note,
-                date: date,
-                ticker: ticker
-            )).get() {
+            if let trade = try? tradeClient.saveTrade(tradeDTO).get() {
                 return .send(.delegate(.save(trade)))
             }
         }

@@ -74,7 +74,7 @@ public struct TradeItemCellView: View {
                 Text("\(Int(viewStore.state.trade.price)) \(viewStore.state.trade.ticker?.currency.rawValue ?? "")")
                     .font(.caption)
                 
-                Text("\(Int(viewStore.state.trade.volume)) vol")
+                Text("\(Int(viewStore.state.trade.quantity)) vol")
                     .font(.caption)
             }
         }

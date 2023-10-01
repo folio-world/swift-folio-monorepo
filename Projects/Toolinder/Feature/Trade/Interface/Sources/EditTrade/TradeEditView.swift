@@ -99,7 +99,7 @@ public struct TradeEditView: View {
                 
                 Image(systemName: "plusminus.circle.fill")
                 
-                TextField("Volume", value: viewStore.binding(get: \.volume, send: TradeEditStore.Action.setVolume), format: .number)
+                TextField("Volume", value: viewStore.binding(get: \.quantity, send: TradeEditStore.Action.setQuantity), format: .number)
                     .keyboardType(.decimalPad)
                 
                 Image(systemName: "building.columns.circle.fill")
