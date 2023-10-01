@@ -15,14 +15,14 @@ import ToolinderDomain
 
 @main
 struct RootApp: App {
-    let modelContainer: ModelContainer
+//    let modelContainer: ModelContainer
     
     init() {
-        do {
-            modelContainer = try ModelContainer(for: Ticker.self, Trade.self)
-        } catch {
-            fatalError("Could not initialize ModelContainer \(error)")
-        }
+//        do {
+//            modelContainer = try ModelContainer(for: Ticker.self, Trade.self, Tag.self)
+//        } catch {
+//            fatalError("Could not initialize ModelContainer \(error)")
+//        }
     }
     var body: some Scene {
         WindowGroup {
@@ -34,6 +34,6 @@ struct RootApp: App {
             )
             .onAppear(perform: UIApplication.shared.hideKeyboard)
         }
-        .modelContainer(modelContainer)
+//        .modelContainer(modelContainer)
     }
 }

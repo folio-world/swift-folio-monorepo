@@ -206,7 +206,7 @@ public struct TickerEditStore: Reducer {
         
         switch mode {
         case .add:
-            if let ticker = try? tickerClient.saveTicker(.init(type: tickerType, currency: currency, name: name)).get() {
+            if let ticker = try? tickerClient.saveTicker(.init(type: tickerType, currency: currency, name: name, tags: [])).get() {
                 return .send(.delegate(.next(ticker)))
             } else {
                 return .none
@@ -214,7 +214,7 @@ public struct TickerEditStore: Reducer {
         case .edit:
             guard let ticker = ticker else { return .none }
             
-            if let ticker = try? tickerClient.updateTicker(ticker, .init(type: tickerType, currency: currency, name: name)).get() {
+            if let ticker = try? tickerClient.updateTicker(ticker, .init(type: tickerType, currency: currency, name: name, tags: [])).get() {
                 return .send(.delegate(.save(ticker)))
             } else {
                 return .none

@@ -61,8 +61,8 @@ public extension DependencyValues {
 extension TradeClient: DependencyKey {
     public static var liveValue = TradeClient(
         fetchTrades: { tradeRepository.fetchTrades(descriptor: .init()) },
-        saveTrade: { tradeRepository.saveTrade(dto: $0) },
-        updateTrade: { tradeRepository.updateTrade(model:$0, dto: $1) },
-        deleteTrade: { tradeRepository.deleteTrade(trade: $0) }
+        saveTrade: { tradeRepository.saveTrade($0) },
+        updateTrade: { tradeRepository.updateTrade($0, new: $1) },
+        deleteTrade: { tradeRepository.deleteTrade($0) }
     )
 }

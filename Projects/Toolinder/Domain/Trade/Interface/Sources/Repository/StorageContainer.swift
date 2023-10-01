@@ -16,8 +16,7 @@ public class StorageContainer {
     
     private init() {
         do {
-            container = try ModelContainer(for: Ticker.self, Trade.self)
-            
+            container = try ModelContainer(for: Ticker.self, Trade.self, Tag.self)
             if let container {
                 context = ModelContext(container)
             }

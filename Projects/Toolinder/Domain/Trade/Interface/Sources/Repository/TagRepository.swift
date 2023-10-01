@@ -43,9 +43,9 @@ public class TagRepository: TagRepositoryInterface {
     }
     
     public func updateTag(_ tag: Tag, new newTag: TagDTO) -> Result<Tag, TagError> {
-        if isValidatedUpdateTrade(tag, new: newTag) {
+        if isValidatedUpdateTag(tag, new: newTag) {
             let tag = tag
-            tag.color = newTag.color
+            tag.hex = newTag.hex
             tag.name = newTag.name
             return .success(tag)
         } else {

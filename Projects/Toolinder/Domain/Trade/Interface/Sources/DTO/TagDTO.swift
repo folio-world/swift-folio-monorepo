@@ -10,24 +10,24 @@ import SwiftData
 import SwiftUI
 
 public class TagDTO {
-    public let id: UUID = UUID()
-    public var color: Color = Color.blue
+    public var id: UUID = UUID()
+    public var hex: String = ""
     public var name: String = ""
     
     public init(
         id: UUID = .init(),
-        color: Color,
+        hex: String,
         name: String
     ) {
         self.id = id
-        self.color = color
+        self.hex = hex
         self.name = name
     }
     
     func toDomain() -> Tag {
         return Tag(
             id: id,
-            color: color,
+            hex: hex,
             name: name
         )
     }

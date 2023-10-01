@@ -13,18 +13,20 @@ public class TickerDTO {
     public var type: TickerType
     public var currency: Currency
     public var name: String
-    public var tag: Tag
+    public var tags: [TagDTO]
     
     public init(
         id: UUID = .init(),
         type: TickerType,
         currency: Currency,
-        name: String
+        name: String,
+        tags: [TagDTO]
     ) {
         self.id = id
         self.type = type
         self.currency = currency
         self.name = name
+        self.tags = tags
     }
     
     func toDomain() -> Ticker {
@@ -33,7 +35,7 @@ public class TickerDTO {
             type: type,
             currency: currency,
             name: name,
-            tags:
+            tags: tags.map { $0.toDomain() }
         )
     }
 }

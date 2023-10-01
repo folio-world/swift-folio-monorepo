@@ -34,7 +34,7 @@ public class TradeRepository: TradeRepositoryInterface {
     
     public func saveTrade(_ trade: TradeDTO) -> Result<Trade, TradeError> {
         if isValidatedSaveTrade(trade) {
-            let trade = dto.toDomain()
+            let trade = trade.toDomain()
             context?.insert(trade)
             return .success(trade)
         } else {
@@ -42,24 +42,24 @@ public class TradeRepository: TradeRepositoryInterface {
         }
     }
     
-    public func updateTrade(model: Trade, dto: TradeDTO) -> Result<Trade, TradeError> {
-        if isValidatedUpdateTrade(origin: model, new: dto) {
-            let trade = model
-            trade.ticker = dto.ticker
-            trade.date = dto.date
-            trade.side = dto.side
-            trade.price = dto.price
-            trade.volume = dto.volume
-            trade.images = dto.images
-            trade.note = dto.note
+    public func updateTrade(_ trade: Trade, new newTrade: TradeDTO) -> Result<Trade, TradeError> {
+        if isValidatedUpdateTrade(trade, new: newTrade) {
+            let trade = trade
+            trade.ticker = newTrade.ticker
+            trade.date = newTrade.date
+            trade.side = newTrade.side
+            trade.price = newTrade.price
+            trade.volume = newTrade.volume
+            trade.images = newTrade.images
+            trade.note = newTrade.note
             return .success(trade)
         } else {
             return .failure(.unknown)
         }
     }
     
-    public func deleteTrade(trade: Trade) -> Result<Trade, TradeError> {
-        if isValidatedDeleteTrade(origin: trade) {
+    public func deleteTrade(_ trade: Trade) -> Result<Trade, TradeError> {
+        if isValidatedDeleteTrade(trade) {
             context?.delete(trade)
             return .success(trade)
         } else {
@@ -67,9 +67,9 @@ public class TradeRepository: TradeRepositoryInterface {
         }
     }
     
-    public func isValidatedSaveTrade(dto: TradeDTO) -> Bool {
-        if dto.side == .buy { return true }
-        guard let trades = try? fetchTrades(descriptor: .init()).get().filter({ $0.ticker == dto.ticker }).sorted(by: { $0.date < $1.date })
+    public func isValidatedSaveTrade(_ trade: TradeDTO) -> Bool {
+        if trade.side == .buy { return true }
+        guard let trades = try? fetchTrades(descriptor: .init()).get().filter({ $0.ticker == trade.ticker }).sorted(by: { $0.date < $1.date })
         else { return false }
         
         let currentVolume = trades.reduce(0) { (result, trade) in
@@ -80,7 +80,7 @@ public class TradeRepository: TradeRepositoryInterface {
             }
         }
         
-        return currentVolume - dto.volume > 0
+        return currentVolume - trade.volume >= 0
     }
     
     public func isValidatedUpdateTrade(_ trade: Trade, new newTrade: TradeDTO) -> Bool {
