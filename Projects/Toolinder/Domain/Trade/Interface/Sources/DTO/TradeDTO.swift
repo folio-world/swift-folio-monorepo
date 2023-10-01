@@ -9,6 +9,7 @@ import Foundation
 import SwiftData
 
 public struct TradeDTO {
+    public let id: UUID
     public var side: TradeSide
     public var price: Double
     public var volume: Double
@@ -20,6 +21,7 @@ public struct TradeDTO {
     public var ticker: Ticker?
     
     public init(
+        id: UUID = .init(),
         side: TradeSide = .buy,
         price: Double = 0,
         volume: Double = 0,
@@ -29,6 +31,7 @@ public struct TradeDTO {
         date: Date = .now,
         ticker: Ticker
     ) {
+        self.id = id
         self.side = side
         self.images = images
         self.price = price
@@ -41,6 +44,7 @@ public struct TradeDTO {
     
     func toDomain() -> Trade {
         return Trade(
+            id: id,
             side: side,
             price: price,
             volume: volume,
