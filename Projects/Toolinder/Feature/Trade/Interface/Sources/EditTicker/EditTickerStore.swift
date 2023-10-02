@@ -11,7 +11,7 @@ import ComposableArchitecture
 
 import ToolinderDomainTradeInterface
 
-public struct TickerEditStore: Reducer {
+public struct EditTickerStore: Reducer {
     public init() {}
     
     public enum Mode {
@@ -22,14 +22,17 @@ public struct TickerEditStore: Reducer {
     public struct State: Equatable {
         public var mode: Mode
         public var name: String = ""
-        public var tickerType: TickerType?
-        public var currency: Currency?
+        public var selectedTickerType: TickerType?
+        public var selectedCurrency: Currency?
+        public var selectedTags: [Tag] = []
         
         public var selectedTicker: Ticker?
         
         public var tickerItem: IdentifiedArrayOf<TickerItemCellStore.State> = []
+        public var tagItem: IdentifiedArrayOf<TagItemCellStore.State> = []
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
         @PresentationState var selectCurrency: SelectCurrencyStore.State?
+        @PresentationState var selectTag: SelectTagStore.State?
         @PresentationState var alert: AlertState<Action.Alert>?
         
         public init(
@@ -41,8 +44,13 @@ public struct TickerEditStore: Reducer {
             
             if mode == .edit {
                 self.name = selectedTicker?.name ?? ""
-                self.tickerType = selectedTicker?.type ?? .stock
-                self.currency = selectedTicker?.currency ?? .dollar
+                self.selectedTickerType = selectedTicker?.type ?? .stock
+                self.selectedCurrency = selectedTicker?.currency ?? .dollar
+                self.tagItem = .init(
+                    uniqueElements: selectedTicker?.tags?.map { tag in
+                        return .init(tag: tag)
+                    } ?? []
+                )
             }
         }
     }
@@ -51,9 +59,9 @@ public struct TickerEditStore: Reducer {
         case onAppear
         
         case setName(String)
-        case tickerTapped(Ticker)
-        case tickerTypeViewTapped
-        case currencyViewTapped
+        case tickerTypeButtonTapped
+        case currencyButtonTapped
+        case tagButtonTapped
         case deleteButtonTapped
         case nextButtonTapped
         
@@ -61,8 +69,10 @@ public struct TickerEditStore: Reducer {
         case fetchTickersResponse([Ticker])
         
         case tickerItem(id: TickerItemCellStore.State.ID, action: TickerItemCellStore.Action)
+        case tagItem(id: TagItemCellStore.State.ID, action: TagItemCellStore.Action)
         case selectTickerType(PresentationAction<SelectTickerTypeStore.Action>)
         case selectCurrency(PresentationAction<SelectCurrencyStore.Action>)
+        case selectTag(PresentationAction<SelectTagStore.Action>)
         
         case alert(PresentationAction<Alert>)
         case delegate(Delegate)
@@ -93,21 +103,16 @@ public struct TickerEditStore: Reducer {
                 state.name = name
                 return .none
                 
-            case let .tickerTapped(ticker):
-                if ticker == state.selectedTicker {
-                    state.selectedTicker = nil
-                } else {
-                    state.selectedTicker = ticker
-                }
-                
-                return .none
-                
-            case .tickerTypeViewTapped:
+            case .tickerTypeButtonTapped:
                 state.selectTickerType = .init()
                 return .none
                 
-            case .currencyViewTapped:
+            case .currencyButtonTapped:
                 state.selectCurrency = .init()
+                return .none
+                
+            case .tagButtonTapped:
+                state.selectTag = .init(selectedTags: state.selectedTags)
                 return .none
                 
             case .deleteButtonTapped:
@@ -128,8 +133,8 @@ public struct TickerEditStore: Reducer {
                 return validateAndSaveTickerEffect(
                     mode: state.mode,
                     ticker: state.selectedTicker,
-                    tickerType: state.tickerType,
-                    currency: state.currency,
+                    tickerType: state.selectedTickerType,
+                    currency: state.selectedCurrency,
                     name: state.name
                 )
                 
@@ -138,7 +143,11 @@ public struct TickerEditStore: Reducer {
                 return .send(.fetchTickersResponse(tickers))
                 
             case let .fetchTickersResponse(tickers):
-                state.tickerItem = .init(uniqueElements: tickers.map { .init(mode: .preview, ticker: $0) })
+                state.tickerItem = .init(
+                    uniqueElements: tickers.map {
+                        .init(mode: .preview, ticker: $0)
+                    }
+                )
                 return .none
                 
             case let .tickerItem(id: id, action: .delegate(.tapped)):
@@ -160,20 +169,24 @@ public struct TickerEditStore: Reducer {
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):
                 state.selectTickerType = nil
-                state.tickerType = tickerType
+                state.selectedTickerType = tickerType
+                return .none
+                
+            case let .selectCurrency(.presented(.delegate(.select(currency)))):
+                state.selectCurrency = nil
+                state.selectedCurrency = currency
                 return .none
                 
             case .selectTickerType(.dismiss):
                 state.selectTickerType = nil
                 return .none
                 
-            case let .selectCurrency(.presented(.delegate(.select(currency)))):
-                state.selectCurrency = nil
-                state.currency = currency
-                return .none
-                
             case .selectCurrency(.dismiss):
                 state.selectCurrency = nil
+                return .none
+                
+            case .selectTag(.dismiss):
+                state.selectTag = nil
                 return .none
                 
             case .alert(.presented(.confirmDeletion)):
@@ -199,7 +212,7 @@ public struct TickerEditStore: Reducer {
         tickerType: TickerType?,
         currency: Currency?,
         name: String
-    ) -> Effect<TickerEditStore.Action> {
+    ) -> Effect<EditTickerStore.Action> {
         guard let tickerType = tickerType else { return .none }
         guard let currency = currency else { return .none }
         guard name.isEmpty == false else { return .none }

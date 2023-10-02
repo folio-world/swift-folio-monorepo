@@ -14,10 +14,10 @@ import ComposableArchitecture
 import ToolinderDomain
 import ToolinderShared
 
-public struct TradeEditView: View {
-    let store: StoreOf<TradeEditStore>
+public struct EditTradeView: View {
+    let store: StoreOf<EditTradeStore>
     
-    public init(store: StoreOf<TradeEditStore>) {
+    public init(store: StoreOf<EditTradeStore>) {
         self.store = store
     }
     
@@ -46,7 +46,7 @@ public struct TradeEditView: View {
         }
     }
     
-    private func headerView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
+    private func headerView(viewStore: ViewStoreOf<EditTradeStore>) -> some View {
         HStack {
             if viewStore.state.mode == .add {
                 Button(action: {
@@ -75,9 +75,9 @@ public struct TradeEditView: View {
         }
     }
     
-    private func pickerView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
+    private func pickerView(viewStore: ViewStoreOf<EditTradeStore>) -> some View {
         HStack {
-            Picker("", selection: viewStore.binding(get: \.selectedTradeSide, send: TradeEditStore.Action.selectTradeSide)) {
+            Picker("", selection: viewStore.binding(get: \.selectedTradeSide, send: EditTradeStore.Action.selectTradeSide)) {
                 ForEach(TradeSide.allCases, id: \.self) { tradeSide in
                     Text(tradeSide.rawValue)
                         .tag(tradeSide)
@@ -85,26 +85,26 @@ public struct TradeEditView: View {
             }
             .pickerStyle(.segmented)
             
-            DatePicker("", selection: viewStore.binding(get: \.selectedDate, send: TradeEditStore.Action.selectDate))
+            DatePicker("", selection: viewStore.binding(get: \.selectedDate, send: EditTradeStore.Action.selectDate))
         }
     }
     
-    private func inputView(viewStore: ViewStoreOf<TradeEditStore>) -> some View {
+    private func inputView(viewStore: ViewStoreOf<EditTradeStore>) -> some View {
         VStack(spacing: 20) {
             HStack {
                 viewStore.state.selectedTicker.currency.image
                 
-                TextField("Price", value: viewStore.binding(get: \.price, send: TradeEditStore.Action.setPrice), format: .number)
+                TextField("Price", value: viewStore.binding(get: \.price, send: EditTradeStore.Action.setPrice), format: .number)
                     .keyboardType(.decimalPad)
                 
                 Image(systemName: "plusminus.circle.fill")
                 
-                TextField("Volume", value: viewStore.binding(get: \.quantity, send: TradeEditStore.Action.setQuantity), format: .number)
+                TextField("Volume", value: viewStore.binding(get: \.quantity, send: EditTradeStore.Action.setQuantity), format: .number)
                     .keyboardType(.decimalPad)
                 
                 Image(systemName: "building.columns.circle.fill")
                 
-                TextField("Fee %", value: viewStore.binding(get: \.fee, send: TradeEditStore.Action.setFee), format: .number)
+                TextField("Fee %", value: viewStore.binding(get: \.fee, send: EditTradeStore.Action.setFee), format: .number)
                     .keyboardType(.decimalPad)
                 
                 Spacer()
@@ -113,7 +113,7 @@ public struct TradeEditView: View {
             VStack(alignment: .leading) {
                 Image(systemName: "note.text")
                 
-                TextEditor(text: viewStore.binding(get: \.note, send: TradeEditStore.Action.setNote))
+                TextEditor(text: viewStore.binding(get: \.note, send: EditTradeStore.Action.setNote))
             }
             
             ScrollView(.horizontal) {
@@ -124,7 +124,7 @@ public struct TradeEditView: View {
                         ImageItem(imageData: imageData)
                     }
                     
-                    PhotosPicker(selection: viewStore.binding(get: \.selectedPhotosPickerItems, send: TradeEditStore.Action.setPhotoPickerItems),
+                    PhotosPicker(selection: viewStore.binding(get: \.selectedPhotosPickerItems, send: EditTradeStore.Action.setPhotoPickerItems),
                                  matching: .images) {
                         ImageNewItem()
                     }

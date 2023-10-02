@@ -19,7 +19,7 @@ public struct TickerDetailStore: Reducer {
         
         public var tradeDateChartDataEntity: TradeDateChartDataEntity = .init()
         
-        @PresentationState var tickerEdit: TickerEditStore.State?
+        @PresentationState var editTicker: EditTickerStore.State?
         public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
         
         public init(
@@ -37,7 +37,7 @@ public struct TickerDetailStore: Reducer {
         case tickerTypeChartDataEntityRequest
         case tickerTypeChartDataEntityResponse(TradeDateChartDataEntity)
         
-        case tickerEdit(PresentationAction<TickerEditStore.Action>)
+        case editTicker(PresentationAction<EditTickerStore.Action>)
         case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
         
         case delegate(Delegate)
@@ -61,7 +61,7 @@ public struct TickerDetailStore: Reducer {
                 ])
                 
             case .editButtonTapped:
-                state.tickerEdit = .init(mode: .edit, selectedTicker: state.ticker)
+                state.editTicker = .init(mode: .edit, selectedTicker: state.ticker)
                 return .none
                 
             case .tickerTypeChartDataEntityRequest:
@@ -78,12 +78,12 @@ public struct TickerDetailStore: Reducer {
                 state.tradeDateChartDataEntity = entity
                 return .none
                 
-            case .tickerEdit(.presented(.delegate(.delete))):
-                state.tickerEdit = nil
+            case .editTicker(.presented(.delegate(.delete))):
+                state.editTicker = nil
                 return .send(.delegate(.deleted))
                 
-            case .tickerEdit(.dismiss):
-                state.tickerEdit = nil
+            case .editTicker(.dismiss):
+                state.editTicker = nil
                 return .none
                 
             default:
@@ -91,8 +91,8 @@ public struct TickerDetailStore: Reducer {
             }
         }
         
-        .ifLet(\.$tickerEdit, action: /Action.tickerEdit) {
-            TickerEditStore()
+        .ifLet(\.$editTicker, action: /Action.editTicker) {
+            EditTickerStore()
         }
     }
 }

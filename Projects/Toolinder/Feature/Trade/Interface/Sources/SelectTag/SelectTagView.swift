@@ -14,41 +14,58 @@ import ToolinderDomain
 import ToolinderShared
 
 public struct SelectTagView: View {
-    let store: StoreOf<SelectCurrencyStore>
+    let store: StoreOf<SelectTagStore>
     
-    public init(store: StoreOf<SelectCurrencyStore>) {
+    public init(store: StoreOf<SelectTagStore>) {
         self.store = store
     }
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                HStack {
-                    Text("Currency")
-                        .font(.title)
-                    Spacer()
-                }
-                .padding()
-                
-                LazyVGrid(columns: .init(repeating: .init(.flexible(minimum: 10, maximum: 500)), count: 3), alignment: .leading, spacing: 10) {
-                    ForEach(Currency.allCases, id: \.self) { currency in
-                        Label(currency.rawValue, systemImage: currency.systemImageName)
-                            .font(.body)
-                            .padding(10)
-                            .background(Color(uiColor: .systemGray6))
-                            .clipShape(
-                                RoundedRectangle(
-                                    cornerRadius: 8,
-                                    style: .continuous
-                                )
-                            )
-                            .onTapGesture {
-                                viewStore.send(.delegate(.select(currency)))
-                            }
+                VStack(alignment: .leading) {
+                    EditHeaderView(mode: .bypassAdd, title: "Tag") { action in
+                        switch action {
+                        case .dismiss:
+                            viewStore.send(.dismissButtonTapped)
+                        case .delete: break
+                        }
+                    }
+                    
+                    tagItemListView()
+                    
+                    Divider()
+                    
+                    nameView(viewStore: viewStore)
+                    
+                    colorView(viewStore: viewStore)
+                    
+                    MinimalButton(title: "Confirm") {
+                        viewStore.send(.confirmButtonTapped)
                     }
                 }
-                .padding(.horizontal)
+                .padding()
             }
         }
+    }
+    
+    private func tagItemListView() -> some View {
+        LazyVGrid(columns: .init(repeating: .init(.flexible(minimum: 10, maximum: 500)), count: 3), alignment: .leading, spacing: 10) {
+            ForEachStore(self.store.scope(state: \.tagItem, action: SelectTagStore.Action.tagItem(id:action:))) {
+                TagItemCellView(store: $0)
+            }
+        }
+        .padding(.horizontal)
+    }
+    
+    private func nameView(viewStore: ViewStoreOf<SelectTagStore>) -> some View {
+        TextField("Name", text: viewStore.binding(get: \.name, send: SelectTagStore.Action.setName))
+            .foregroundStyle(.foreground)
+    }
+    
+    private func colorView(viewStore: ViewStoreOf<SelectTagStore>) -> some View {
+        ColorPicker(selection: viewStore.binding(get: \.color, send: SelectTagStore.Action.setColor), label: {
+            Label("Color", systemImage: "paintpalette.fill")
+        })
     }
 }

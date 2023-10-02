@@ -37,11 +37,11 @@ public struct TickerDetailView: View {
             }
             .sheet(
                 store: self.store.scope(
-                    state: \.$tickerEdit,
-                    action: { .tickerEdit($0) }
+                    state: \.$editTicker,
+                    action: { .editTicker($0) }
                 )
             ) {
-                TickerEditView(store: $0)
+                EditTickerView(store: $0)
                     .presentationDetents([.medium])
             }
             .toolbar {

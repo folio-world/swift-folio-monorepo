@@ -48,20 +48,20 @@ public struct CalendarView: View {
             }
             .sheet(
                 store: self.store.scope(
-                    state: \.$tickerEdit,
-                    action: { .tickerEdit($0) }
+                    state: \.$editTicker,
+                    action: { .editTicker($0) }
                 )
             ) {
-                TickerEditView(store: $0)
+                EditTickerView(store: $0)
                     .presentationDetents([.medium])
             }
             .sheet(
                 store: self.store.scope(
-                    state: \.$tradeEdit,
-                    action: { .tradeEdit($0) }
+                    state: \.$editTrade,
+                    action: { .editTrade($0) }
                 )
             ) {
-                TradeEditView(store: $0)
+                EditTradeView(store: $0)
                     .presentationDetents([.medium])
             }
             .tag(viewStore.offset)
