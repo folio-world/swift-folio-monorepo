@@ -33,11 +33,11 @@ public struct MyPageNavigationStackView: View {
                 }
             } destination: {
                 switch $0 {
-                case .existingUserPolicy:
+                case .whatIsNew:
                     CaseLet(
-                        /MyPageNavigationStackStore.Path.State.existingUserPolicy,
-                         action: MyPageNavigationStackStore.Path.Action.existingUserPolicy,
-                         then: ExistingUserPolicyView.init(store:))
+                        /MyPageNavigationStackStore.Path.State.whatIsNew,
+                         action: MyPageNavigationStackStore.Path.Action.whatIsNew,
+                         then: WhatIsNewView.init(store:))
                 }
             }
     }

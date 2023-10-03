@@ -46,7 +46,7 @@ public struct MyPageMainView: View {
         HStack {
             Label(
                 title: {
-                    Text("Existing User Policy")
+                    Text("What's New \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")")
                 }, icon: {
                     Image(systemName: "info.circle.fill")
                         .foregroundStyle(.blue)
@@ -55,7 +55,7 @@ public struct MyPageMainView: View {
             Spacer()
             Button(
                 action: {
-                    viewStore.send(.existingUserPolicyTapped)
+                    viewStore.send(.whatIsNew)
                 },
                 label: {
                     Image(systemName: "chevron.right")
