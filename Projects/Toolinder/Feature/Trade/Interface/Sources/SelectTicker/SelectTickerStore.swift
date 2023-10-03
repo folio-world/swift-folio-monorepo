@@ -81,6 +81,7 @@ public struct SelectTickerStore: Reducer {
                 }
                 
             case .editTicker(.presented(.delegate(.save))):
+                state.editTicker = nil
                 return .send(.fetchTickersRequest)
                 
             case .editTicker(.dismiss), .editTicker(.presented(.delegate(.cancle))):

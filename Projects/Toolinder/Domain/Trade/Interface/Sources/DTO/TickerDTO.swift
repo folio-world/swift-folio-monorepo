@@ -13,14 +13,14 @@ public class TickerDTO {
     public var type: TickerType
     public var currency: Currency
     public var name: String
-    public var tags: [TagDTO]
+    public var tags: [Tag]
     
     public init(
         id: UUID = .init(),
         type: TickerType,
         currency: Currency,
         name: String,
-        tags: [TagDTO]
+        tags: [Tag]
     ) {
         self.id = id
         self.type = type
@@ -35,7 +35,7 @@ public class TickerDTO {
             type: type,
             currency: currency,
             name: name,
-            tags: tags.map { $0.toDomain() }
+            tags: tags
         )
     }
 }

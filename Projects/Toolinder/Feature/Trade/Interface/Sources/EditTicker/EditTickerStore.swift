@@ -83,7 +83,7 @@ public struct EditTickerStore: Reducer {
         public enum Delegate: Equatable {
             case cancle
             case save(Ticker)
-            case delete(Ticker)
+            case delete
         }
     }
     
@@ -130,7 +130,8 @@ public struct EditTickerStore: Reducer {
                     ticker: state.ticker,
                     tickerType: state.selectedTickerType,
                     currency: state.selectedCurrency,
-                    name: state.name
+                    name: state.name,
+                    tags: state.selectedTags
                 )
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):
@@ -163,7 +164,7 @@ public struct EditTickerStore: Reducer {
             case .alert(.presented(.confirmDeletion)):
                 if let ticker = state.ticker {
                     let _ = tickerClient.deleteTicker(ticker)
-                    return .send(.delegate(.delete(ticker)))
+                    return .send(.delegate(.delete))
                 }
                 return .none
                 
@@ -183,7 +184,8 @@ public struct EditTickerStore: Reducer {
         ticker: Ticker?,
         tickerType: TickerType?,
         currency: Currency?,
-        name: String
+        name: String,
+        tags: [Tag]
     ) -> Effect<EditTickerStore.Action> {
         guard let tickerType = tickerType else { return .none }
         guard let currency = currency else { return .none }
@@ -191,7 +193,7 @@ public struct EditTickerStore: Reducer {
         
         switch mode {
         case .add:
-            if let ticker = try? tickerClient.saveTicker(.init(type: tickerType, currency: currency, name: name, tags: [])).get() {
+            if let ticker = try? tickerClient.saveTicker(.init(type: tickerType, currency: currency, name: name, tags: tags)).get() {
                 return .send(.delegate(.save(ticker)))
             } else {
                 return .none
@@ -199,7 +201,7 @@ public struct EditTickerStore: Reducer {
         case .edit:
             guard let ticker = ticker else { return .none }
             
-            if let ticker = try? tickerClient.updateTicker(ticker, .init(type: tickerType, currency: currency, name: name, tags: [])).get() {
+            if let ticker = try? tickerClient.updateTicker(ticker, .init(type: tickerType, currency: currency, name: name, tags: tags)).get() {
                 return .send(.delegate(.save(ticker)))
             } else {
                 return .none

@@ -15,7 +15,7 @@ public struct TickerDetailStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
-        public let ticker: Ticker
+        public var ticker: Ticker
         
         public var tradeDateChartDataEntity: TradeDateChartDataEntity = .init()
         
@@ -76,6 +76,11 @@ public struct TickerDetailStore: Reducer {
                 
             case let .tickerTypeChartDataEntityResponse(entity):
                 state.tradeDateChartDataEntity = entity
+                return .none
+                
+            case let .editTicker(.presented(.delegate(.save(ticker)))):
+                state.editTicker = nil
+                state.ticker = ticker
                 return .none
                 
             case .editTicker(.presented(.delegate(.delete))):
