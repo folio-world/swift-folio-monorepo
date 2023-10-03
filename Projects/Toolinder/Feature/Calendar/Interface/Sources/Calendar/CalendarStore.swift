@@ -142,13 +142,10 @@ public struct CalendarStore: Reducer {
                     return .none
                 }
                 
-//            case let .selectTicker(.presented):
-//                return .none
-                
-//            case let .editTicker(.presented(.delegate(.next(ticker)))):
-//                state.editTicker = nil
-//                state.editTrade = .init(selectedTicker: ticker, selectedDate: state.selectedDate)
-//                return .none
+            case let .selectTicker(.presented(.delegate(.select(ticker)))):
+                state.selectTicker = nil
+                state.editTrade = .init(selectedTicker: ticker, selectedDate: state.selectedDate)
+                return .none
                 
             case .selectTicker(.dismiss):
                 state.selectTicker = nil

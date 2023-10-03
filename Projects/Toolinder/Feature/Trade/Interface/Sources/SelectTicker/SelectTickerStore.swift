@@ -73,6 +73,13 @@ public struct SelectTickerStore: Reducer {
                 )
                 return .none
                 
+            case let .tickerItem(id: id, action: .delegate(.tapped)):
+                if let ticker = state.tickerItem[id: id]?.ticker {
+                    return .send(.delegate(.select(ticker)))
+                } else {
+                    return .none
+                }
+                
             case .editTicker(.presented(.delegate(.save))):
                 return .send(.fetchTickersRequest)
                 
@@ -84,9 +91,11 @@ public struct SelectTickerStore: Reducer {
                 return .none
             }
         }
-        
         .ifLet(\.$editTicker, action: /Action.editTicker) {
             EditTickerStore()
+        }
+        .forEach(\.tickerItem, action: /Action.tickerItem(id:action:)) {
+            TickerItemCellStore()
         }
     }
 }

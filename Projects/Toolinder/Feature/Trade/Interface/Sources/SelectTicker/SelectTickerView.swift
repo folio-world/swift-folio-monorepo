@@ -58,11 +58,10 @@ public struct SelectTickerView: View {
     }
     
     private func tickerItemListView() -> some View {
-        LazyVGrid(columns: .init(repeating: .init(.flexible(minimum: 10, maximum: 500)), count: 3), alignment: .leading, spacing: 10) {
+        LazyVGrid(columns: .init(repeating: .init(.flexible(minimum: 10, maximum: 500)), count: 2), alignment: .leading, spacing: 10) {
             ForEachStore(self.store.scope(state: \.tickerItem, action: SelectTickerStore.Action.tickerItem(id:action:))) {
                 TickerItemCellView(store: $0)
             }
         }
-        .padding(.horizontal)
     }
 }
