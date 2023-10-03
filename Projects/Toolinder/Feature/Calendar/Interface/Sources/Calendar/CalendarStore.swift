@@ -43,8 +43,8 @@ public struct CalendarStore: Reducer {
         
         public var calendarItem: IdentifiedArrayOf<CalendarItemCellStore.State> = []
         public var tradeItem: IdentifiedArrayOf<TradeItemCellStore.State> = []
-        @PresentationState var tickerEdit: TickerEditStore.State?
-        @PresentationState var tradeEdit: TradeEditStore.State?
+        @PresentationState var selectTicker: SelectTickerStore.State?
+        @PresentationState var editTrade: EditTradeStore.State?
         
         public init(
             id: UUID = .init(),
@@ -83,8 +83,8 @@ public struct CalendarStore: Reducer {
         
         case calendarItem(id: CalendarItemCellStore.State.ID, action: CalendarItemCellStore.Action)
         case tradeItem(id: TradeItemCellStore.State.ID, action: TradeItemCellStore.Action)
-        case tickerEdit(PresentationAction<TickerEditStore.Action>)
-        case tradeEdit(PresentationAction<TradeEditStore.Action>)
+        case selectTicker(PresentationAction<SelectTickerStore.Action>)
+        case editTrade(PresentationAction<EditTradeStore.Action>)
         
         case delegate(Delegate)
         
@@ -104,7 +104,7 @@ public struct CalendarStore: Reducer {
                 return .none
                 
             case .newButtonTapped:
-                state.tickerEdit = .init()
+                state.selectTicker = .init()
                 return .none
                 
             case let .tradeItemTapped(trade):
@@ -142,31 +142,27 @@ public struct CalendarStore: Reducer {
                     return .none
                 }
                 
-            case .tickerEdit(.presented(.delegate(.cancel))):
-                state.tickerEdit = nil
+            case let .selectTicker(.presented(.delegate(.select(ticker)))):
+                state.selectTicker = nil
+                state.editTrade = .init(selectedTicker: ticker, selectedDate: state.selectedDate)
                 return .none
                 
-            case let .tickerEdit(.presented(.delegate(.next(ticker)))):
-                state.tickerEdit = nil
-                state.tradeEdit = .init(selectedTicker: ticker, selectedDate: state.selectedDate)
+            case .selectTicker(.dismiss):
+                state.selectTicker = nil
                 return .none
                 
-            case .tickerEdit(.dismiss):
-                state.tickerEdit = nil
+            case .editTrade(.presented(.delegate(.save))):
+                state.selectTicker = nil
+                state.editTrade = nil
                 return .none
                 
-            case .tradeEdit(.presented(.delegate(.save))):
-                state.tickerEdit = nil
-                state.tradeEdit = nil
+            case let .editTrade(.presented(.delegate(.cancel(ticker)))):
+                state.selectTicker = .init(selectedTicker: ticker)
+                state.editTrade = nil
                 return .none
                 
-            case let .tradeEdit(.presented(.delegate(.cancel(ticker)))):
-                state.tickerEdit = .init(selectedTicker: ticker)
-                state.tradeEdit = nil
-                return .none
-                
-            case .tradeEdit(.dismiss):
-                state.tradeEdit = nil
+            case .editTrade(.dismiss):
+                state.editTrade = nil
                 return .none
                 
             default:
@@ -179,11 +175,11 @@ public struct CalendarStore: Reducer {
         .forEach(\.tradeItem, action: /Action.tradeItem(id:action:)) {
             TradeItemCellStore()
         }
-        .ifLet(\.$tickerEdit, action: /Action.tickerEdit) {
-            TickerEditStore()
+        .ifLet(\.$selectTicker, action: /Action.selectTicker) {
+            SelectTickerStore()
         }
-        .ifLet(\.$tradeEdit, action: /Action.tradeEdit) {
-            TradeEditStore()
+        .ifLet(\.$editTrade, action: /Action.editTrade) {
+            EditTradeStore()
         }
     }
 }

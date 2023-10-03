@@ -40,7 +40,7 @@ public struct MinimalButton: View {
             }
             .padding(.vertical, 10)
         })
-        .background(.black)
+        .background(isActive ? Color.foreground : Color.foreground) //TODO: active 현재 미사용
         .clipShape(
             RoundedRectangle(
                 cornerRadius: 8,

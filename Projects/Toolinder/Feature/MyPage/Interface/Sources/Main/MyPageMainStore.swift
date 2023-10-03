@@ -20,10 +20,10 @@ public struct MyPageMainStore: Reducer {
         case onAppear
         case delegate(Delegate)
         
-        case existingUserPolicyTapped
+        case whatIsNew
         
         public enum Delegate: Equatable {
-            case existingUserPolicy
+            case whatIsNew
         }
     }
     
@@ -33,8 +33,8 @@ public struct MyPageMainStore: Reducer {
             case .onAppear:
                 return .none
                 
-            case .existingUserPolicyTapped:
-                return .send(.delegate(.existingUserPolicy))
+            case .whatIsNew:
+                return .send(.delegate(.whatIsNew))
                 
             default:
                 return .none

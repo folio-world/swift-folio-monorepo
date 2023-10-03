@@ -123,10 +123,10 @@ public struct CalendarMainStore: Reducer {
                 case .delegate(.refresh):
                     return .send(.fetch)
                     
-                case .tradeEdit(.presented(.delegate(.save))):
+                case .editTrade(.presented(.delegate(.save))):
                     return .send(.fetch)
                     
-                case .tradeEdit(.dismiss):
+                case .editTrade(.dismiss):
                     return .send(.fetch)
                     
                 case let .delegate(.detail(trade)):

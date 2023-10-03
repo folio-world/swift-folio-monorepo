@@ -9,7 +9,7 @@ import Foundation
 
 import ComposableArchitecture
 
-public struct ExistingUserPolicyStore: Reducer {
+public struct WhatIsNewStore: Reducer {
     public init() {}
     
     public struct State: Equatable {

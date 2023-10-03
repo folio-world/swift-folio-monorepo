@@ -45,11 +45,11 @@ public struct TradeDetailView: View {
             }
             .sheet(
                 store: self.store.scope(
-                    state: \.$tradeEdit,
-                    action: { .tradeEdit($0) }
+                    state: \.$editTrade,
+                    action: { .editTrade($0) }
                 )
             ) {
-                TradeEditView(store: $0)
+                EditTradeView(store: $0)
                     .presentationDetents([.medium])
             }
             .navigationTitle(viewStore.state.trade.ticker?.name ?? "")
@@ -80,7 +80,7 @@ public struct TradeDetailView: View {
             HStack(alignment: .bottom, spacing: .zero) {
                 Spacer()
                 
-                Text(scaledString(valueOrNil: viewStore.state.trade.volume))
+                Text(scaledString(valueOrNil: viewStore.state.trade.quantity))
                     .font(.title)
                     .fontWeight(.semibold)
                 

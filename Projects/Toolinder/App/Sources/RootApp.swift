@@ -15,15 +15,8 @@ import ToolinderDomain
 
 @main
 struct RootApp: App {
-    let modelContainer: ModelContainer
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    init() {
-        do {
-            modelContainer = try ModelContainer(for: Ticker.self, Trade.self)
-        } catch {
-            fatalError("Could not initialize ModelContainer \(error)")
-        }
-    }
     var body: some Scene {
         WindowGroup {
             RootView(
@@ -32,8 +25,12 @@ struct RootApp: App {
                         ._printChanges()
                 }
             )
+            .modelContainer(for: [
+                Ticker.self,
+                Trade.self,
+                Tag.self
+            ])
             .onAppear(perform: UIApplication.shared.hideKeyboard)
         }
-        .modelContainer(modelContainer)
     }
 }

@@ -29,16 +29,16 @@ public struct MyPageNavigationStackStore: Reducer {
     
     public struct Path: Reducer {
         public enum State: Equatable {
-            case existingUserPolicy(ExistingUserPolicyStore.State)
+            case whatIsNew(WhatIsNewStore.State)
         }
         
         public enum Action: Equatable {
-            case existingUserPolicy(ExistingUserPolicyStore.Action)
+            case whatIsNew(WhatIsNewStore.Action)
         }
         
         public var body: some Reducer<State, Action> {
-            Scope(state: /State.existingUserPolicy, action: /Action.existingUserPolicy) {
-                ExistingUserPolicyStore()
+            Scope(state: /State.whatIsNew, action: /Action.whatIsNew) {
+                WhatIsNewStore()
             }
         }
     }
@@ -51,8 +51,8 @@ public struct MyPageNavigationStackStore: Reducer {
             case .onAppear:
                 return .none
                 
-            case .main(.delegate(.existingUserPolicy)):
-                state.path.append(.existingUserPolicy(.init()))
+            case .main(.delegate(.whatIsNew)):
+                state.path.append(.whatIsNew(.init()))
                 return .none
                 
             default:

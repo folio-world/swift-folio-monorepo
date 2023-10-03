@@ -31,12 +31,12 @@ public extension Ticker {
         for trade in trades {
             switch trade.side {
             case .buy:
-                totalAmount += trade.price * trade.volume
-                buyVolume += trade.volume
+                totalAmount += trade.price * trade.quantity
+                buyVolume += trade.quantity
                 
             case .sell:
-                totalAmount -= avgPrice * trade.volume
-                sellVoume += trade.volume
+                totalAmount -= avgPrice * trade.quantity
+                sellVoume += trade.quantity
             }
 
             totalVolume = buyVolume - sellVoume
@@ -47,7 +47,7 @@ public extension Ticker {
             
             // 수익 계산
             if trade.side == .sell {
-                profit += (trade.price - avgPrice) * trade.volume
+                profit += (trade.price - avgPrice) * trade.quantity
             }
         }
         // 수익률 계산

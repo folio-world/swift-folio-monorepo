@@ -46,6 +46,7 @@ public class TickerRepository: TickerRepositoryInterface {
             ticker.type = newTicker.type
             ticker.currency = newTicker.currency
             ticker.name = newTicker.name
+            ticker.tags = newTicker.tags
             return .success(ticker)
         } else {
             return .failure(.unknown)
