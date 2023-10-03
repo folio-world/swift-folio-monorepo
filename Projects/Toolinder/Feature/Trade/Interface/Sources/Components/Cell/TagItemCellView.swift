@@ -24,7 +24,7 @@ public struct TagItemCellView: View {
             HStack(spacing: 10) {
                 Circle()
                     .fill(Color(hex: viewStore.state.tag.hex))
-                    .frame(width: 20, height: 20)
+                    .frame(width: 15, height: 15)
                 
                 Text(viewStore.state.tag.name)
                     .font(.caption2)

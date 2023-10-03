@@ -33,9 +33,17 @@ public extension Color {
         )
     }
     
-    static func blackOrWhite(_ isSelected: Bool = false) -> Self {
-        return isSelected ? Color(uiColor: .label) : Color(uiColor: .systemBackground)
+    static var foreground: Self {
+        return Color(uiColor: .label)
     }
+    
+    static var background: Self {
+        return Color(uiColor: .systemBackground)
+    }
+    
+//    static func blackOrWhite(_ isSelected: Bool = false) -> Self {
+//        return isSelected ? Color(uiColor: .label) : Color(uiColor: .systemBackground)
+//    }
     
     func toHex() -> String {
         let uic = UIColor(self)

@@ -116,7 +116,7 @@ public struct EditTickerView: View {
     }
     
     private func nameView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
-        TextField("Name", text: viewStore.binding(get: \.name, send: EditTickerStore.Action.setName))
+        TextField("Name", text: viewStore.binding(get: \.name.localizedUppercase, send: EditTickerStore.Action.setName))
             .foregroundStyle(.foreground)
     }
     
@@ -140,16 +140,17 @@ public struct EditTickerView: View {
     
     private func tagView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
         ScrollView(.horizontal) {
-            HStack {
+            HStack(spacing: .zero) {
                 Button(action: {
                     viewStore.send(.tagButtonTapped)
                 }, label: {
-                    Label(viewStore.selectedTags.isEmpty ? "Tag": "", systemImage: "tag.circle.fill")
+                    Label(viewStore.state.selectedTags.isEmpty ? "Tag" : "", systemImage: "tag.circle.fill")
                         .foregroundStyle(.foreground)
                 })
                 
                 ForEachStore(self.store.scope(state: \.tagItem, action: EditTickerStore.Action.tagItem(id:action:))) {
                     TagItemCellView(store: $0)
+                        .padding(.trailing)
                 }
             }
         }

@@ -22,7 +22,7 @@ public struct EditTagStore: Reducer {
         public var title: LocalizedStringKey = ""
         
         public var tagName: String = ""
-        public var tagColor: Color = .blackOrWhite()
+        public var tagColor: Color = .foreground
         
         public init(
             mode: EditMode,

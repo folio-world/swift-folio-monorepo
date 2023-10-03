@@ -40,7 +40,7 @@ public struct MinimalButton: View {
             }
             .padding(.vertical, 10)
         })
-        .background(.black)
+        .background(isActive ? Color.foreground : .gray)
         .clipShape(
             RoundedRectangle(
                 cornerRadius: 8,

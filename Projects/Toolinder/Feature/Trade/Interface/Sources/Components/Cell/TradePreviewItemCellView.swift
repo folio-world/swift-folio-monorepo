@@ -29,7 +29,7 @@ public struct TradePreviewItemCellView: View {
                 Text(viewStore.state.trade.ticker?.name ?? "")
                     .font(.caption2)
                     .fontWeight(.light)
-                    .foregroundStyle(Color.blackOrWhite(!viewStore.state.isSelected))
+                    .foregroundStyle(viewStore.state.isSelected ? Color.background : Color.foreground)
                 
                 Spacer()
             }

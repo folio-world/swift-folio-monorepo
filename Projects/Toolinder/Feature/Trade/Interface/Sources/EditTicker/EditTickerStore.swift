@@ -48,6 +48,7 @@ public struct EditTickerStore: Reducer {
                 self.name = ticker?.name ?? ""
                 self.selectedTickerType = ticker?.type ?? .stock
                 self.selectedCurrency = ticker?.currency ?? .dollar
+                self.selectedTags = ticker?.tags ?? []
                 self.tagItem = .init(
                     uniqueElements: ticker?.tags?.map { tag in
                         return .init(mode: .select, tag: tag)

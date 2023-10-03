@@ -29,7 +29,7 @@ public struct CalendarItemCellView: View {
                     Text("\(viewStore.state.date.day)")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .foregroundStyle(Color.blackOrWhite(!viewStore.state.isSelected))
+                        .foregroundStyle(viewStore.state.isSelected ? Color.background : Color.foreground)
                     
                     Spacer()
                 }
@@ -41,7 +41,7 @@ public struct CalendarItemCellView: View {
                 
                 Spacer()
             }
-            .background(Color.blackOrWhite(viewStore.state.isSelected))
+            .background(viewStore.state.isSelected ? Color.foreground : Color.background)
             .clipShape(
                 RoundedRectangle(
                     cornerRadius: 8,
