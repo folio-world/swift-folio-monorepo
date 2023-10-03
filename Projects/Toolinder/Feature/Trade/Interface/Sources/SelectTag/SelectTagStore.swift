@@ -16,11 +16,10 @@ public struct SelectTagStore: Reducer {
     public init() {}
     
     public struct State: Equatable {
-        public var tagItem: IdentifiedArrayOf<TagItemCellStore.State> = []
-        
         public var selectedTags: [Tag]
-        public var name: String = ""
-        public var color: Color = .blackOrWhite()
+        
+        public var tagItem: IdentifiedArrayOf<TagItemCellStore.State> = []
+        @PresentationState var editTag: EditTagStore.State?
         
         public init(selectedTags: [Tag]) {
             self.selectedTags = selectedTags
@@ -30,15 +29,14 @@ public struct SelectTagStore: Reducer {
     public enum Action: Equatable {
         case onAppear
         
-        case setName(String)
-        case setColor(Color)
-        case dismissButtonTapped
+        case addButtonTapped
         case confirmButtonTapped
         
         case fetchTagsRequest
         case fetchTagsResponse([Tag])
         
         case tagItem(id: TagItemCellStore.State.ID, action: TagItemCellStore.Action)
+        case editTag(PresentationAction<EditTagStore.Action>)
         
         case delegate(Delegate)
         
@@ -53,7 +51,16 @@ public struct SelectTagStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                return .concatenate([
+                    .send(.fetchTagsRequest)
+                ])
+                
+            case .addButtonTapped:
+                state.editTag = .init(mode: .add)
                 return .none
+                
+            case .confirmButtonTapped:
+                return .send(.delegate(.select(state.selectedTags)))
                 
             case .fetchTagsRequest:
                 let tags = (try? tagClient.fetchTags().get()) ?? []
@@ -64,19 +71,42 @@ public struct SelectTagStore: Reducer {
                     uniqueElements: tags.map { tag in
                         return .init(
                             tag: tag,
-                            isSelected: state.selectedTags.contains(where: { $0 == tag})
+                            isSelected: state.selectedTags.contains(where: { $0 == tag })
                         )
                     }
                 )
                 return .none
                 
-            case .confirmButtonTapped:
+            case let .tagItem(id: id, action: .delegate(.tapped)):
+                guard let tag = state.tagItem[id: id]?.tag else { return .none }
                 
+                state.tagItem[id: id]?.isSelected.toggle()
+                if let index = state.selectedTags.firstIndex(of: tag) {
+                    state.selectedTags.remove(at: index)
+                } else {
+                    state.selectedTags.append(tag)
+                }
+                return .none
+                
+            case .editTag(.presented(.delegate(.save))):
+                state.editTag = nil
+                return .send(.fetchTagsRequest)
+                
+            case .editTag(.dismiss):
+                state.editTag = nil
                 return .none
                 
             default:
                 return .none
             }
+        }
+        
+        .ifLet(\.$editTag, action: /Action.editTag) {
+            EditTagStore()
+        }
+        
+        .forEach(\.tagItem, action: /Action.tagItem(id:action:)) {
+            TagItemCellStore()
         }
     }
 }

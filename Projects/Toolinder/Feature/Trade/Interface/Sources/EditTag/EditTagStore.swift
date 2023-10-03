@@ -40,12 +40,12 @@ public struct EditTagStore: Reducer {
         case setTagColor(Color)
         case dismissButtonTapped
         case deleteButtonTapped
-        case confirmButtonTapped
+        case saveButtonTapped
         
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
-            case confirm
+            case save(Tag)
         }
     }
     
@@ -65,7 +65,11 @@ public struct EditTagStore: Reducer {
                 state.tagColor = color
                 return .none
                 
-            case .confirmButtonTapped:
+            case .saveButtonTapped:
+                guard state.tagName != "" else { return .none }
+                if let tag = try? tagClient.saveTag(.init(hex: state.tagColor.toHex(), name: state.tagName)).get() {
+                    return .send(.delegate(.save(tag)))
+                }
                 return .none
                 
             default:

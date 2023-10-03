@@ -21,29 +21,28 @@ public struct TagItemCellView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            HStack(spacing: 2) {
+            HStack(spacing: 10) {
                 Circle()
                     .fill(Color(hex: viewStore.state.tag.hex))
+                    .frame(width: 20, height: 20)
                 
-//                RoundedRectangle(cornerRadius: 3)
-//                    .fill(viewStore.state.trade.side == .buy ? .pink : .mint)
-//                    .frame(width: 2.5, height: 11)
-                
-//                Text(viewStore.state.trade.ticker?.name ?? "")
-//                    .font(.caption2)
-//                    .fontWeight(.light)
-//                    .foregroundStyle(Color.blackOrWhite(!viewStore.state.isSelected))
+                Text(viewStore.state.tag.name)
+                    .font(.caption2)
+                    .foregroundStyle(.foreground)
                 
                 Spacer()
             }
             .padding(10)
-            .background(Color(uiColor: .systemGray6))
+            .background(viewStore.state.isSelected ? Color(uiColor: .systemGray5) : Color(uiColor: .systemGray6))
             .clipShape(
                 RoundedRectangle(
                     cornerRadius: 8,
                     style: .continuous
                 )
             )
+            .onTapGesture {
+                viewStore.send(.tapped)
+            }
         }
     }
 }

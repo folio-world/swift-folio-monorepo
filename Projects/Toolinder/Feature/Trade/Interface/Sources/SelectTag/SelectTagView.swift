@@ -22,29 +22,46 @@ public struct SelectTagView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
-                VStack(alignment: .leading) {
-                    EditHeaderView(mode: .select, title: "Tag") { action in
-                        switch action {
-                        case .dismiss:
-                            viewStore.send(.dismissButtonTapped)
-                        default: break
+            GeometryReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        headerView(viewStore: viewStore)
+                            .padding()
+                        
+                        tagItemListView()
+                        
+                        Spacer()
+                        
+                        MinimalButton(title: "Confirm") {
+                            viewStore.send(.confirmButtonTapped)
                         }
+                        .padding()
                     }
-                    
-                    tagItemListView()
-                    
-                    Divider()
-                    
-                    nameView(viewStore: viewStore)
-                    
-                    colorView(viewStore: viewStore)
-                    
-                    MinimalButton(title: "Confirm") {
-                        viewStore.send(.confirmButtonTapped)
-                    }
+                    .frame(minHeight: proxy.size.height)
                 }
-                .padding()
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$editTag,
+                    action: { .editTag($0) }
+                )
+            ) {
+                EditTagView(store: $0)
+                    .presentationDetents([.medium])
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func headerView(viewStore: ViewStoreOf<SelectTagStore>) -> some View {
+        EditHeaderView(mode: .select, title: "Tag", isShowNewButton: true) { mode in
+            switch mode {
+            case .new:
+                viewStore.send(.addButtonTapped)
+            default: break
             }
         }
     }
@@ -56,16 +73,5 @@ public struct SelectTagView: View {
             }
         }
         .padding(.horizontal)
-    }
-    
-    private func nameView(viewStore: ViewStoreOf<SelectTagStore>) -> some View {
-        TextField("Name", text: viewStore.binding(get: \.name, send: SelectTagStore.Action.setName))
-            .foregroundStyle(.foreground)
-    }
-    
-    private func colorView(viewStore: ViewStoreOf<SelectTagStore>) -> some View {
-        ColorPicker(selection: viewStore.binding(get: \.color, send: SelectTagStore.Action.setColor), label: {
-            Label("Color", systemImage: "paintpalette.fill")
-        })
     }
 }

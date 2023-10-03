@@ -73,6 +73,13 @@ public struct SelectTickerStore: Reducer {
                 )
                 return .none
                 
+            case .editTicker(.presented(.delegate(.save))):
+                return .send(.fetchTickersRequest)
+                
+            case .editTicker(.dismiss), .editTicker(.presented(.delegate(.cancle))):
+                state.editTicker = nil
+                return .none
+                
             default:
                 return .none
             }

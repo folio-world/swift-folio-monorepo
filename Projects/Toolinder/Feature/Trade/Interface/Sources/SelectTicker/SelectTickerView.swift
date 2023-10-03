@@ -21,22 +21,38 @@ public struct SelectTickerView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
-                VStack {
-                    EditHeaderView(
-                        mode: .select,
-                        title: "Ticker",
-                        isShowNewButton: true
-                    ) { _ in }
-                        .padding()
-                    
-                    if viewStore.tickerItem.isEmpty {
-                        tickerItemListEmptyView(viewStore: viewStore)
-                            .padding()
-                    } else {
-                        tickerItemListView()
-                            .padding()
-                    }
-                }
+                headerView(viewStore: viewStore)
+                    .padding()
+                
+                tickerItemListView()
+                    .padding()
+            }
+            .onAppear {
+                viewStore.send(.onAppear)
+            }
+            .sheet(
+                store: self.store.scope(
+                    state: \.$editTicker,
+                    action: { .editTicker($0) }
+                )
+            ) {
+                EditTickerView(store: $0)
+                    .presentationDetents([.medium])
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private func headerView(viewStore: ViewStoreOf<SelectTickerStore>) -> some View {
+        EditHeaderView(
+            mode: .select,
+            title: "Ticker",
+            isShowNewButton: true
+        ) { mode in
+            switch mode {
+            case .new:
+                viewStore.send(.addButtonTapped)
+            default: break
             }
         }
     }
@@ -48,17 +64,5 @@ public struct SelectTickerView: View {
             }
         }
         .padding(.horizontal)
-    }
-    
-    private func tickerItemListEmptyView(viewStore: ViewStoreOf<SelectTickerStore>) -> some View {
-        HStack {
-            Button(action: {
-                viewStore.send(.addButtonTapped)
-            }, label: {
-                Image(systemName: "cloud.rain.fill")
-                    .font(.largeTitle)
-                    .foregroundStyle(.foreground)
-            })
-        }
     }
 }

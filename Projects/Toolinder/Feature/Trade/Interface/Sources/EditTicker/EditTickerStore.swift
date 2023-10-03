@@ -21,7 +21,15 @@ public struct EditTickerStore: Reducer {
         public var name: String = ""
         public var selectedTickerType: TickerType?
         public var selectedCurrency: Currency?
-        public var selectedTags: [Tag] = []
+        public var selectedTags: [Tag] = [] {
+            didSet {
+                tagItem = .init(
+                    uniqueElements: selectedTags.map { tag in
+                        return .init(tag: tag)
+                    }
+                )
+            }
+        }
         
         public var tagItem: IdentifiedArrayOf<TagItemCellStore.State> = []
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
@@ -103,6 +111,9 @@ public struct EditTickerStore: Reducer {
                 state.selectTag = .init(selectedTags: state.selectedTags)
                 return .none
                 
+            case .dismissButtonTapped:
+                return .send(.delegate(.cancle))
+                
             case .deleteButtonTapped:
                 state.alert = AlertState {
                     TextState("\(state.ticker?.trades?.count ?? 0) records are also deleted.")
@@ -144,6 +155,11 @@ public struct EditTickerStore: Reducer {
                 state.selectTag = nil
                 return .none
                 
+            case let .selectTag(.presented(.delegate(.select(tags)))):
+                state.selectTag = nil
+                state.selectedTags = tags
+                return .none
+                
             case .alert(.presented(.confirmDeletion)):
                 if let ticker = state.ticker {
                     let _ = tickerClient.deleteTicker(ticker)
@@ -155,6 +171,10 @@ public struct EditTickerStore: Reducer {
                 return .none
             }
         }
+        .ifLet(\.$selectTag, action: /Action.selectTag) {
+            SelectTagStore()
+        }
+        
         .ifLet(\.$alert, action: /Action.alert)
     }
     

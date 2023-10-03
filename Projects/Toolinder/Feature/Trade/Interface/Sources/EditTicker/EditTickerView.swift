@@ -24,29 +24,20 @@ public struct EditTickerView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 20) {
                 headerView(viewStore: viewStore)
-                    .padding()
-                
-                Divider()
-                    .padding(.horizontal)
                 
                 nameView(viewStore: viewStore)
-                    .padding(.horizontal)
                 
                 tickerTypeView(viewStore: viewStore)
-                    .padding(.horizontal)
                 
                 currencyView(viewStore: viewStore)
-                    .padding(.horizontal)
                 
                 tagView(viewStore: viewStore)
-                    .padding(.horizontal)
                 
                 Spacer()
                 
                 MinimalButton(title: "Save") {
                     viewStore.send(.saveButtonTapped)
                 }
-                .padding()
             }
             .onAppear {
                 viewStore.send(.onAppear)
@@ -84,6 +75,7 @@ public struct EditTickerView: View {
                     action: { .alert($0) }
                 )
             )
+            .padding()
         }
     }
     
@@ -152,7 +144,7 @@ public struct EditTickerView: View {
                 Button(action: {
                     viewStore.send(.tagButtonTapped)
                 }, label: {
-                    Label("Tag", systemImage: "tag.circle.fill")
+                    Label(viewStore.selectedTags.isEmpty ? "Tag": "", systemImage: "tag.circle.fill")
                         .foregroundStyle(.foreground)
                 })
                 
