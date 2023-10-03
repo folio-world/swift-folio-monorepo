@@ -30,7 +30,14 @@ public struct TagItemCellView: View {
                     .font(.caption2)
                     .foregroundStyle(.foreground)
                 
-                Spacer()
+                if viewStore.state.mode == .edit {
+                    Button(action: {
+                        viewStore.send(.editButtonTapped)
+                    }, label: {
+                        Image(systemName: "pencil.circle.fill")
+                    })
+                    .foregroundStyle(.foreground)
+                }
             }
             .padding(10)
             .background(viewStore.state.isSelected ? Color(uiColor: .systemGray5) : Color(uiColor: .systemGray6))

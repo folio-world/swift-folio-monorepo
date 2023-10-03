@@ -42,6 +42,7 @@ public struct SelectTagStore: Reducer {
         
         public enum Delegate: Equatable {
             case select([Tag])
+            case deleted(Tag)
         }
     }
     
@@ -70,11 +71,13 @@ public struct SelectTagStore: Reducer {
                 state.tagItem = .init(
                     uniqueElements: tags.map { tag in
                         return .init(
+                            mode: .edit,
                             tag: tag,
                             isSelected: state.selectedTags.contains(where: { $0 == tag })
                         )
                     }
                 )
+                
                 return .none
                 
             case let .tagItem(id: id, action: .delegate(.tapped)):
@@ -88,9 +91,23 @@ public struct SelectTagStore: Reducer {
                 }
                 return .none
                 
+            case let .tagItem(id: id, action: .delegate(.editButtonTapped)):
+                state.editTag = .init(mode: .edit, tag: state.tagItem[id: id]?.tag)
+                return .none
+                
             case .editTag(.presented(.delegate(.save))):
                 state.editTag = nil
                 return .send(.fetchTagsRequest)
+                
+            case let .editTag(.presented(.delegate(.delete(tag)))):
+                if let index = state.selectedTags.firstIndex(of: tag) {
+                    state.selectedTags.remove(at: index)
+                }
+                state.editTag = nil
+                return .concatenate([
+                    .send(.fetchTagsRequest),
+                    .send(.delegate(.deleted(tag)))
+                ])
                 
             case .editTag(.dismiss):
                 state.editTag = nil

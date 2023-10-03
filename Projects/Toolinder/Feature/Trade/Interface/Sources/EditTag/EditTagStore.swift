@@ -30,6 +30,11 @@ public struct EditTagStore: Reducer {
         ) {
             self.mode = mode
             self.tag = tag
+            
+            if mode == .edit {
+                self.tagName = tag?.name ?? ""
+                self.tagColor = Color(hex: tag?.hex ?? "")
+            }
         }
     }
     
@@ -45,7 +50,9 @@ public struct EditTagStore: Reducer {
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
+            case cancle
             case save(Tag)
+            case delete(Tag)
         }
     }
     
@@ -63,6 +70,15 @@ public struct EditTagStore: Reducer {
                 
             case let .setTagColor(color):
                 state.tagColor = color
+                return .none
+                
+            case .dismissButtonTapped:
+                return .send(.delegate(.cancle))
+                
+            case .deleteButtonTapped:
+                if let tag = state.tag, let deletedTag = try? tagClient.deleteTag(tag).get() {
+                    return .send(.delegate(.delete(deletedTag)))
+                }
                 return .none
                 
             case .saveButtonTapped:

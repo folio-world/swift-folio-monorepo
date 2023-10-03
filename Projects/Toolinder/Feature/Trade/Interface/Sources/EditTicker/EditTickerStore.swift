@@ -50,7 +50,7 @@ public struct EditTickerStore: Reducer {
                 self.selectedCurrency = ticker?.currency ?? .dollar
                 self.tagItem = .init(
                     uniqueElements: ticker?.tags?.map { tag in
-                        return .init(tag: tag)
+                        return .init(mode: .select, tag: tag)
                     } ?? []
                 )
             }
@@ -159,6 +159,12 @@ public struct EditTickerStore: Reducer {
             case let .selectTag(.presented(.delegate(.select(tags)))):
                 state.selectTag = nil
                 state.selectedTags = tags
+                return .none
+                
+            case let .selectTag(.presented(.delegate(.deleted(tag)))):
+                if let index = state.selectedTags.firstIndex(of: tag) {
+                    state.selectedTags.remove(at: index)
+                }
                 return .none
                 
             case .alert(.presented(.confirmDeletion)):

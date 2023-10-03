@@ -15,16 +15,19 @@ public struct TagItemCellStore: Reducer {
     public init() {}
     
     public struct State: Equatable, Identifiable {
+        public let mode: EditMode
         public let id: UUID
         
         public let tag: Tag
         public var isSelected: Bool
         
         public init(
+            mode: EditMode = .edit,
             id: UUID = .init(),
             tag: Tag,
             isSelected: Bool = false
         ) {
+            self.mode = mode
             self.id = id
             self.tag = tag
             self.isSelected = isSelected
@@ -35,11 +38,13 @@ public struct TagItemCellStore: Reducer {
         case onAppear
         
         case tapped
+        case editButtonTapped
         
         case delegate(Delegate)
         
         public enum Delegate: Equatable {
             case tapped
+            case editButtonTapped
         }
     }
     
@@ -51,6 +56,9 @@ public struct TagItemCellStore: Reducer {
                 
             case .tapped:
                 return .send(.delegate(.tapped))
+                
+            case .editButtonTapped:
+                return .send(.delegate(.editButtonTapped))
                 
             default:
                 return .none

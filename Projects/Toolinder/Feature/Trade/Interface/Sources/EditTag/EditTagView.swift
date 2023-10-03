@@ -41,14 +41,35 @@ public struct EditTagView: View {
     
     @ViewBuilder
     private func headerView(viewStore: ViewStoreOf<EditTagStore>) -> some View {
-        EditHeaderView(mode: viewStore.state.mode, title: "Tag") { action in
-            switch action {
-            case .dismiss:
-                viewStore.send(.dismissButtonTapped)
-            case .delete:
-                viewStore.send(.deleteButtonTapped)
-            default: break
+        switch viewStore.state.mode {
+        case .add:
+            EditHeaderView(
+                mode: viewStore.state.mode,
+                title: "Tag",
+                isShowDismissButton: true
+            ) { action in
+                switch action {
+                case .dismiss:
+                    viewStore.send(.dismissButtonTapped)
+                default: break
+                }
             }
+        case .edit:
+            EditHeaderView(
+                mode: viewStore.state.mode,
+                title: "Tag",
+                isShowDeleteButton: true
+            ) { action in
+                switch action {
+                case .dismiss:
+                    viewStore.send(.dismissButtonTapped)
+                case .delete:
+                    viewStore.send(.deleteButtonTapped)
+                default: break
+                }
+            }
+            
+        default: EmptyView()
         }
     }
     
