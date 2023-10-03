@@ -119,7 +119,8 @@ public extension [TargetDependency] {
             ]
         case .Folio:
             return [
-                .external(name: "GoogleMobileAds")
+                .external(name: "GoogleMobileAds"),
+                .external(name: "FirebaseAnalytics")
             ]
         default: return []
         }

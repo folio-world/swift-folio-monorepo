@@ -121,3 +121,4 @@ Derived/
 *.p12
 master.key
 *.package.resolved
+GoogleService-Info.plist
