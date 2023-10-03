@@ -30,6 +30,7 @@ public struct EditTagView: View {
                             viewStore.send(.dismissButtonTapped)
                         case .delete:
                             viewStore.send(.deleteButtonTapped)
+                        default: break
                         }
                     }
                     

@@ -24,11 +24,7 @@ public struct EditTickerView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 20) {
                 headerView(viewStore: viewStore)
-                    .padding([.top, .horizontal])
-                
-                if viewStore.state.mode == .add {
-                    tickersView(viewStore: viewStore)
-                }
+                    .padding()
                 
                 Divider()
                     .padding(.horizontal)
@@ -47,10 +43,10 @@ public struct EditTickerView: View {
                 
                 Spacer()
                 
-                MinimalButton(title: "Next") {
-                    viewStore.send(.nextButtonTapped)
+                MinimalButton(title: "Save") {
+                    viewStore.send(.saveButtonTapped)
                 }
-                .padding(.horizontal)
+                .padding()
             }
             .onAppear {
                 viewStore.send(.onAppear)
@@ -91,38 +87,39 @@ public struct EditTickerView: View {
         }
     }
     
+    @ViewBuilder
     private func headerView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
-        HStack {
-            if viewStore.state.mode == .add {
-                Text("Ticker")
-                    .font(.title)
-            } else {
-                Text(viewStore.state.selectedTicker?.name ?? "")
-                    .font(.title)
-            }
-            
-            Spacer()
-            
-            if viewStore.state.mode == .edit {
-                Button(action: {
-                    viewStore.send(.deleteButtonTapped)
-                }, label: {
-                    Image(systemName: "trash.circle.fill")
-                        .foregroundStyle(.foreground)
-                        .font(.title)
-                })
-            }
-        }
-    }
-    
-    private func tickersView(viewStore: ViewStoreOf<EditTickerStore>) -> some View {
-        ScrollView(.horizontal) {
-            HStack {
-                ForEachStore(self.store.scope(state: \.tickerItem, action: EditTickerStore.Action.tickerItem(id:action:))) {
-                    TickerItemCellView(store: $0)
+        switch viewStore.state.mode {
+        case .add:
+            EditHeaderView(
+                mode: viewStore.state.mode,
+                title: LocalizedStringKey(viewStore.state.ticker?.name ?? "Ticker"),
+                isShowDismissButton: true,
+                isShowDeleteButton: false
+            ) { mode in
+                switch mode {
+                case .dismiss:
+                    viewStore.send(.dismissButtonTapped)
+                default: break
                 }
             }
-            .padding(.horizontal)
+            
+        case .edit:
+            EditHeaderView(
+                mode: viewStore.state.mode,
+                title: LocalizedStringKey(viewStore.state.ticker?.name ?? "Ticker"),
+                isShowDismissButton: true,
+                isShowDeleteButton: true
+            ) { mode in
+                switch mode {
+                case .dismiss:
+                    viewStore.send(.dismissButtonTapped)
+                case .delete:
+                    viewStore.send(.deleteButtonTapped)
+                default: break
+                }
+            }
+        default: EmptyView()
         }
     }
     

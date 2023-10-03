@@ -24,11 +24,11 @@ public struct SelectTagView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ScrollView {
                 VStack(alignment: .leading) {
-                    EditHeaderView(mode: .bypassAdd, title: "Tag") { action in
+                    EditHeaderView(mode: .select, title: "Tag") { action in
                         switch action {
                         case .dismiss:
                             viewStore.send(.dismissButtonTapped)
-                        case .delete: break
+                        default: break
                         }
                     }
                     

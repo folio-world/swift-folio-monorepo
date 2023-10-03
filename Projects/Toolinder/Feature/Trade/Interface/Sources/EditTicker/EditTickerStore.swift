@@ -14,21 +14,15 @@ import ToolinderDomainTradeInterface
 public struct EditTickerStore: Reducer {
     public init() {}
     
-    public enum Mode {
-        case add
-        case edit
-    }
-    
     public struct State: Equatable {
-        public var mode: Mode
+        public var mode: EditMode
+        public var ticker: Ticker?
+        
         public var name: String = ""
         public var selectedTickerType: TickerType?
         public var selectedCurrency: Currency?
         public var selectedTags: [Tag] = []
         
-        public var selectedTicker: Ticker?
-        
-        public var tickerItem: IdentifiedArrayOf<TickerItemCellStore.State> = []
         public var tagItem: IdentifiedArrayOf<TagItemCellStore.State> = []
         @PresentationState var selectTickerType: SelectTickerTypeStore.State?
         @PresentationState var selectCurrency: SelectCurrencyStore.State?
@@ -36,18 +30,18 @@ public struct EditTickerStore: Reducer {
         @PresentationState var alert: AlertState<Action.Alert>?
         
         public init(
-            mode: Mode = .add,
-            selectedTicker: Ticker? = nil
+            mode: EditMode = .add,
+            ticker: Ticker? = nil
         ) {
             self.mode = mode
-            self.selectedTicker = selectedTicker
+            self.ticker = ticker
             
             if mode == .edit {
-                self.name = selectedTicker?.name ?? ""
-                self.selectedTickerType = selectedTicker?.type ?? .stock
-                self.selectedCurrency = selectedTicker?.currency ?? .dollar
+                self.name = ticker?.name ?? ""
+                self.selectedTickerType = ticker?.type ?? .stock
+                self.selectedCurrency = ticker?.currency ?? .dollar
                 self.tagItem = .init(
-                    uniqueElements: selectedTicker?.tags?.map { tag in
+                    uniqueElements: ticker?.tags?.map { tag in
                         return .init(tag: tag)
                     } ?? []
                 )
@@ -62,13 +56,10 @@ public struct EditTickerStore: Reducer {
         case tickerTypeButtonTapped
         case currencyButtonTapped
         case tagButtonTapped
+        case dismissButtonTapped
         case deleteButtonTapped
-        case nextButtonTapped
+        case saveButtonTapped
         
-        case fetchTickersRequest
-        case fetchTickersResponse([Ticker])
-        
-        case tickerItem(id: TickerItemCellStore.State.ID, action: TickerItemCellStore.Action)
         case tagItem(id: TagItemCellStore.State.ID, action: TagItemCellStore.Action)
         case selectTickerType(PresentationAction<SelectTickerTypeStore.Action>)
         case selectCurrency(PresentationAction<SelectCurrencyStore.Action>)
@@ -82,8 +73,7 @@ public struct EditTickerStore: Reducer {
         }
         
         public enum Delegate: Equatable {
-            case cancel
-            case next(Ticker)
+            case cancle
             case save(Ticker)
             case delete(Ticker)
         }
@@ -95,9 +85,7 @@ public struct EditTickerStore: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .concatenate([
-                    .send(.fetchTickersRequest)
-                ])
+                return .none
                 
             case let .setName(name):
                 state.name = name
@@ -117,7 +105,7 @@ public struct EditTickerStore: Reducer {
                 
             case .deleteButtonTapped:
                 state.alert = AlertState {
-                    TextState("\(state.selectedTicker?.trades?.count ?? 0) records are also deleted.")
+                    TextState("\(state.ticker?.trades?.count ?? 0) records are also deleted.")
                 } actions: {
                     ButtonState(role: .destructive, action: .confirmDeletion) {
                         TextState("Delete")
@@ -125,47 +113,14 @@ public struct EditTickerStore: Reducer {
                 }
                 return .none
                 
-            case .nextButtonTapped:
-                if let ticker = state.selectedTicker, state.mode == .add {
-                    return .send(.delegate(.next(ticker)))
-                }
-                
+            case .saveButtonTapped:
                 return validateAndSaveTickerEffect(
                     mode: state.mode,
-                    ticker: state.selectedTicker,
+                    ticker: state.ticker,
                     tickerType: state.selectedTickerType,
                     currency: state.selectedCurrency,
                     name: state.name
                 )
-                
-            case .fetchTickersRequest:
-                let tickers = (try? tickerClient.fetchTickers().get()) ?? []
-                return .send(.fetchTickersResponse(tickers))
-                
-            case let .fetchTickersResponse(tickers):
-                state.tickerItem = .init(
-                    uniqueElements: tickers.map {
-                        .init(mode: .preview, ticker: $0)
-                    }
-                )
-                return .none
-                
-            case let .tickerItem(id: id, action: .delegate(.tapped)):
-                let isSelected = state.tickerItem[id: id]?.isSelected ?? false
-                
-                for id in state.tickerItem.ids {
-                    state.tickerItem[id: id]?.isSelected = false
-                }
-                
-                state.tickerItem[id: id]?.isSelected = !isSelected
-                
-                if !isSelected {
-                    state.selectedTicker = state.tickerItem[id: id]?.ticker
-                } else {
-                    state.selectedTicker = nil
-                }
-                
-                return .none
                 
             case let .selectTickerType(.presented(.delegate(.select(tickerType)))):
                 state.selectTickerType = nil
@@ -190,7 +145,7 @@ public struct EditTickerStore: Reducer {
                 return .none
                 
             case .alert(.presented(.confirmDeletion)):
-                if let ticker = state.selectedTicker {
+                if let ticker = state.ticker {
                     let _ = tickerClient.deleteTicker(ticker)
                     return .send(.delegate(.delete(ticker)))
                 }
@@ -200,14 +155,11 @@ public struct EditTickerStore: Reducer {
                 return .none
             }
         }
-        .forEach(\.tickerItem, action: /Action.tickerItem(id:action:)) {
-            TickerItemCellStore()
-        }
         .ifLet(\.$alert, action: /Action.alert)
     }
     
     private func validateAndSaveTickerEffect(
-        mode: Mode,
+        mode: EditMode,
         ticker: Ticker?,
         tickerType: TickerType?,
         currency: Currency?,
@@ -220,7 +172,7 @@ public struct EditTickerStore: Reducer {
         switch mode {
         case .add:
             if let ticker = try? tickerClient.saveTicker(.init(type: tickerType, currency: currency, name: name, tags: [])).get() {
-                return .send(.delegate(.next(ticker)))
+                return .send(.delegate(.save(ticker)))
             } else {
                 return .none
             }
@@ -232,6 +184,7 @@ public struct EditTickerStore: Reducer {
             } else {
                 return .none
             }
+        default: return .none
         }
     }
 }
