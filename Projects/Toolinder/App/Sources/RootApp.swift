@@ -25,6 +25,11 @@ struct RootApp: App {
                         ._printChanges()
                 }
             )
+            .modelContainer(for: [
+                Ticker.self,
+                Trade.self,
+                Tag.self
+            ])
             .onAppear(perform: UIApplication.shared.hideKeyboard)
         }
     }
