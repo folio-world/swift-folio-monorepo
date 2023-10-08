@@ -13,7 +13,8 @@ import ToolinderFeaturePortfolioInterface
 import ToolinderFeaturePortfolio
 import ToolinderFeatureMyPageInterface
 import ToolinderFeatureMyPage
-
+import ToolinderCore
+import ToolinderShared
 
 public struct MainTabStore: Reducer {
     public init() {}
@@ -30,6 +31,8 @@ public struct MainTabStore: Reducer {
         var myPage: MyPageNavigationStackStore.State = .init()
         
         var currentTab: Tab = .calendar
+        
+        var interstitialed: Interstitialed = .init(id: Environment.interstitialId)
         
         public init() { }
     }
@@ -66,6 +69,10 @@ public struct MainTabStore: Reducer {
                 
             case .portfolio(.delegate(.deleted)):
                 return .send(.refresh)
+                
+            case .calendar(.path(.element(id: _, action: .detail(.onAppear)))), .portfolio(.path(.element(id: _, action: .tickerDetail(.onAppear)))):
+                state.interstitialed.show { }
+                return .none
                 
             default:
                 return .none

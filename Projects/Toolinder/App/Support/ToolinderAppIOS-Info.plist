@@ -21,15 +21,15 @@
 	<key>CFBundleVersion</key>
 	<string>2.0.0</string>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-2392187154020666~7018659983</string>
+	<string>ca-app-pub-2392187154020666~3429915837</string>
 	<key>GADIsAdManagerApp</key>
 	<true/>
 	<key>OPENAI_API_KEY</key>
 	<string>$(OPENAI_API_KEY)</string>
 	<key>Primary App Icon Set Name</key>
 	<string>AppIcon</string>
-	<key>REWARDED_ID</key>
-	<string>$(REWARDED_ID)</string>
+	<key>INTERSTITIAL_ID</key>
+	<string>$(INTERSTITIAL_ID)</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
