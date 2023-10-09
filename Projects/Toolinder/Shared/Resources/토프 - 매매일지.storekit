@@ -5,7 +5,7 @@
   ],
   "products" : [
     {
-      "displayPrice" : "5.99",
+      "displayPrice" : "1.99",
       "familyShareable" : false,
       "internalID" : "6468932023",
       "localizations" : [
@@ -29,7 +29,7 @@
     "_applicationInternalID" : "1619745259",
     "_developerTeamID" : "X64MATB2CC",
     "_failTransactionsEnabled" : false,
-    "_lastSynchronizedDate" : 718531218.02902901,
+    "_lastSynchronizedDate" : 718533915.13122296,
     "_locale" : "en_US",
     "_storefront" : "USA",
     "_storeKitErrors" : [

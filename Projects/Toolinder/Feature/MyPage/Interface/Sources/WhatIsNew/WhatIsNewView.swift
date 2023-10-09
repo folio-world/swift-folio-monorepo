@@ -45,7 +45,7 @@ public struct WhatIsNewView: View {
                 }
                 .padding()
             }
-            .navigationTitle("What's New \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")")
+            .navigationTitle("What's New")
         }
     }
 }

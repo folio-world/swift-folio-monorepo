@@ -80,7 +80,7 @@ public struct MyPageMainView: View {
             viewStore.send(.whatIsNewTapped)
         }, label: {
             Label(
-                title: { Text("What's New \(Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "")") },
+                title: { Text("What's New") },
                 icon: {
                     Image(systemName: "info.circle.fill")
                         .foregroundStyle(.blue)
