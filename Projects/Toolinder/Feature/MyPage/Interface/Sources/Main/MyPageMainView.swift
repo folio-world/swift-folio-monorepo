@@ -36,9 +36,7 @@ public struct MyPageMainView: View {
             }
             .navigationTitle("MyPage")
             .onAppear {
-                Task {
-                    await self.test()
-                }
+                viewStore.send(.onAppear)
             }
             .sheet(
                 store: self.store.scope(
@@ -48,16 +46,6 @@ public struct MyPageMainView: View {
             ) {
                 RemoveADView(store: $0)
             }
-        }
-    }
-    
-    @MainActor
-    func test() async {
-        do {
-            let storeProducts = try await Product.products(for: ["com.tamsadan.toolinder.removead"])
-            debugPrint(storeProducts)
-        } catch {
-            
         }
     }
     
