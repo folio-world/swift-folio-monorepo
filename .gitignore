@@ -123,3 +123,4 @@ master.key
 *.package.resolved
 
 GoogleService-Info.plist
+*.storekit

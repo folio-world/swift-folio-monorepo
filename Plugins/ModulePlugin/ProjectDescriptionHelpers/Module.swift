@@ -111,7 +111,10 @@ public extension Module {
                 (.Folio, .OPENAI),
                 (.Folio, .Admob)
             ]
-        case .Toolinder: return []
+        case .Toolinder: 
+            return [
+                (.Folio, .Admob)
+            ]
         case .Folio:
             return [
                 (.Folio, .OPENAI),

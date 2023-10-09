@@ -34,7 +34,7 @@ public struct MinimalButton: View {
                 Text(self.title)
                     .font(.title3)
                     .fontWeight(.semibold)
-                    .foregroundStyle(.white)
+                    .foregroundStyle(.background)
                 
                 Spacer()
             }

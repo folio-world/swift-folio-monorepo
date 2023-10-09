@@ -5,8 +5,8 @@
 //  Created by 송영모 on 2023/08/24.
 //
 import SwiftUI
+
 import GoogleMobileAds
-import UIKit
 
 public final class Rewarded: NSObject {
     let rewardedId: String

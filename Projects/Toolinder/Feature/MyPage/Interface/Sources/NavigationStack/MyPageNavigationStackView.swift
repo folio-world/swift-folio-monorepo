@@ -37,7 +37,8 @@ public struct MyPageNavigationStackView: View {
                     CaseLet(
                         /MyPageNavigationStackStore.Path.State.whatIsNew,
                          action: MyPageNavigationStackStore.Path.Action.whatIsNew,
-                         then: WhatIsNewView.init(store:))
+                         then: WhatIsNewView.init(store:)
+                    )
                 }
             }
     }

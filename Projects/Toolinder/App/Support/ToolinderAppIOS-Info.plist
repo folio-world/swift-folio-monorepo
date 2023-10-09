@@ -17,19 +17,21 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2</string>
+	<string>2.1</string>
 	<key>CFBundleVersion</key>
-	<string>2.0.0</string>
+	<string>2.1.0</string>
 	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-2392187154020666~7018659983</string>
+	<string>ca-app-pub-2392187154020666~3429915837</string>
 	<key>GADIsAdManagerApp</key>
 	<true/>
 	<key>OPENAI_API_KEY</key>
 	<string>$(OPENAI_API_KEY)</string>
+	<key>REMOVEAD_IPA_ID</key>
+	<string>$(REMOVEAD_IPA_ID)</string>
 	<key>Primary App Icon Set Name</key>
 	<string>AppIcon</string>
-	<key>REWARDED_ID</key>
-	<string>$(REWARDED_ID)</string>
+	<key>INTERSTITIAL_ID</key>
+	<string>$(INTERSTITIAL_ID)</string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>
